@@ -1,5 +1,6 @@
 
 cmake_minimum_required (VERSION 2.8.10)
+enable_language(C CXX)
 
 ##cmake module directories
 #helper modules
@@ -25,7 +26,10 @@ set(QENG_VERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR}.${QENG_VERSION_PATC
 enable_testing()
 
 ##load helper functions from modules
-include(Common)
+include(common)
+
+##include some safeguards
+include(safeguards)
 
 ##define include directories
 include_directories(
@@ -33,8 +37,11 @@ include_directories(
 	${PROJECT_BINARY_DIR}/include
 )
 
-##call cmake of subdirectories
+##generate all necessary header files
 add_subdirectory(include)
+##compile library
 add_subdirectory(src)
-#add_subdirectory(doc)
+##generate documentation
+add_subdirectory(doc)
+
 #add_subdirectory(test)

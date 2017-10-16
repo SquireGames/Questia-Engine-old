@@ -1,2 +1,7 @@
 #include "QuestiaEngine/Test.h"
-#include "QuestiaEngine/Config.h"
+#include "QuestiaEngine/config.h"
+
+int test()
+{
+	return 1;
+}

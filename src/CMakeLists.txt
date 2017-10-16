@@ -4,7 +4,7 @@
 
 ##define header files
 set(HEADER_FILES
-	"${CMAKE_CURRENT_BINARY_DIR}/../include/${PROJECT_NAME}/Config.h"
+	"${CMAKE_CURRENT_BINARY_DIR}/../include/${PROJECT_NAME}/config.h"
 	"../include/${PROJECT_NAME}/Test.h"
 )
 
