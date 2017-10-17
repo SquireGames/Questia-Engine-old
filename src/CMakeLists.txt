@@ -1,22 +1,22 @@
-#----------------------------------------#
-#				Add files				 #
-#----------------------------------------#
+#----------------------------------------
+#				Add files				 
+#----------------------------------------
 
 ##define header files
-set(HEADER_FILES
+set(QUESTIAENGINE_HEADERS
 	"${CMAKE_CURRENT_BINARY_DIR}/../include/${PROJECT_NAME}/config.h"
 	"../include/${PROJECT_NAME}/Test.h"
 )
 
 ##define source files to compile
-set(SOURCE_FILES
-	Test.cpp
+set(QUESTIAENGINE_SOURCES
+	"Test.cpp"
 )
 
 
-#----------------------------------------#
-#		   Library naming scheme		 #
-#----------------------------------------#
+#----------------------------------------
+#		   Library naming scheme		 
+#----------------------------------------
 
 
 ##naming scheme of output files
@@ -25,9 +25,9 @@ set(LIBEXT_STATIC "-s")
 set(LIBEXT_DEBUG "-d")
 
 
-#----------------------------------------#
-#	    Get build and library types		 #
-#----------------------------------------#
+#----------------------------------------
+#	    Get build and library types		 
+#----------------------------------------
 
 #convert build mode to lowercase
 set(BUILD_MODE ${CMAKE_BUILD_TYPE})
@@ -44,7 +44,6 @@ if(NOT BUILD_MODE STREQUAL "debug" AND NOT BUILD_MODE STREQUAL "release" AND NOT
 	PRINT(BUILD_MODE)
 	MESSAGE(FATAL_ERROR)
 endif()
-
 
 
 #convert build mode to lowercase
@@ -65,14 +64,14 @@ else()
 endif()
 
 
-#----------------------------------------#
-#	      Generate library files		 #
-#----------------------------------------#
+#----------------------------------------
+#	      Generate library files		 
+#----------------------------------------
 
 
 ##macro to help with adding libraries
 MACRO(ADDLIB libname type)
-	add_library("${libname}" ${type} ${SOURCE_FILES} ${HEADER_FILES})
+	add_library("${libname}" ${type} ${QUESTIAENGINE_SOURCES} ${QUESTIAENGINE_HEADERS})
 	set_target_properties("${libname}" PROPERTIES
 		VERSION ${QENG_VERSION}
 	)
