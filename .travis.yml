@@ -4,10 +4,6 @@ dist: trusty
 
 language: cpp
 
-compiler:
-  - gcc
-  - clang
-
 matrix:
   include:
     - compiler: gcc
@@ -31,8 +27,5 @@ matrix:
         env: COMPILER=clang++-3.7
 
 script:
-  - mkdir -p build
-  - cd build
-  - cmake ..
-  - cmake --build .
+  - mkdir build && cd build && cmake .. && cmake --build .
   
