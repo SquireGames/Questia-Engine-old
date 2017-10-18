@@ -2,11 +2,11 @@
 #define an option to generate documentation, on by default
 option(BUILD_DOC "Build Documentation" OFF)
 
-#see if Doxygen exists
-find_package(Doxygen)
-
 #generate documentation
 if(BUILD_DOC)
+    #see if Doxygen exists
+    find_package(Doxygen)
+
 	if(NOT DOXYGEN_FOUND)
 		message(STATUS "Doxygen must be intalled to generate documentation")
 	else()
