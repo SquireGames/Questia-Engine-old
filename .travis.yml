@@ -6,7 +6,8 @@ language: cpp
 
 matrix:
   include:
-    - compiler: gcc
+    - os: linux
+      compiler: gcc
       addons:
         apt:
           sources:
@@ -15,16 +16,22 @@ matrix:
             - g++-6
             - cmake
       env: COMPILER=g++-6
-    - compiler: clang
+    - os: linux
+      compiler: clang
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.7
+            - llvm-toolchain-precise-3.8
           packages:
-            - clang-3.7
+            - clang-3.8
             - cmake
-      env: COMPILER=clang++-3.7
+      env: COMPILER=clang++-3.8
+    - os: osx
+      script:
+        - mkdir build
+        - cd build
+        - cmake .. && cmake --build .
 
 script:
   - mkdir build
