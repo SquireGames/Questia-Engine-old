@@ -14,6 +14,7 @@ environment:
       image: Visual Studio 2015
       
 before_build:
+  - set PATH=%PATH:C:\Program Files (x86)\Git\bin;=%)
   - set PATH=C:\MinGW\bin;%PATH%
 
 #install:
