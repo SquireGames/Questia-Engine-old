@@ -13,12 +13,9 @@ environment:
 #install:
 #  - git submodule update --init --recursive
 
-before_build:
+build_script:
   - ps: mkdir build
   - ps: cd build
   - cmake "-G%GENERATOR%" ..
- 
-build:
-  project: $(APPVEYOR_BUILD_FOLDER)\QuestiaEngine.sln
-        
-        
+  - cmake --build . --config
+  
