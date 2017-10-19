@@ -12,10 +12,19 @@ environment:
     - GENERATOR: "Visual Studio 15 2017 Win64"
     - GENERATOR: "MinGW Makefiles"
       image: Visual Studio 2015
+      CXX_PATH: 'C:\mingw-w64\i686-6.3.0-posix-dwarf-rt_v5-rev1\mingw32\bin'
       
 before_build:
-  - set PATH=%PATH:C:\Program Files (x86)\Git\bin;=%)
-  - set PATH=C:\MinGW\bin;%PATH%
+  #solves git environment varialbe conflict with MinGW
+  - ps: |
+       if($env:GENERATOR -eq "MinGW Makefiles")
+       {
+         $env:path = $env:path.replace("C:\Program Files\Git\usr\bin;", "")
+         if($env:CXX_PATH -ne "")
+         {
+            $env:path += ";$env:cxx_path"
+         }
+       }
 
 #install:
 #  - git submodule update --init --recursive
