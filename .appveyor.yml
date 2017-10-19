@@ -5,7 +5,7 @@ configuration:
   - Release
   - Debug
 
-enviroment:
+environment:
   matrix:
     - GENERATOR: "Visual Studio 15 2017"
       platform:
@@ -14,7 +14,7 @@ enviroment:
       platform:
         - x64
        
-install:
+#install:
 #  - git submodule update --init --recursive
 
 before_build:
