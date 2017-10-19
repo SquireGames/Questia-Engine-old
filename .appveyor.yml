@@ -16,7 +16,7 @@ environment:
 before_build:
   - ps: mkdir build
   - ps: cd build
-  - cmake -G%GENERATOR% ..
+  - cmake "-G%GENERATOR%" ..
  
 build:
   project: $(APPVEYOR_BUILD_FOLDER)\$(APPVEYOR_PROJECT_NAME).sln
