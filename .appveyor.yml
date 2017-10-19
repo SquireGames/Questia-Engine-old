@@ -8,11 +8,7 @@ configuration:
 environment:
   matrix:
     - GENERATOR: "Visual Studio 15 2017"
-      platform:
-        - x86
     - GENERATOR: "Visual Studio 15 2017 Win64"
-      platform:
-        - x64
        
 #install:
 #  - git submodule update --init --recursive
