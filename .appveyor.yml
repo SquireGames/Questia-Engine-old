@@ -11,8 +11,10 @@ environment:
     - GENERATOR: "Visual Studio 15 2017"
     - GENERATOR: "Visual Studio 15 2017 Win64"
     - GENERATOR: "MinGW Makefiles"
-      image:
-        -Visual Studio 2015
+      image: Visual Studio 2015
+      
+before_build:
+  -set PATH=C:\MinGW\bin;%PATH%
 
 #install:
 #  - git submodule update --init --recursive
