@@ -14,7 +14,7 @@ environment:
       image: Visual Studio 2015
       
 before_build:
-  -set PATH=C:\MinGW\bin;%PATH%
+  - set PATH=C:\MinGW\bin;%PATH%
 
 #install:
 #  - git submodule update --init --recursive
