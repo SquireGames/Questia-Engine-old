@@ -1,0 +1,22 @@
+
+image: 
+  - Visual Studio 2017
+
+configuration:
+  - Release
+  - Debug
+
+environment:
+  matrix:
+    - GENERATOR: "Visual Studio 15 2017"
+    - GENERATOR: "Visual Studio 15 2017 Win64"
+
+#install:
+#  - git submodule update --init --recursive
+
+build_script:
+  - ps: mkdir build
+  - ps: cd build
+  - cmake "-G%GENERATOR%" "-DCMAKE_BUILD_TYPE=%CONFIGURATION%" ..
+  - cmake --build .
+  
