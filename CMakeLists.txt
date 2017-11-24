@@ -25,9 +25,6 @@ set(QENG_VERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR}.${QENG_VERSION_PATC
 ##needs to be called from top directory
 enable_testing()
 
-##load helper functions from modules
-include(common)
-
 ##include some safeguards
 include(safeguards)
 
