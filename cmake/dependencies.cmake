@@ -13,8 +13,8 @@ downloadProject(
 )
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-set(GTEST_HAS_TR1_TUPLE 0 PARENT_SCOPE)
-set(GTEST_HAS_STD_TUPLE 1 PARENT_SCOPE)
+add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
+add_definitions(-DGTEST_HAS_STD_TUPLE=1)
 
 # add to include path
 include_directories(
