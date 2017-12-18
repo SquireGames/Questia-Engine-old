@@ -28,6 +28,10 @@ enable_testing()
 ## include some safeguards
 include(safeguards)
 
+## TODO: remove once gtest removes the tr1 namespace
+add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
+add_definitions(-DGTEST_HAS_STD_TUPLE=1)
+
 ## get all dependencies
 include(dependencies)
 

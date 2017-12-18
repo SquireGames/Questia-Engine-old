@@ -13,9 +13,6 @@ downloadProject(
 )
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
-add_definitions(-DGTEST_HAS_STD_TUPLE=1)
-
 # add to include path
 include_directories(
     "${${PROJ_NAME}_SOURCE_DIR}/googletest/googletest/include"
