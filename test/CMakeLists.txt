@@ -11,6 +11,8 @@ set(QUESTIAENGINE_TEST_HEADERS
     "include/${PROJECT_NAME}/Test/Test.h"
 )
 
+# TODO use QuestiaEngine lib file instead of compiling separately
+
 ## append source files
 foreach(EXTSRC ${QUESTIAENGINE_SOURCES})
     LIST(APPEND QUESTIAENGINE_TEST_SOURCES "../src/${EXTSRC}")

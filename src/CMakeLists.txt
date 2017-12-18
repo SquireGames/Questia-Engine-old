@@ -45,7 +45,7 @@ endif()
 # if invalid buildmode print warning
 if(NOT BUILD_MODE STREQUAL "debug" AND NOT BUILD_MODE STREQUAL "release" AND NOT BUILD_MODE STREQUAL "both")
 	MESSAGE(STATUS "Invalid build type. Valid options: debug release both")
-	PRINT(BUILD_MODE)
+	MESSAGE(STATUS "${BUILD_MODE}")
 	MESSAGE(FATAL_ERROR)
 endif()
 
@@ -55,23 +55,30 @@ set(LIBRARY_TYPE ${BUILD_SHARED_LIBS})
 string(TOLOWER "${LIBRARY_TYPE}" LIBRARY_TYPE)
 
 # set default build mode if it is not set
-if("${LIBRARY_TYPE}" STREQUAL "")
-	set(LIBRARY_TYPE "both")
-elseif(${LIBRARY_TYPE} STREQUAL "on" OR ${LIBRARY_TYPE} STREQUAL "true")
+if(${LIBRARY_TYPE} STREQUAL "on" OR ${LIBRARY_TYPE} STREQUAL "true")
 	set(LIBRARY_TYPE "shared")
-elseif(${LIBRARY_TYPE} STREQUAL "off" OR ${LIBRARY_TYPE} STREQUAL "false")
+elseif("${LIBRARY_TYPE}" STREQUAL "" OR ${LIBRARY_TYPE} STREQUAL "off" OR ${LIBRARY_TYPE} STREQUAL "false")
 	set(LIBRARY_TYPE "static")
 else()
-	MESSAGE(STATUS "Invalid library type. Valid options: BOOL <empty>")
-	PRINT(BUILD_SHARED_LIBS)
+	MESSAGE(STATUS "Invalid library type. Valid options: BOOL")
+	MESSAGE(STATUS "${BUILD_SHARED_LIBS}")
 	MESSAGE(FATAL_ERROR)
 endif()
 
+#----------------------------------------
+#	      Compiler options	 
+#----------------------------------------
+
+## force visual studio to link with /MT and MTd when linking statically
+
+if(LIBRARY_TYPE STREQUAL "static")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT" PARENT_SCOPE)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd" PARENT_SCOPE)
+endif()
 
 #----------------------------------------
 #	      Generate library files		 
 #----------------------------------------
-
 
 ## macro to help with adding libraries
 MACRO(ADDLIB libname type)
@@ -81,17 +88,16 @@ MACRO(ADDLIB libname type)
 	)
 ENDMACRO()
 
-
 ## create libries with different extensions for debug and release builds
 # note: header files need to be added to targets so IDE's can find them
 
 if(BUILD_MODE STREQUAL "release" OR BUILD_MODE STREQUAL "both")
 
-	if(LIBRARY_TYPE STREQUAL "shared" OR LIBRARY_TYPE STREQUAL "both")
+	if(LIBRARY_TYPE STREQUAL "shared")
 		ADDLIB(${LIBFILE_NAME} SHARED)
 	endif()
 	
-	if(LIBRARY_TYPE STREQUAL "static" OR LIBRARY_TYPE STREQUAL "both")
+	if(LIBRARY_TYPE STREQUAL "static")
 		ADDLIB(${LIBFILE_NAME}${LIBEXT_STATIC} STATIC)
 	endif()
 	
@@ -100,11 +106,11 @@ endif()
 
 if(BUILD_MODE STREQUAL "debug" OR BUILD_MODE STREQUAL "both")
 
-	if(LIBRARY_TYPE STREQUAL "shared" OR LIBRARY_TYPE STREQUAL "both")
+	if(LIBRARY_TYPE STREQUAL "shared")
 		ADDLIB(${LIBFILE_NAME}${LIBEXT_DEBUG} SHARED )
 	endif()
 	
-	if(LIBRARY_TYPE STREQUAL "static" OR LIBRARY_TYPE STREQUAL "both")
+	if(LIBRARY_TYPE STREQUAL "static")
 		ADDLIB(${LIBFILE_NAME}${LIBEXT_DEBUG}${LIBEXT_STATIC} STATIC)
 	endif()
 	
