@@ -5,8 +5,11 @@ dist: trusty
 language: cpp
 
 env:
-  - BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF
-  - BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON
+  global:
+    - COMPILER=g++-6
+  matrix:
+    - BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF
+    - BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON
   
 matrix:
   include:
@@ -19,7 +22,6 @@ matrix:
           packages:
             - g++-6
             - cmake
-      env: COMPILER=g++-6
     - os: osx
       script:
         - mkdir build
