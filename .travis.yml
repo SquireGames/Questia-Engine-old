@@ -3,10 +3,6 @@ sudo: required
 dist: trusty
 
 language: cpp
-
-env:
-  - COMPILER=g++-6 BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF
-  - COMPILER=g++-6 BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON
   
 matrix:
   include:
@@ -19,7 +15,25 @@ matrix:
           packages:
             - g++-6
             - cmake
+      env: COMPILER=g++-6 BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+            - cmake
+      env: COMPILER=g++-6 BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON
     - os: osx
+      env: COMPILER=g++-6 BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF
+      script:
+        - mkdir build
+        - cd build
+        - cmake -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC .. && cmake --build .
+    - os: osx
+      env: COMPILER=g++-6 BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON
       script:
         - mkdir build
         - cd build
