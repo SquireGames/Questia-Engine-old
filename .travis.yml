@@ -4,6 +4,10 @@ dist: trusty
 
 language: cpp
 
+env:
+  - BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF
+  - BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON
+  
 matrix:
   include:
     - os: linux
@@ -20,10 +24,10 @@ matrix:
       script:
         - mkdir build
         - cd build
-        - cmake .. && cmake --build .
+        - cmake -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC .. && cmake --build .
 
 script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && cmake --build .
+  - cmake -DCMAKE_CXX_COMPILER=$COMPILER -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC .. && cmake --build .
   
