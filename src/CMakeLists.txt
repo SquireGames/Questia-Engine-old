@@ -17,64 +17,14 @@ set(QUESTIAENGINE_SOURCES
 set(QUESTIAENGINE_HEADERS ${QUESTIAENGINE_HEADERS} PARENT_SCOPE)
 set(QUESTIAENGINE_SOURCES ${QUESTIAENGINE_SOURCES} PARENT_SCOPE)
 
-
 #----------------------------------------
 #		   Library naming scheme		 
 #----------------------------------------
-
 
 ## naming scheme of output files
 set(LIBFILE_NAME questia-eng)
 set(LIBEXT_STATIC "-s")
 set(LIBEXT_DEBUG "-d")
-
-
-#----------------------------------------
-#	    Get build and library types		 
-#----------------------------------------
-
-# convert build mode to lowercase
-set(BUILD_MODE ${CMAKE_BUILD_TYPE})
-string(TOLOWER "${BUILD_MODE}" BUILD_MODE)
-
-# set default build mode if it is not set
-if("${BUILD_MODE}" STREQUAL "")
-	set(BUILD_MODE "both")
-endif()
-
-# if invalid buildmode print warning
-if(NOT BUILD_MODE STREQUAL "debug" AND NOT BUILD_MODE STREQUAL "release" AND NOT BUILD_MODE STREQUAL "both")
-	MESSAGE(STATUS "Invalid build type. Valid options: debug release both")
-	MESSAGE(STATUS "${BUILD_MODE}")
-	MESSAGE(FATAL_ERROR)
-endif()
-
-
-# convert build mode to lowercase
-set(LIBRARY_TYPE ${BUILD_SHARED_LIBS})
-string(TOLOWER "${LIBRARY_TYPE}" LIBRARY_TYPE)
-
-# set default build mode if it is not set
-if(${LIBRARY_TYPE} STREQUAL "on" OR ${LIBRARY_TYPE} STREQUAL "true")
-	set(LIBRARY_TYPE "shared")
-elseif("${LIBRARY_TYPE}" STREQUAL "" OR ${LIBRARY_TYPE} STREQUAL "off" OR ${LIBRARY_TYPE} STREQUAL "false")
-	set(LIBRARY_TYPE "static")
-else()
-	MESSAGE(STATUS "Invalid library type. Valid options: BOOL")
-	MESSAGE(STATUS "${BUILD_SHARED_LIBS}")
-	MESSAGE(FATAL_ERROR)
-endif()
-
-#----------------------------------------
-#	      Compiler options	 
-#----------------------------------------
-
-## force visual studio to link with /MT and MTd when linking statically
-
-if(LIBRARY_TYPE STREQUAL "static")
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT" PARENT_SCOPE)
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd" PARENT_SCOPE)
-endif()
 
 #----------------------------------------
 #	      Generate library files		 
@@ -91,7 +41,7 @@ ENDMACRO()
 ## create libries with different extensions for debug and release builds
 # note: header files need to be added to targets so IDE's can find them
 
-if(BUILD_MODE STREQUAL "release" OR BUILD_MODE STREQUAL "both")
+if(BUILD_MODE STREQUAL "release")
 
 	if(LIBRARY_TYPE STREQUAL "shared")
 		ADDLIB(${LIBFILE_NAME} SHARED)
@@ -103,8 +53,7 @@ if(BUILD_MODE STREQUAL "release" OR BUILD_MODE STREQUAL "both")
 	
 endif()
 
-
-if(BUILD_MODE STREQUAL "debug" OR BUILD_MODE STREQUAL "both")
+if(BUILD_MODE STREQUAL "debug")
 
 	if(LIBRARY_TYPE STREQUAL "shared")
 		ADDLIB(${LIBFILE_NAME}${LIBEXT_DEBUG} SHARED )
