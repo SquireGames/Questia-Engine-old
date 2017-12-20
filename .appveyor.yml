@@ -3,8 +3,8 @@ image:
   - Visual Studio 2017
 
 configuration:
-  - Release
-  - Debug
+  - release
+  - debug
 
 environment:
   matrix:
@@ -32,6 +32,5 @@ build_script:
   - cmake --build .
   
 test_script:
-    - ps: cd build
     - ctest -C "%CONFIGURATION%"
     
