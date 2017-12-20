@@ -23,10 +23,10 @@ endif()
 
 # only allow debug or release modes
 if(BUILD_MODE STREQUAL "release")
-    set(CMAKE_CONFIGURATION_TYPES "Release")
+    set(CMAKE_CONFIGURATION_TYPES "Release" CACHE STRING "Do not modify" FORCE)
 endif()
 if(BUILD_MODE STREQUAL "debug")
-    set(CMAKE_CONFIGURATION_TYPES "Debug")
+    set(CMAKE_CONFIGURATION_TYPES "Debug" CACHE STRING "Do not modify" FORCE)
 endif()
 
 #----------------------------------------
@@ -59,7 +59,7 @@ endif()
 
 # TODO move responsibility to questia dependencies repository
 
-if(LIBRARY_TYPE STREQUAL "static")
+if(LIBRARY_TYPE STREQUAL "static" AND CMAKE_GENERATOR MATCHES "Visual Studio")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 endif()
