@@ -11,7 +11,13 @@ downloadProject(
     VERSION_MAJOR 0
     VERSION_MINOR 0
 )
+
+## TODO: remove once gtest removes the tr1 namespace
+## TODO: move to dependency repository
+
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
+add_definitions(-DGTEST_HAS_STD_TUPLE=1)
 
 # add to include path
 include_directories(
