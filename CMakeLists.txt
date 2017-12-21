@@ -27,6 +27,12 @@ enable_testing()
 ## prevent in source builds and wrong settings
 include(safeguards)
 
+
+# TODO: remove when gtest removes TR1
+add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
+add_definitions(-DGTEST_HAS_STD_TUPLE=1)
+
+
 ## set static/shared and release/debug options
 include(buildConfiguration)
 

@@ -12,16 +12,43 @@ downloadProject(
     VERSION_MINOR 0
 )
 
-## TODO: remove once gtest removes the tr1 namespace
 ## TODO: move to dependency repository
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
-add_definitions(-DGTEST_HAS_STD_TUPLE=1)
 
 # add to include path
 include_directories(
     "${${PROJ_NAME}_SOURCE_DIR}/googletest/googletest/include"
     "${${PROJ_NAME}_SOURCE_DIR}/googletest/googlemock/include"
     "${${PROJ_NAME}_SOURCE_DIR}/SDL2-2.0.7/include"
+)
+
+
+# TODO make macro to automate changing output directory
+
+# ensure install will find all lib files
+set_target_properties(SDL2 PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+)
+set_target_properties(gtest PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+)
+set_target_properties(gtest_main PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+)
+set_target_properties(gmock PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+)
+set_target_properties(gmock_main PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
 )
