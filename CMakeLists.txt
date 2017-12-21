@@ -52,4 +52,7 @@ add_subdirectory(src)
 ## generate documentation
 add_subdirectory(doc)
 ## run tests
-add_subdirectory(test)
+# disabled with shared libraries, gtest does not like to be dynamically linked
+if(NOT BUILD_SHARED_LIBS)
+    add_subdirectory(test)
+endif()

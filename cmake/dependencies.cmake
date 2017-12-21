@@ -72,7 +72,7 @@ if(NOT WIN32)
                 ${LIB_BIN_DIR}/${LIB_NAME_NOVER}
             DEPENDS ${targetLib}
         )
-        add_custom_target(copy_file_${targetLib} ALL
+        add_custom_target(create_symlink_${targetLib} ALL
             DEPENDS ${LIB_BIN_DIR}/${LIB_NAME_NOVER}
         )
     ENDMACRO()

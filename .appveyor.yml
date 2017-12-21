@@ -3,8 +3,8 @@ image:
   - Visual Studio 2017
 
 configuration:
-  - release
-  - debug
+  - Release
+  - Debug
 
 environment:
   matrix:
