@@ -2,7 +2,7 @@ include(downloadProject)
 
 ## force visual studio to link with /MT and MTd when linking statically
 # TODO move to dependency repository
-if(LIBRARY_TYPE STREQUAL "static" AND CMAKE_GENERATOR MATCHES "Visual Studio")
+if(NOT BUILD_SHARED_LIBS AND CMAKE_GENERATOR MATCHES "Visual Studio")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT" PARENT_SCOPE)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd" PARENT_SCOPE)
 endif()
