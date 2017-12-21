@@ -29,7 +29,7 @@ build_script:
   - ps: mkdir build
   - ps: cd build
   - cmake "-G%GENERATOR%" "-DCMAKE_BUILD_TYPE=%CONFIGURATION%" "-DBUILD_SHARED_LIBS=%BUILD_SHARED_LIBS%" "-DSDL_SHARED=%SDL_SHARED%" "-DSDL_STATIC=%SDL_STATIC%" ..
-  - cmake --build . "--config %CONFIGURATION%"
+  - cmake --build . --config "%CONFIGURATION%"
   
 test_script:
     - ctest -C "%CONFIGURATION%"
