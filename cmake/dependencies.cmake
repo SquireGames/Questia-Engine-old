@@ -66,7 +66,7 @@ endif()
         endif()
         set(LIV_NAME_FULL ${LIB_FILE_PREFIX}${LIB_FILE_BASENAME}${LIB_FILE_SUFFIX})
         add_custom_command(
-            OUTPUT ${LIB_BIN_DIR}/${targetLib}.lib
+            OUTPUT ${LIB_BIN_DIR}/${LIV_NAME_FULL}
             COMMAND ${CMAKE_COMMAND} -E copy
                 $<TARGET_FILE:${targetLib}>
                 ${LIB_BIN_DIR}
