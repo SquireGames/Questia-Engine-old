@@ -38,9 +38,9 @@ else()
 endif()
 
 # only add new targets to copy files on non-Windows machines
-#if(NOT WIN32)
+if(NOT WIN32)
     # give installer for targets the correct binary location
-    MACRO(COPY_LIBS_TO_BINARY_DIR targetLib)
+    MACRO(COPY_LIBS_TO_BINARY_DIR targetLib override)
         get_property(LIB_BIN_DIR TARGET ${targetLib} PROPERTY BINARY_DIR)
         get_target_property(LIB_FILE_PREFIX ${targetLib} PREFIX)
         get_target_property(LIB_FILE_BASENAME ${targetLib} OUTPUT_NAME)
@@ -65,11 +65,14 @@ endif()
         if(LIB_FILE_SUFFIX MATCHES "-NOTFOUND")
         endif()
         set(LIV_NAME_FULL ${LIB_FILE_PREFIX}${LIB_FILE_BASENAME}${LIB_FILE_SUFFIX})
+        if(override)
+            set(LIV_NAME_FULL ${LIB_FILE_PREFIX}${targetLib}${LIB_FILE_SUFFIX})
+        endif()
         add_custom_command(
             OUTPUT ${LIB_BIN_DIR}/${LIV_NAME_FULL}
             COMMAND ${CMAKE_COMMAND} -E copy
                 $<TARGET_FILE:${targetLib}>
-                ${LIB_BIN_DIR}
+                ${LIB_BIN_DIR}/${LIV_NAME_FULL}
             DEPENDS ${targetLib}
         )
         add_custom_target(copy_file_${targetLib} ALL
@@ -78,16 +81,15 @@ endif()
     ENDMACRO()
 
     if(BUILD_GMOCK)
-        COPY_LIBS_TO_BINARY_DIR(gtest)
+        COPY_LIBS_TO_BINARY_DIR(gtest OFF)
     endif()
     if(BUILD_GTEST)
-        COPY_LIBS_TO_BINARY_DIR(gmock)
+        COPY_LIBS_TO_BINARY_DIR(gmock OFF)
     endif()
     if(SDL_SHARED)
-        COPY_LIBS_TO_BINARY_DIR(SDL2)
+        COPY_LIBS_TO_BINARY_DIR(SDL2 ON)
     endif()
     if(SDL_STATIC)
-        COPY_LIBS_TO_BINARY_DIR(SDL2-static)
+        COPY_LIBS_TO_BINARY_DIR(SDL2-static OFF)
     endif()
-
-#endif()
+endif()
