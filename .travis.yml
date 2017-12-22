@@ -15,7 +15,12 @@ matrix:
           packages:
             - g++-6
             - cmake
-      env: COMPILER=g++-6 BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF
+      env: COMPILER=g++-6 BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF CONFIG=debug
+      script:
+          - mkdir build
+          - cd build
+          - cmake -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_CXX_COMPILER=$COMPILER -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC .. 
+          - sudo cmake --build . --target install
     - os: linux
       compiler: gcc
       addons:
@@ -25,22 +30,67 @@ matrix:
           packages:
             - g++-6
             - cmake
-      env: COMPILER=g++-6 BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON
+      env: COMPILER=g++-6 BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF CONFIG=release
+      script:
+          - mkdir build
+          - cd build
+          - cmake -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_CXX_COMPILER=$COMPILER -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC .. 
+          - sudo cmake --build . --target install
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+            - cmake
+      env: COMPILER=g++-6 BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON CONFIG=debug
+      script:
+          - mkdir build
+          - cd build
+          - cmake -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_CXX_COMPILER=$COMPILER -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC .. 
+          - sudo cmake --build . --target install && ctest -C $CONFIG
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+            - cmake
+      env: COMPILER=g++-6 BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON CONFIG=release
+      script:
+          - mkdir build
+          - cd build
+          - cmake -DCMAKE_BUILD_TYPE=$CONFIG -DCMAKE_CXX_COMPILER=$COMPILER -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC .. 
+          - sudo cmake --build . --target install && ctest -C $CONFIG  
     - os: osx
-      env: BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF
+      env: BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF CONFIG=debug
       script:
         - mkdir build
         - cd build
-        - cmake -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC .. && cmake --build .
+        - cmake -DCMAKE_BUILD_TYPE=$CONFIG -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC .. 
+        - sudo cmake --build . --target install
     - os: osx
-      env: BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON
+      env: BUILD_SHARED_LIBS=ON SDL_SHARED=ON SDL_STATIC=OFF CONFIG=release
       script:
         - mkdir build
         - cd build
-        - cmake -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC .. && cmake --build .
-
-script:
-  - mkdir build
-  - cd build
-  - cmake -DCMAKE_CXX_COMPILER=$COMPILER -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC .. && cmake --build .
-  
+        - cmake -DCMAKE_BUILD_TYPE=$CONFIG -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC ..
+        - sudo cmake --build . --target install
+    - os: osx
+      env: BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON CONFIG=debug
+      script:
+        - mkdir build
+        - cd build
+        - cmake -DCMAKE_BUILD_TYPE=$CONFIG -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC ..
+        - sudo cmake --build . --target install && ctest -C $CONFIG 
+    - os: osx
+      env: BUILD_SHARED_LIBS=OFF SDL_SHARED=OFF SDL_STATIC=ON CONFIG=release
+      script:
+        - mkdir build
+        - cd build
+        - cmake -DCMAKE_BUILD_TYPE=$CONFIG -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DSDL_SHARED=$SDL_SHARED -DSDL_STATIC=$SDL_STATIC ..
+        - sudo cmake --build . --target install && ctest -C $CONFIG 

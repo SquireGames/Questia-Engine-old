@@ -8,7 +8,7 @@ include_directories("include")
 ## append header files
 set(QUESTIAENGINE_TEST_HEADERS
     ${QUESTIAENGINE_HEADERS}
-    "include/${PROJECT_NAME}/Test/Test.h"
+    "include/QENG/Test/Test.h"
 )
 
 # TODO use QuestiaEngine lib file instead of compiling separately

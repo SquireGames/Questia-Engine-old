@@ -2,11 +2,10 @@
 cmake_minimum_required (VERSION 2.8.10)
 enable_language(C CXX)
 
-## cmake module directories
-# helper modules
+# cmake module directory
 LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-## cxx specification
+## c++ specification
 set(CMAKE_CXX_STANDARD 17)
 
 ## define directory structure of output 
@@ -19,18 +18,23 @@ project(QuestiaEngine)
 set(QENG_VERSION_MAJOR "0")
 set(QENG_VERSION_MINOR "0")
 set(QENG_VERSION_PATCH "0")
-set(QENG_VERSION_TWEAK "0")
-set(QENG_VERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR}.${QENG_VERSION_PATCH}.${QENG_VERSION_TWEAK})
+set(QENG_VERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR}.${QENG_VERSION_PATCH})
+set(QENG_SOVERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR})
 
 ## needs to be called from top directory
 enable_testing()
 
-## include some safeguards
+## prevent in source builds and wrong settings
 include(safeguards)
 
-## TODO: remove once gtest removes the tr1 namespace
+
+# TODO: remove when gtest removes TR1
 add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
 add_definitions(-DGTEST_HAS_STD_TUPLE=1)
+
+
+## set static/shared and release/debug options
+include(buildConfiguration)
 
 ## get all dependencies
 include(dependencies)
@@ -47,6 +51,8 @@ add_subdirectory(include)
 add_subdirectory(src)
 ## generate documentation
 add_subdirectory(doc)
-
 ## run tests
-add_subdirectory(test)
+# disabled with shared libraries, gtest does not like to be dynamically linked
+if(NOT BUILD_SHARED_LIBS)
+    add_subdirectory(test)
+endif()
