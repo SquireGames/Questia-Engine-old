@@ -22,7 +22,7 @@ set(QUESTIAENGINE_SOURCES ${QUESTIAENGINE_SOURCES} PARENT_SCOPE)
 #----------------------------------------
 
 # naming scheme of output library files
-set(LIB_NAME questia-eng)
+set(LIB_NAME qeng)
 set(LIB_EXT_STATIC "-s")
 set(LIB_EXT_DEBUG "-d")
 # preprocessor symbol for shared library compilation
