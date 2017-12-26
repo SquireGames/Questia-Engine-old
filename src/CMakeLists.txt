@@ -46,6 +46,10 @@ if(CMAKE_GENERATOR MATCHES "Visual Studio" AND BUILD_SHARED_LIBS)
     set_target_properties(${LIB_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 
+if(CMAKE_GENERATOR MATCHES "Visual Studio" AND NOT BUILD_SHARED_LIBS)
+    target_link_libraries(${LIB_NAME} debug MSVCRTD.lib optimized MSVCRT.lib)
+endif()
+
 set_target_properties(${LIB_NAME} PROPERTIES VERSION ${QENG_VERSION})
 set_target_properties(${LIB_NAME} PROPERTIES DEFINE_SYMBOL "${LIB_SYMBOL}_EXPORTS")
 
