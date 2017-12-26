@@ -1,13 +1,5 @@
 include(downloadProject)
 
-## force visual studio to link with /MT and MTd when linking statically
-# TODO move to dependency repository
-if(NOT BUILD_SHARED_LIBS AND CMAKE_GENERATOR MATCHES "Visual Studio")
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT" PARENT_SCOPE)
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd" PARENT_SCOPE)
-endif()
-
-
 # TODO see if the project is already available on the computer
 
 set(PROJ_NAME "qeng-deps")
@@ -29,13 +21,6 @@ include_directories(
     "${${PROJ_NAME}_SOURCE_DIR}/googletest/googlemock/include"
     "${${PROJ_NAME}_SOURCE_DIR}/SDL2-2.0.7/include"
 )
-
-# ensure SDL2 is compiling the correct libraries
-if(BUILD_SHARED_LIBS)
-    set(SDL_SHARED ON)
-else()
-    set(SDL_STATIC ON)
-endif()
 
 # add symlink where required for installing on linux
 if(NOT WIN32)

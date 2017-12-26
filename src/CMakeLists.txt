@@ -22,7 +22,7 @@ set(QUESTIAENGINE_SOURCES ${QUESTIAENGINE_SOURCES} PARENT_SCOPE)
 #----------------------------------------
 
 # naming scheme of output library files
-set(LIB_NAME questia-eng)
+set(LIB_NAME qeng)
 set(LIB_EXT_STATIC "-s")
 set(LIB_EXT_DEBUG "-d")
 # preprocessor symbol for shared library compilation
@@ -34,7 +34,21 @@ string(TOUPPER "LIB_SYMBOL" LIB_SYMBOL)
 #	      Create library
 #----------------------------------------
 
-add_library(${LIB_NAME} ${QUESTIAENGINE_SOURCES} ${QUESTIAENGINE_HEADERS})
+if(BUILD_SHARED_LIBS)
+    set(LIB_TYPE SHARED)
+else()
+    set(LIB_TYPE STATIC)
+endif()   
+ 
+add_library(${LIB_NAME} ${LIB_TYPE} ${QUESTIAENGINE_SOURCES} ${QUESTIAENGINE_HEADERS})
+
+if(CMAKE_GENERATOR MATCHES "Visual Studio" AND BUILD_SHARED_LIBS)
+    set_target_properties(${LIB_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
+if(CMAKE_GENERATOR MATCHES "Visual Studio" AND NOT BUILD_SHARED_LIBS)
+    target_link_libraries(${LIB_NAME} debug MSVCRTD.lib optimized MSVCRT.lib)
+endif()
 
 set_target_properties(${LIB_NAME} PROPERTIES VERSION ${QENG_VERSION})
 set_target_properties(${LIB_NAME} PROPERTIES DEFINE_SYMBOL "${LIB_SYMBOL}_EXPORTS")

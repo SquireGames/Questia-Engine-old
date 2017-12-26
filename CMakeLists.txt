@@ -21,9 +21,6 @@ set(QENG_VERSION_PATCH "0")
 set(QENG_VERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR}.${QENG_VERSION_PATCH})
 set(QENG_SOVERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR})
 
-## needs to be called from top directory
-enable_testing()
-
 ## prevent in source builds and wrong settings
 include(safeguards)
 
@@ -31,7 +28,6 @@ include(safeguards)
 # TODO: remove when gtest removes TR1
 add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
 add_definitions(-DGTEST_HAS_STD_TUPLE=1)
-
 
 ## set static/shared and release/debug options
 include(buildConfiguration)
@@ -52,7 +48,10 @@ add_subdirectory(src)
 ## generate documentation
 add_subdirectory(doc)
 ## run tests
-# disabled with shared libraries, gtest does not like to be dynamically linked
-if(NOT BUILD_SHARED_LIBS)
+# disabled with shared libraries, gtest does not like to be dynamically linked on UNIX
+# bases systems with pthreads
+if(NOT BUILD_SHARED_LIBS OR WIN32)
+    ## needs to be called from top directory
+    enable_testing()
     add_subdirectory(test)
 endif()

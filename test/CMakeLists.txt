@@ -7,18 +7,10 @@ include_directories("include")
 
 ## append header files
 set(QUESTIAENGINE_TEST_HEADERS
-    ${QUESTIAENGINE_HEADERS}
     "include/QENG/Test/Test.h"
 )
 
-# TODO use QuestiaEngine lib file instead of compiling separately
-
-## append source files
-foreach(EXTSRC ${QUESTIAENGINE_SOURCES})
-    LIST(APPEND QUESTIAENGINE_TEST_SOURCES "../src/${EXTSRC}")
-endforeach()
-   
-LIST(APPEND QUESTIAENGINE_TEST_SOURCES
+set(QUESTIAENGINE_TEST_SOURCES
     "Test.cpp"
 )
 
@@ -27,7 +19,6 @@ LIST(APPEND QUESTIAENGINE_TEST_SOURCES
 #				Create test			 
 #----------------------------------------
 
-add_executable(test_all ${QUESTIAENGINE_TEST_SOURCES} ${QUESTIAENGINE_TEST_HEADERS})
-target_link_libraries(test_all gtest gmock_main)
-add_test(NAME test_example COMMAND test_all)
-
+add_executable(test_all ${QUESTIAENGINE_HEADERS} ${QUESTIAENGINE_TEST_SOURCES} ${QUESTIAENGINE_TEST_HEADERS})
+target_link_libraries(test_all gtest gmock_main qeng)
+add_test(NAME unit_tests COMMAND test_all)
