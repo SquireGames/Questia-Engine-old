@@ -22,13 +22,6 @@ include_directories(
     "${${PROJ_NAME}_SOURCE_DIR}/SDL2-2.0.7/include"
 )
 
-# ensure SDL2 is compiling the correct libraries
-if(BUILD_SHARED_LIBS)
-    set(SDL_SHARED ON)
-else()
-    set(SDL_STATIC ON)
-endif()
-
 # add symlink where required for installing on linux
 if(NOT WIN32)
     MACRO(ADD_SYMLINK targetLib)

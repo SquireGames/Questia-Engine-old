@@ -20,5 +20,5 @@ set(QUESTIAENGINE_TEST_SOURCES
 #----------------------------------------
 
 add_executable(test_all ${QUESTIAENGINE_HEADERS} ${QUESTIAENGINE_TEST_SOURCES} ${QUESTIAENGINE_TEST_HEADERS})
-target_link_libraries(test_all qeng gtest gmock_main)
+target_link_libraries(test_all gtest gmock_main qeng)
 add_test(NAME unit_tests COMMAND test_all)
