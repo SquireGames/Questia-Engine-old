@@ -29,7 +29,6 @@ include(safeguards)
 add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
 add_definitions(-DGTEST_HAS_STD_TUPLE=1)
 
-
 ## set static/shared and release/debug options
 include(buildConfiguration)
 
