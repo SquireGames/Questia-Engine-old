@@ -7,7 +7,7 @@ set(PROJ_NAME "qeng-deps")
 downloadProject(
     PROJECT ${PROJ_NAME}
     REPOSITORY https://github.com/SquireGames/Questia-Dependencies.git
-    BRANCH 97da0ba
+    COMMIT 97da0ba
     VERSION_MAJOR 0
     VERSION_MINOR 0
 )
