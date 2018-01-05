@@ -5,8 +5,6 @@
 
 ## force visual studio to link with /MT and MTd when linking statically
 
-# TODO move responsibility to questia dependencies repository
-
 # ensure the BUILD_SHARED_LIBS option exists
 option(BUILD_SHARED_LIBS OFF)
 
