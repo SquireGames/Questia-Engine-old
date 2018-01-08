@@ -21,4 +21,9 @@ set(QUESTIAENGINE_TEST_SOURCES
 
 add_executable(test_all ${QUESTIAENGINE_HEADERS} ${QUESTIAENGINE_TEST_SOURCES} ${QUESTIAENGINE_TEST_HEADERS})
 target_link_libraries(test_all gtest gmock_main qeng)
+
+if(CMAKE_GENERATOR MATCHES "Visual Studio" AND NOT BUILD_SHARED_LIBS)
+    target_link_libraries(test_all debug MSVCRTD.lib optimized MSVCRT.lib)
+endif()
+
 add_test(NAME unit_tests COMMAND test_all)
