@@ -19,7 +19,7 @@ set(QUESTIAENGINE_TEST_SOURCES
 #				Create test			 
 #----------------------------------------
 
-add_executable(test_all ${QUESTIAENGINE_HEADERS} ${QUESTIAENGINE_TEST_SOURCES} ${QUESTIAENGINE_TEST_HEADERS})
+add_executable(test_all ${QUESTIAENGINE_TEST_SOURCES} ${QUESTIAENGINE_TEST_HEADERS})
 target_link_libraries(test_all gtest gmock_main qeng)
 
 if(CMAKE_GENERATOR MATCHES "Visual Studio" AND NOT BUILD_SHARED_LIBS)
