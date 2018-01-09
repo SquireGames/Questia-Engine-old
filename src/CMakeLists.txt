@@ -5,17 +5,13 @@
 ## define header files
 set(QUESTIAENGINE_HEADERS
 	"${CMAKE_CURRENT_BINARY_DIR}/../include/QENG/config.h"
-    "../include/QENG/Engine.h"
+    "../include/QENG/ClientEngine.h"
 )
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
-    "Engine.cpp"
+    "ClientEngine.cpp"
 )
-
-# allow other to get src and header files
-set(QUESTIAENGINE_HEADERS ${QUESTIAENGINE_HEADERS} PARENT_SCOPE)
-set(QUESTIAENGINE_SOURCES ${QUESTIAENGINE_SOURCES} PARENT_SCOPE)
 
 #----------------------------------------
 #		   Library naming scheme		 

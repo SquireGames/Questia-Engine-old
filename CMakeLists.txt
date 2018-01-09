@@ -42,11 +42,24 @@ add_subdirectory(include)
 add_subdirectory(src)
 ## generate documentation
 add_subdirectory(doc)
-## run tests
+
+## testing
 # disabled with shared libraries, gtest does not like to be dynamically linked on UNIX
-# bases systems with pthreads
+# based systems with pthreads
+option(QENG_BUILD_TESTS OFF)
 if(NOT BUILD_SHARED_LIBS OR WIN32)
-    ## needs to be called from top directory
-    enable_testing()
-    add_subdirectory(test)
+    if(QENG_BUILD_TESTS)
+        ## needs to be called from top directory
+        enable_testing()
+        add_subdirectory(test)
+    endif()
 endif()
+
+## samples
+option(QENG_BUILD_SAMPLES OFF)
+if(QENG_BUILD_SAMPLES)
+    ## needs to be called from top directory
+    add_subdirectory(samples)
+endif()
+
+
