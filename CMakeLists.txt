@@ -27,8 +27,9 @@ include(safeguards)
 ## set static/shared settings
 include(buildConfiguration)
 
-## get all dependencies
-include(dependencies)
+## get dependencies
+include (${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 
 ## define project include directories
 include_directories(

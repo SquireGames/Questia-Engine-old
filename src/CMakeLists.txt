@@ -64,11 +64,7 @@ endif()
 set_target_properties(${LIB_NAME} PROPERTIES FOLDER "QENG")
  
 # link dependencies
-if(BUILD_SHARED_LIBS)
-    target_link_libraries(${LIB_NAME} SDL2)
-else()
-    target_link_libraries(${LIB_NAME} SDL2-static)
-endif()
+target_link_libraries(${LIB_NAME} ${CONAN_LIBS})
  
 # install rule
 install(
