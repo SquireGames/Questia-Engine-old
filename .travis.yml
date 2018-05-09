@@ -2,11 +2,6 @@
 sudo: required
 dist: trusty
 
-branches:
-  only:
-    - master
-    - 0.0.x
-
 language: cpp
   
 matrix:
