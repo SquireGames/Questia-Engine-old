@@ -8,21 +8,22 @@ class QengConan(ConanFile):
     license = "https://github.com/SquireGames/Questia-Engine/blob/master/LICENSE.txt"
     url = "https://github.com/SquireGames/Questia-Engine"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False]}
-    default_options = "shared=True", "gtest:shared=True"
+    options = {"shared": [True, False], "build_doc": [True, False]}
+    default_options = "shared=True", "build_doc=False", "gtest:shared=True"
     generators = "cmake"
     requires = "gtest/1.8.0@bincrafters/stable"
 
     def configure(self):
         for req in self.requires:
-            self.options[req.split('/', 1)[0]].shared = self.options.shared
+            self.options[req.split("/", 1)[0]].shared = self.options.shared
     
     def source(self):
         self.run("git clone https://github.com/SquireGames/Questia-Engine.git")
-        self.run("cd Questia-Engine")  
+        self.run("cd %s" % self.folder)
 
     def build(self):
         cmake = CMake(self)
+        cmake.definitions["BUILD_DOC"] = self.options.build_doc
         cmake.configure()
         cmake.build()
         cmake.install()
@@ -39,7 +40,6 @@ class QengConan(ConanFile):
         self.cpp_info.libs = self.collect_libs()
               
     def imports(self):
-        if self.options.shared == True:
+        if self.options.shared:
             self.copy("*.dll", "bin", "bin")
             self.copy("*.dylib", "lib", "lib")
-    
