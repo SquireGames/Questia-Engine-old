@@ -64,7 +64,9 @@ endif()
 set_target_properties(${LIB_NAME} PROPERTIES FOLDER "QENG")
  
 # link dependencies
-target_link_libraries(${LIB_NAME} ${CONAN_LIBS})
+set(CONAL_LIBS_NO_GTEST ${CONAN_LIBS})
+list(REMOVE_ITEM CONAL_LIBS_NO_GTEST ${CONAN_LIBS_GTEST})
+target_link_libraries(${LIB_NAME} ${CONAL_LIBS_NO_GTEST})
  
 # install rule
 install(
