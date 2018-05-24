@@ -6,12 +6,12 @@
 set(QUESTIAENGINE_HEADERS
 	"${CMAKE_CURRENT_BINARY_DIR}/../include/QENG/config.h"
     "../include/QENG/ClientEngine.h"
-)
+        ../include/QENG/Window.h)
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
     "ClientEngine.cpp"
-)
+        Window.cpp)
 
 #----------------------------------------
 #		   Library naming scheme		 
