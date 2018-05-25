@@ -44,3 +44,6 @@ CTestTestfile.cmake
 
 # out of source build
 build
+\.idea/
+
+cmake-build-debug/

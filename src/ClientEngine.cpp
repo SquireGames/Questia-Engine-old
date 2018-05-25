@@ -1,15 +1,52 @@
-#include "QENG/ClientEngine.h"
-#include "gtest/gtest.h"
-
 #include <iostream>
+#include "QENG/ClientEngine.h"
 
-ClientEngine::ClientEngine()
+namespace qe
 {
-}
+	qe::ClientEngine::ClientEngine(qe::EngineSettings initSettings) noexcept :
+			window()
+			, frameRate(initSettings.frameRate)
+			, tickRate(initSettings.tickRate)
+			, tickCount(0)
+	{
+		if(!glfwInit())
+		{
+			std::cout << "Error initializing glfw" << std::endl;
+			std::terminate();
+		}
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-int ClientEngine::run()
-{
-	const int windowSize_x = 400, windowSize_y = 300;
+		window = std::unique_ptr<Window>(new Window(u8"Questia Engine game title", initSettings.screenWidth, initSettings.screenHeight));
+	}
 
-	return 0;
+	void ClientEngine::run() noexcept
+	{
+		while(!window->isClosed())
+		{
+			window->update();
+		}
+		glfwTerminate();
+	}
+
+	void ClientEngine::setTickRate(unsigned int tickRate) noexcept
+	{
+		this->tickRate = tickRate;
+	}
+
+	void ClientEngine::setFrameRate(unsigned int frameRate) noexcept
+	{
+		this->frameRate = frameRate;
+	}
+
+	unsigned int ClientEngine::getTickRate() const noexcept
+	{
+		return tickRate;
+	}
+
+	unsigned int ClientEngine::getFrameRate() const noexcept
+	{
+		return frameRate;
+	}
 }

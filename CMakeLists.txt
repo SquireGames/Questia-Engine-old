@@ -28,7 +28,7 @@ include(safeguards)
 include(buildConfiguration)
 
 ## get dependencies
-include (${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
 ## define project include directories
