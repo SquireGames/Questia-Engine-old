@@ -11,7 +11,7 @@ configuration:
   
 install:
   - ps: echo "Downloading conan"
-  - ps: set PATH=%PATH%;%PYTHON%/Scripts/
+  - cmmd: set PATH=%PATH%;%PYTHON%/Scripts/
   - ps: pip.exe install conan
   - ps: conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
   - ps: conan user
