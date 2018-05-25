@@ -20,9 +20,9 @@ install:
 environment:
   matrix:
     - GENERATOR: "Visual Studio 15 2017 Win64"
-      BUILD_SHARED_LIBS: "ON"
+      BUILD_SHARED_LIBS: "True"
     - GENERATOR: "Visual Studio 15 2017 Win64"
-      BUILD_SHARED_LIBS: "OFF"
+      BUILD_SHARED_LIBS: "False"
 
 build_script:
   - ps: mkdir build
