@@ -26,7 +26,7 @@ environment:
 
 build_script:
   - ps: mkdir build
-  - ps: conan install . -if build -o build_samples=True -o "shared=%BUILD_SHARED_LIBS%" -o build_tests=True -s "build_type=%CONFIGURATION%"
+  - ps: conan install . -if build -o build_samples=True -o shared=$env:BUILD_SHARED_LIBS -o build_tests=True -s build_type=$env:CONFIGURATION
   - ps: cd build
   - cmake "-G%GENERATOR%" "-DCMAKE_BUILD_TYPE=%CONFIGURATION%" "-DBUILD_SHARED_LIBS=%BUILD_SHARED_LIBS%" -DQENG_BUILD_TESTS=ON -DQENG_BUILD_SAMPLES=ON ..
   - cmake --build . --config "%CONFIGURATION%"
