@@ -23,7 +23,7 @@ class QengConan(ConanFile):
     requires = (
         "gtest/1.8.0@bincrafters/stable"
         , "glfw/3.2.1.20180327@bincrafters/stable"
-        , "glad/0.1.16a0@bincrafters/stable")
+        , "glad/0.1.24@bincrafters/stable")
 
     def configure(self):
         for req in self.requires:
