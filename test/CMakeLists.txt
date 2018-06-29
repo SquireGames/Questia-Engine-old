@@ -1,7 +1,4 @@
 
-# prevent gtest from changing settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
 #----------------------------------------
 #				Add files				 
 #----------------------------------------

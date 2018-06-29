@@ -26,7 +26,7 @@ environment:
 
 build_script:
   - ps: mkdir build
-  - ps: conan install . -if build -o build_samples=True -o shared=$env:BUILD_SHARED_LIBS -o build_tests=True -s build_type=$env:CONFIGURATION --build missing
+  - ps: conan install . -if build -o build_samples=True -o shared=$env:BUILD_SHARED_LIBS -o build_tests=$env:BUILD_SHARED_LIBS -s build_type=$env:CONFIGURATION --build missing
   - ps: cd build
   - ps: conan build ..
   
