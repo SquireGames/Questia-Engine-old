@@ -25,16 +25,10 @@ environment:
       BUILD_SHARED_LIBS: "False"
 
 build_script:
-  - ps: try 
-        {
-            mkdir build
-            conan install . -if build -o build_samples=True -o shared=$env:BUILD_SHARED_LIBS -o build_tests=$env:BUILD_SHARED_LIBS -s build_type=$env:CONFIGURATION --build missing
-            cd build
-            conan build ..
-        }
-        catch 
-        {
-        }
+  - cmd: mkdir build
+  - cmd: conan install . -if build -o build_samples=True -o shared=%BUILD_SHARED_LIBS% -o build_tests=%BUILD_SHARED_LIBS% -s build_type=%CONFIGURATION% --build missing
+  - cmd: cd build
+  - cmd: conan build ..
   
 test_script:
     - ctest -C "%CONFIGURATION%"
