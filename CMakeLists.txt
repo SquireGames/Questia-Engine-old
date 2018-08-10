@@ -1,5 +1,5 @@
 
-cmake_minimum_required (VERSION 2.8.10)
+cmake_minimum_required (VERSION 3.8.2)
 enable_language(C CXX)
 
 # cmake module directory
@@ -29,7 +29,10 @@ include(buildConfiguration)
 
 ## get dependencies
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+conan_basic_setup(KEEP_RPATHS)
+
+## define helper functions to help with linking
+include(qengMacros)
 
 ## define project include directories
 include_directories(
@@ -48,12 +51,12 @@ add_subdirectory(doc)
 # disabled with shared libraries, gtest does not like to be dynamically linked on UNIX
 # based systems with pthreads
 option(QENG_BUILD_TESTS OFF)
-if(NOT BUILD_SHARED_LIBS OR WIN32)
+if(BUILD_SHARED_LIBS OR WIN32)
     if(QENG_BUILD_TESTS)
         ## needs to be called from top directory
         enable_testing()
         add_subdirectory(test)
-    endif()
+   endif()
 endif()
 
 ## samples
@@ -62,5 +65,3 @@ if(QENG_BUILD_SAMPLES)
     ## needs to be called from top directory
     add_subdirectory(samples)
 endif()
-
-

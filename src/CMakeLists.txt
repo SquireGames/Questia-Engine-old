@@ -64,12 +64,7 @@ endif()
 set_target_properties(${LIB_NAME} PROPERTIES FOLDER "QENG")
  
 # link dependencies
-set(CONAL_LIBS_NO_GTEST ${CONAN_LIBS})
-if(CONAN_LIBS_GTEST)
-    list(REMOVE_ITEM CONAL_LIBS_NO_GTEST ${CONAN_LIBS_GTEST})
-endif()
-
-target_link_libraries(${LIB_NAME} ${CONAL_LIBS_NO_GTEST})
+qeng_target_link_libraries_libqeng(${LIB_NAME})
  
 # install rule
 install(
@@ -78,5 +73,3 @@ install(
     LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin
     ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel
 )
-
- 
