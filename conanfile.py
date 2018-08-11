@@ -2,9 +2,8 @@ from conans import ConanFile, CMake, tools
 
 
 class QengConan(ConanFile):
-    name = "QENG"
+    name = "qeng"
     version = "0.0.1"
-    folder = "Questia-Engine"
     license = "https://github.com/SquireGames/Questia-Engine/blob/master/LICENSE.txt"
     url = "https://github.com/SquireGames/Questia-Engine"
     settings = "os", "compiler", "build_type", "arch"
@@ -23,6 +22,8 @@ class QengConan(ConanFile):
     requires = (
          "glfw/3.2.1.20180327@bincrafters/stable", 
          "glad/0.1.24@bincrafters/stable")
+         
+    exports_sources = "*", "!build*", "!test_package*", "!.*", "!conanfile.py"
 
     def requirements(self):
         if self.options.build_tests:
@@ -46,10 +47,6 @@ class QengConan(ConanFile):
             elif not self.options.shared and self.settings.build_type == "Release" and self.settings.compiler.runtime != "MT":
                 self.output.warn("Use '-s compiler.runtime=MT' when compiling with shared=false and build_type=Release")
 
-    def source(self):
-        self.run("git clone https://github.com/SquireGames/Questia-Engine.git")
-        self.run("cd %s" % self.folder)
-
     def build(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_DOC"] = self.options.build_doc
@@ -60,7 +57,7 @@ class QengConan(ConanFile):
         cmake.install()
 
     def package(self):
-        self.copy("*.h", dst="include", src=self.folder)
+        self.copy("*.h", dst="include", src="include")
         self.copy("*.lib", dst="lib", keep_path=False)
         self.copy("*.dll", dst="bin", keep_path=False)
         self.copy("*.so", dst="lib", keep_path=False)
@@ -74,3 +71,4 @@ class QengConan(ConanFile):
         if self.options.shared:
             self.copy("*.dll", "bin", "bin")
             self.copy("*.dylib*", "lib", "lib")
+            self.copy('*.so*', dst='lib', src='lib')

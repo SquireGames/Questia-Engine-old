@@ -1,4 +1,3 @@
-
 cmake_minimum_required (VERSION 3.8.2)
 enable_language(C CXX)
 
@@ -17,12 +16,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 project(QuestiaEngine)
 set(QENG_VERSION_MAJOR "0")
 set(QENG_VERSION_MINOR "0")
-set(QENG_VERSION_PATCH "0")
+set(QENG_VERSION_PATCH "1")
 set(QENG_VERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR}.${QENG_VERSION_PATCH})
 set(QENG_SOVERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR})
-
-## prevent in source builds and wrong settings
-include(safeguards)
 
 ## set static/shared settings
 include(buildConfiguration)
