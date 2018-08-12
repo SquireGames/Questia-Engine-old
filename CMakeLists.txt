@@ -44,15 +44,10 @@ add_subdirectory(src)
 add_subdirectory(doc)
 
 ## testing
-# disabled with shared libraries, gtest does not like to be dynamically linked on UNIX
-# based systems with pthreads
 option(QENG_BUILD_TESTS OFF)
-if(BUILD_SHARED_LIBS OR WIN32)
-    if(QENG_BUILD_TESTS)
-        ## needs to be called from top directory
-        enable_testing()
-        add_subdirectory(test)
-   endif()
+if(QENG_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
 endif()
 
 ## samples

@@ -13,6 +13,13 @@ macro(qeng_target_link_libraries target)
     if(CMAKE_GENERATOR MATCHES "Visual Studio" AND NOT BUILD_SHARED_LIBS)
         target_link_libraries(${target} debug MSVCRTD.lib optimized MSVCRT.lib)
     endif()
+    
+    # use pthread if on UNIX
+    if(UNIX)
+        set(THREADS_PREFER_PTHREAD_FLAG ON)
+        find_package(Threads REQUIRED)
+        target_link_libraries(${target} Threads::Threads)
+    endif()   
 endmacro()
 
 # links qeng and gtest to an executable
@@ -29,6 +36,12 @@ macro(qeng_target_link_libraries_test target)
         target_link_libraries(${target} debug MSVCRTD.lib optimized MSVCRT.lib)
     endif()
     
+    # use pthread if on UNIX
+    if(UNIX)
+        set(THREADS_PREFER_PTHREAD_FLAG ON)
+        find_package(Threads REQUIRED)
+        target_link_libraries(${target} Threads::Threads)
+    endif()   
 endmacro()
 
 # links the target qeng lib

@@ -19,7 +19,7 @@ install:
   
 script:
  - mkdir build
- - sudo conan install . -if build -o build_samples=True -o build_tests=$BUILD_SHARED_LIBS -o shared=$BUILD_SHARED_LIBS -s build_type=$CONFIG --build missing
+ - sudo conan install . -if build -o build_samples=True -o build_tests=True -o shared=$BUILD_SHARED_LIBS -s build_type=$CONFIG --build missing
  - cd build
  - sudo conan build ..
  - ctest -C "%CONFIGURATION%"

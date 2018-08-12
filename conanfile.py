@@ -33,9 +33,7 @@ class QengConan(ConanFile):
     def configure(self):
         for req in self.requires:
             self.options[req.split("/", 1)[0]].shared = self.options.shared
-        # do not allow non-static tests on Unix systems
-        if self.settings.os != "Windows" and self.options.build_tests and not self.options.shared:
-            raise Exception("Cannot test this package when linking statically. Use shared=True or build_tests=False.")
+        
         # ensure proper compiler settings when using Visual Studio
         if self.settings.compiler == "Visual Studio":
             if self.options.shared and self.settings.build_type == "Debug" and self.settings.compiler.runtime != "MDd":
