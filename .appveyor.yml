@@ -38,7 +38,8 @@ build_script:
   - cmd: conan build ..
   
 test_script:
-    - ctest -C "%CONFIGURATION%"
-    - conan export . qeng/0.0.1@squiregames/testing
-    - conan test test_package qeng/0.0.1@squiregames/testing
+  - ctest -C "%CONFIGURATION%"
+  - cmd: cd ..
+  - conan export . qeng/0.0.1@squiregames/testing
+  - conan test test_package qeng/0.0.1@squiregames/testing
     
