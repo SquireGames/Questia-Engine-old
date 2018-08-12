@@ -16,6 +16,7 @@ class QengTestConan(ConanFile):
         self.copy("*.dll", dst="bin", src="bin")
         self.copy("*.dylib*", dst="bin", src="lib")
         self.copy('*.so*', dst='lib', src='lib')
+        self.copy("*.lib", dst="lib", keep_path=False)
 
     def test(self):
         if not tools.cross_building(self.settings):

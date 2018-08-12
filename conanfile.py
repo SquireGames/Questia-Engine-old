@@ -67,6 +67,10 @@ class QengConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
+        self.cpp_info.release_shared.libs = ["qeng"]
+        self.cpp_info.release_static.libs = ["qeng-s"]
+        self.cpp_info.debug_shared.libs = ["qeng-d"]
+        self.cpp_info.debug_static.libs = ["qeng-s-d"]
 
     def imports(self):
         if self.options.shared:

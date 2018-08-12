@@ -3,17 +3,27 @@ include(setupMacosRPath)
 
 # links qeng to an executable
 macro(qeng_target_link_libraries target)
-    # link qeng
-    target_link_libraries(${target} qeng)
-    
+    if(DEFINED QENG_VERSION)
+        # link qeng
+        target_link_libraries(${target} qeng)
+    else()
+        # link qeng and gtest/gmock
+        conan_target_link_libraries(${target} ${CONAN_LIBS} ${CONAN_LIBS_QENG_RELEASE_SHARED} ${CONAN_LIBS_QENG_RELEASE_STATIC} ${CONAN_LIBS_QENG_DEBUG_SHARED} ${CONAN_LIBS_QENG_DEBUG_STATIC})
+    endif()
+
     # fix macos dynamic library linking issues
     fix_install_name(${target})
 endmacro()
 
 # links qeng and gtest to an executable
 macro(qeng_target_link_libraries_test target)
-    # link qeng and gtest/gmock
-    target_link_libraries(${target} qeng ${CONAN_LIBS})
+    if(DEFINED QENG_VERSION)
+        # link qeng and gtest/gmock
+        target_link_libraries(${target} qeng ${CONAN_LIBS})
+    else()
+        # link qeng and gtest/gmock
+        conan_target_link_libraries(${target} ${CONAN_LIBS})
+    endif()
     
     # fix macos dynamic library linking issues
     fix_install_name(${target})

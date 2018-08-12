@@ -24,8 +24,8 @@ script:
  - sudo conan build ..
  - ctest -C "%CONFIGURATION%"
  - cd ..
- - conan export . qeng/0.0.1@squiregames/testing
- - conan test test_package qeng/0.0.1@squiregames/testing
+ - sudo conan export-pkg . qeng/0.0.1@squiregames/testing
+ - sudo conan test test_package qeng/0.0.1@squiregames/testing  -o qeng:shared=$BUILD_SHARED_LIBS -s build_type=$CONFIG -o glad:profile=core -o glad:api_version=3.3 --build missing 
   
 matrix:
   include:
