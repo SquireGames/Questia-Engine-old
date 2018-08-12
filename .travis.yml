@@ -23,6 +23,8 @@ script:
  - cd build
  - sudo conan build ..
  - ctest -C "%CONFIGURATION%"
+ - conan export . qeng/0.0.1@squiregames/testing
+ - conan test test_package qeng/0.0.1@squiregames/testing
   
 matrix:
   include:
