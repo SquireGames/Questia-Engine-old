@@ -47,6 +47,9 @@ class QengConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
+        cmake.definitions["QENG_VERSION_MAJOR"] = self.version.split(".")[0]
+        cmake.definitions["QENG_VERSION_MINOR"] = self.version.split(".")[1]
+        cmake.definitions["QENG_VERSION_PATCH"] = self.version.split(".")[2]
         cmake.definitions["BUILD_DOC"] = self.options.build_doc
         cmake.definitions["QENG_BUILD_SAMPLES"] = self.options.build_samples
         cmake.definitions["QENG_BUILD_TESTS"] = self.options.build_tests
