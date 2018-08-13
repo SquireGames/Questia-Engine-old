@@ -1,5 +1,4 @@
-
-cmake_minimum_required (VERSION 2.8.10)
+cmake_minimum_required (VERSION 3.8.2)
 enable_language(C CXX)
 
 # cmake module directory
@@ -15,20 +14,22 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 ## define project properties
 project(QuestiaEngine)
-set(QENG_VERSION_MAJOR "0")
-set(QENG_VERSION_MINOR "0")
-set(QENG_VERSION_PATCH "0")
+# imported from conanfile.py
+option(QENG_VERSION_MAJOR "")
+option(QENG_VERSION_MINOR "")
+option(QENG_VERSION_PATCH "")
 set(QENG_VERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR}.${QENG_VERSION_PATCH})
 set(QENG_SOVERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR})
-
-## prevent in source builds and wrong settings
-include(safeguards)
 
 ## set static/shared settings
 include(buildConfiguration)
 
-## get all dependencies
-include(dependencies)
+## get dependencies
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(KEEP_RPATHS)
+
+## define helper functions to help with linking
+include(qengMacros)
 
 ## define project include directories
 include_directories(
@@ -44,15 +45,10 @@ add_subdirectory(src)
 add_subdirectory(doc)
 
 ## testing
-# disabled with shared libraries, gtest does not like to be dynamically linked on UNIX
-# based systems with pthreads
 option(QENG_BUILD_TESTS OFF)
-if(NOT BUILD_SHARED_LIBS OR WIN32)
-    if(QENG_BUILD_TESTS)
-        ## needs to be called from top directory
-        enable_testing()
-        add_subdirectory(test)
-    endif()
+if(QENG_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
 endif()
 
 ## samples
@@ -61,5 +57,3 @@ if(QENG_BUILD_SAMPLES)
     ## needs to be called from top directory
     add_subdirectory(samples)
 endif()
-
-

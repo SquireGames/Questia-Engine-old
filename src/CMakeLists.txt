@@ -6,12 +6,12 @@
 set(QUESTIAENGINE_HEADERS
 	"${CMAKE_CURRENT_BINARY_DIR}/../include/QENG/config.h"
     "../include/QENG/ClientEngine.h"
-)
+        ../include/QENG/Window.h)
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
     "ClientEngine.cpp"
-)
+        Window.cpp)
 
 #----------------------------------------
 #		   Library naming scheme		 
@@ -64,11 +64,7 @@ endif()
 set_target_properties(${LIB_NAME} PROPERTIES FOLDER "QENG")
  
 # link dependencies
-if(BUILD_SHARED_LIBS)
-    target_link_libraries(${LIB_NAME} SDL2)
-else()
-    target_link_libraries(${LIB_NAME} SDL2-static)
-endif()
+qeng_target_link_libraries_libqeng(${LIB_NAME})
  
 # install rule
 install(
@@ -77,5 +73,3 @@ install(
     LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin
     ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel
 )
-
- 

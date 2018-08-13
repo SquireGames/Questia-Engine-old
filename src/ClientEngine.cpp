@@ -1,62 +1,52 @@
+#include <iostream>
 #include "QENG/ClientEngine.h"
 
-#include <iostream>
-
-ClientEngine::ClientEngine():
-	window(nullptr)
-	, renderer(nullptr)
+namespace qe
 {
-}
-
-int ClientEngine::run()
-{
-	const int windowSize_x = 400, windowSize_y = 300;
-
-	if (SDL_Init(SDL_INIT_VIDEO) == -1)
+	qe::ClientEngine::ClientEngine(qe::EngineSettings initSettings) noexcept :
+			window()
+			, frameRate(initSettings.frameRate)
+			, tickRate(initSettings.tickRate)
+			, tickCount(0)
 	{
-		std::cout << "FATAL: Failed to initialize SDL" << std::endl;
-		std::cout << "\t" << SDL_GetError();
-		return 0;
-	}
-
-	window = SDL_CreateWindow("QENG Sample", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowSize_x, windowSize_y, SDL_WINDOW_SHOWN);
-	if (window == nullptr)
-	{
-		std::cout << "FATAL: Failed to initialize SDL window" << std::endl;
-		std::cout << "\t" << SDL_GetError();
-		return 0;
-	}
-
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	if (renderer == nullptr)
-	{
-		std::cout << "FATAL: Failed to initialize SDL renderer" << std::endl;
-		std::cout << "\t" << SDL_GetError();
-		return 0;
-	}
-
-	SDL_RenderSetLogicalSize(renderer, windowSize_x, windowSize_y);
-	SDL_SetRenderDrawColor(renderer, 12, 23, 34, 45);
-
-	bool runSample = true;
-	while (runSample)
-	{
-		SDL_Event event;
-		while (SDL_PollEvent(&event))
+		if(!glfwInit())
 		{
-			if (event.type == SDL_QUIT)
-			{
-				runSample = false;
-			}
+			std::cout << "Error initializing glfw" << std::endl;
+			std::terminate();
 		}
-		SDL_Delay(7);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		SDL_RenderClear(renderer);
-		SDL_RenderPresent(renderer);
+		window = std::unique_ptr<Window>(new Window(u8"Questia Engine game title", initSettings.screenWidth, initSettings.screenHeight));
 	}
 
-	SDL_DestroyWindow(window);
-	SDL_Quit();
+	void ClientEngine::run() noexcept
+	{
+		while(!window->isClosed())
+		{
+			window->update();
+		}
+		glfwTerminate();
+	}
 
-	return 0;
+	void ClientEngine::setTickRate(unsigned int tickRate) noexcept
+	{
+		this->tickRate = tickRate;
+	}
+
+	void ClientEngine::setFrameRate(unsigned int frameRate) noexcept
+	{
+		this->frameRate = frameRate;
+	}
+
+	unsigned int ClientEngine::getTickRate() const noexcept
+	{
+		return tickRate;
+	}
+
+	unsigned int ClientEngine::getFrameRate() const noexcept
+	{
+		return frameRate;
+	}
 }
