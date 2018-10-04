@@ -15,11 +15,13 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 ## define project properties
 project(QuestiaEngine)
 # imported from conanfile.py
+option(QENG_GRAPHICS "")
 option(QENG_VERSION_MAJOR "")
 option(QENG_VERSION_MINOR "")
 option(QENG_VERSION_PATCH "")
-set(QENG_VERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR}.${QENG_VERSION_PATCH})
-set(QENG_SOVERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR})
+# enable this if you are working from an IDE or CMake GUI that does not directly support Conan, all it does
+# is import options from conanfile.py rather than from the command line
+option(QENG_IMPORT_CONANFILE_DEFINES OFF)
 
 ## set static/shared settings
 include(buildConfiguration)
@@ -27,6 +29,22 @@ include(buildConfiguration)
 ## get dependencies
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(KEEP_RPATHS)
+
+# import option defines from conanfile.py
+if(QENG_IMPORT_CONANFILE_DEFINES)
+    foreach(DEFINE ${CONAN_DEFINES})
+        string(REPLACE "-D" "" DEFINE ${DEFINE})
+        string(REPLACE "=" ";\"" DEFINE ${DEFINE})
+        set(DEFINE "${DEFINE}\"")
+        list(GET DEFINE 0 VAR)
+        list(GET DEFINE 1 VAL)
+        set(${VAR} ${VAL})
+    endforeach()
+endif()
+
+# set version information
+set(QENG_VERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR}.${QENG_VERSION_PATCH})
+set(QENG_SOVERSION ${QENG_VERSION_MAJOR}.${QENG_VERSION_MINOR})
 
 ## define helper functions to help with linking
 include(qengMacros)

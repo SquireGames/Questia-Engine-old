@@ -4,14 +4,24 @@
 
 ## define header files
 set(QUESTIAENGINE_HEADERS
-	"${CMAKE_CURRENT_BINARY_DIR}/../include/QENG/config.h"
-    "../include/QENG/ClientEngine.h"
-        ../include/QENG/Window.h)
+        "${CMAKE_CURRENT_BINARY_DIR}/../include/QENG/config.h"
+        "../include/QENG/ClientEngine.h"
+        "../include/QENG/graphics/Window.h")
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
-    "ClientEngine.cpp"
-        Window.cpp)
+    "ClientEngine.cpp")
+
+## define implementations of generic classes
+if(QENG_GRAPHICS MATCHES "none")
+    list(APPEND QUESTIAENGINE_SOURCES
+            "graphics/mock/Window.cpp")
+elseif(QENG_GRAPHICS MATCHES "opengl")
+    list(APPEND QUESTIAENGINE_SOURCES
+            "graphics/opengl/Window.cpp")
+else()
+    message(FATAL_ERROR "The Graphics option: " "${QENG_GRAPHICS}" " is not currently supported.")
+endif()
 
 #----------------------------------------
 #		   Library naming scheme		 

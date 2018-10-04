@@ -40,7 +40,6 @@ class QengConan(ConanFile):
             self.options["glad"].no_loader = False
             self.options["glad"].extensions = ""
 
-
     def configure(self):
         for req in self.requires:
             self.options[req.split("/", 1)[0]].shared = self.options.shared
@@ -56,6 +55,15 @@ class QengConan(ConanFile):
             elif not self.options.shared and self.settings.build_type == "Release" and self.settings.compiler.runtime != "MT":
                 self.output.warn("Use '-s compiler.runtime=MT' when compiling with shared=false and build_type=Release")
 
+        # make defines easier to use in IDEs when just installing the project
+        self.deps_cpp_info.defines.extend(["QENG_VERSION_MAJOR=" + self.version.split(".")[0],
+                                           "QENG_VERSION_MINOR=" + self.version.split(".")[1],
+                                           "QENG_VERSION_PATCH=" + self.version.split(".")[2],
+                                           "BUILD_DOC=" + str(self.options.build_doc),
+                                           "QENG_BUILD_SAMPLES=" + str(self.options.build_samples),
+                                           "QENG_BUILD_TESTS=" + str(self.options.build_tests),
+                                           "QENG_GRAPHICS=" + str(self.options.graphics)])
+
     def build(self):
         cmake = CMake(self)
         cmake.definitions["QENG_VERSION_MAJOR"] = self.version.split(".")[0]
@@ -64,6 +72,7 @@ class QengConan(ConanFile):
         cmake.definitions["BUILD_DOC"] = self.options.build_doc
         cmake.definitions["QENG_BUILD_SAMPLES"] = self.options.build_samples
         cmake.definitions["QENG_BUILD_TESTS"] = self.options.build_tests
+        cmake.definitions["QENG_GRAPHICS"] = self.options.graphics
         cmake.configure()
         cmake.build()
         cmake.install()
