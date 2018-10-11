@@ -2,8 +2,7 @@
 #define WINDOW_H
 
 #include <string>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "QENG/util/pimpl.h"
 
 namespace qe
 {
@@ -13,15 +12,14 @@ namespace qe
 		enum class Mode { windowed, fullscreen };
 
 		explicit Window(const std::string& title, unsigned int width, unsigned int height) noexcept;
-		explicit Window(const std::string& title, GLFWmonitor* monitor = glfwGetPrimaryMonitor()) noexcept;
 		Window(const Window&) = delete;
-		Window(Window&&) = default;
-		Window& operator=(Window) = delete;
-		Window& operator=(Window&&) = default;
+		Window(Window&&) noexcept = default;
+		Window& operator=(Window) noexcept = delete;
+		Window& operator=(Window&&) noexcept = default;
 		~Window() noexcept;
 
 		void update() noexcept;
-		void toFullscreen(GLFWmonitor* monitor = glfwGetPrimaryMonitor()) noexcept;
+		void toFullscreen() noexcept;
 		void toWindowed(unsigned int width, unsigned int height) noexcept;
 		void resize(unsigned int width, unsigned int height) noexcept;
 		void setTitle(const std::string& title) noexcept;
@@ -34,14 +32,8 @@ namespace qe
 		bool isClosed() const noexcept;
 
 	private:
-		void initWindow(const std::string& title, unsigned int width, unsigned int height, GLFWmonitor* monitor);
-		void initGladLoader() const noexcept;
-		const GLFWvidmode* applyWindowHint(GLFWmonitor* monitor);
-
-		GLFWwindow* window;
-		unsigned int width;
-		unsigned int height;
-		Mode mode;
+		class Impl;
+		pimpl<Impl> pImpl;
 	};
 }
 

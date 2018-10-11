@@ -1,79 +1,97 @@
 #include <QENG/graphics/Window.h>
 #include <iostream>
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 namespace qe
 {
-	Window::Window(const std::string& title, unsigned int width, unsigned int height) noexcept :
-			width(width)
-			, height(height)
-			, mode(Mode::windowed)
+	class Window::Impl
 	{
-		initWindow(title, width, height, nullptr);
-		glfwMakeContextCurrent(window);
-		initGladLoader();
-	}
+	public:
+		Impl(const std::string& title, unsigned int width, unsigned int height);
 
-	Window::Window(const std::string& title, GLFWmonitor* monitor) noexcept :
+		void initWindow(const std::string& title, unsigned int width, unsigned int height, GLFWmonitor* monitor);
+		void initGladLoader() const noexcept;
+		const GLFWvidmode* applyWindowHint(GLFWmonitor* monitor);
+
+		GLFWmonitor* monitor;
+		GLFWwindow* window;
+		unsigned int width;
+		unsigned int height;
+		Mode mode;
+	};
+
+	Window::Impl::Impl(const std::string& title, unsigned int width, unsigned int height) :
+			monitor(glfwGetPrimaryMonitor()),
+			window(nullptr),
+			width(width),
+			height(height),
 			mode(Mode::fullscreen)
 	{
 		const GLFWvidmode* vidMode = applyWindowHint(monitor);
 		width = static_cast<unsigned int>(vidMode->width);
 		height = static_cast<unsigned int>(vidMode->height);
-		initWindow(title, width, height, monitor);
+		initWindow(title, width, height, nullptr);
 		glfwMakeContextCurrent(window);
 		initGladLoader();
 	}
 
+	Window::Window(const std::string& title, unsigned int width, unsigned int height) noexcept :
+			pImpl(title, width, height)
+	{
+	}
+
 	Window::~Window() noexcept
 	{
-		glfwDestroyWindow(window);
+		glfwDestroyWindow(pImpl->window);
 	}
 
 	void Window::update() noexcept
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(pImpl->window);
 	}
 
-	void Window::toFullscreen(GLFWmonitor* monitor) noexcept
+	void Window::toFullscreen() noexcept
 	{
-		if(mode != Mode::fullscreen)
+		if(pImpl->mode != Mode::fullscreen)
 		{
-			mode = Mode::fullscreen;
-			const GLFWvidmode* vidMode = glfwGetVideoMode(monitor);
-			width = static_cast<unsigned int>(vidMode->width);
-			height = static_cast<unsigned int>(vidMode->height);
-			glfwSetWindowMonitor(window, monitor, 0, 0, vidMode->width, vidMode->height, vidMode->refreshRate);
+			pImpl->mode = Mode::fullscreen;
+			const GLFWvidmode* vidMode = glfwGetVideoMode(pImpl->monitor);
+			pImpl->width = static_cast<unsigned int>(vidMode->width);
+			pImpl->height = static_cast<unsigned int>(vidMode->height);
+			glfwSetWindowMonitor(pImpl->window, pImpl->monitor, 0, 0, vidMode->width, vidMode->height, vidMode->refreshRate);
 		}
 	}
 
 	void Window::toWindowed(unsigned int width, unsigned int height) noexcept
 	{
-		if(mode != Mode::windowed)
+		if(pImpl->mode != Mode::windowed)
 		{
-			mode = Mode::windowed;
-			this->width = width;
-			this->height = height;
-			glfwSetWindowMonitor(window, nullptr, 20, 50, width, height, GLFW_DONT_CARE);
+			pImpl->mode = Mode::windowed;
+			pImpl->width = width;
+			pImpl->height = height;
+			glfwSetWindowMonitor(pImpl->window, nullptr, 20, 50, width, height, GLFW_DONT_CARE);
 		}
 	}
 
 	Window::Mode Window::getMode() const noexcept
 	{
-		return mode;
+		return pImpl->mode;
 	}
 
 	bool Window::isClosed() const noexcept
 	{
-		return static_cast<bool>(glfwWindowShouldClose(window));
+		return static_cast<bool>(glfwWindowShouldClose(pImpl->window));
 	}
 
 	void* Window::getUnderlyingWindow() const noexcept
 	{
-		return window;
+		return pImpl->window;
 	}
 
-	void Window::initWindow(const std::string& title, unsigned int width, unsigned int height, GLFWmonitor* monitor)
+	void Window::Impl::initWindow(const std::string& title, unsigned int width, unsigned int height, GLFWmonitor* monitor)
 	{
 		window = glfwCreateWindow(width, height, title.c_str(), monitor, nullptr);
 		if(!window)
@@ -85,13 +103,13 @@ namespace qe
 		glfwSetWindowUserPointer(window, this);
 		glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height)
 		{
-			auto* pThis = static_cast<Window*>(glfwGetWindowUserPointer(window));
+			auto* pThis = static_cast<Impl*>(glfwGetWindowUserPointer(window));
 			pThis->width = static_cast<unsigned int>(width);
 			pThis->height = static_cast<unsigned int>(height);
 		});
 	}
 
-	void Window::initGladLoader() const noexcept
+	void Window::Impl::initGladLoader() const noexcept
 	{
 		if(!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
 		{
@@ -101,7 +119,7 @@ namespace qe
 		}
 	}
 
-	const GLFWvidmode* Window::applyWindowHint(GLFWmonitor* monitor)
+	const GLFWvidmode* Window::Impl::applyWindowHint(GLFWmonitor* monitor)
 	{
 		const GLFWvidmode* vidMode = glfwGetVideoMode(monitor);
 		if(!vidMode)
@@ -119,25 +137,25 @@ namespace qe
 
 	unsigned int Window::getWidth() const noexcept
 	{
-		return width;
+		return pImpl->width;
 	}
 
 	unsigned int Window::getHeight() const noexcept
 	{
-		return height;
+		return pImpl->height;
 	}
 
 	void Window::resize(unsigned int width, unsigned int height) noexcept
 	{
-		if(mode == Mode::windowed)
+		if(pImpl->mode == Mode::windowed)
 		{
-			glfwSetWindowSize(window, width, height);
+			glfwSetWindowSize(pImpl->window, width, height);
 		}
 	}
 
 	void Window::setTitle(const std::string& title) noexcept
 	{
-		glfwSetWindowTitle(window, title.c_str());
+		glfwSetWindowTitle(pImpl->window, title.c_str());
 	}
 
 }
