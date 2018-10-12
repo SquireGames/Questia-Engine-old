@@ -62,4 +62,4 @@ namespace qe
 	}
 }
 
-#endif PIMPL_H
+#endif //PIMPL_H

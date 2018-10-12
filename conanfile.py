@@ -21,8 +21,7 @@ class QengConan(ConanFile):
         "graphics=opengl")
     generators = "cmake"
     requires = ()
-         
-    exports_sources = "*", "!build*", "!test_package*", "!.*", "!conanfile.py"
+    exports_sources = "cmake*", "doc*", "include*", "samples*", "src*", "test*", "CMakeLists.txt"
 
     def requirements(self):
         if self.options.build_tests:
