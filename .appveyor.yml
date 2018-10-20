@@ -31,7 +31,7 @@ environment:
 
 build_script:
   # build gtest from source to avoid linker errors 
-  - cmd: conan install glad/0.1.24@bincrafters/stable -o shared=%BUILD_SHARED_LIBS% -s build_type=%CONFIGURATION% -s compiler.runtime=%RUNTIME% --build
+  - cmd: conan install gtest/1.8.0@bincrafters/stable -o shared=%BUILD_SHARED_LIBS% -s build_type=%CONFIGURATION% -s compiler.runtime=%RUNTIME% --build
   - cmd: mkdir build
   - cmd: conan install . -if build -o build_samples=True -o shared=%BUILD_SHARED_LIBS% -o build_tests=True -s build_type=%CONFIGURATION% -s compiler.runtime=%RUNTIME% -o glad:profile=core -o glad:api_version=3.3 --build missing
   - cmd: cd build

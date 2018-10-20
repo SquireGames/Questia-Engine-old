@@ -1,11 +1,10 @@
 #ifndef CLIENTENGINE_H
 #define CLIENTENGINE_H
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <memory>
+#include <QENG/graphics/GraphicsInstance.h>
 
-#include "Window.h"
+#include "graphics/Window.h"
 
 namespace qe
 {
@@ -30,6 +29,7 @@ namespace qe
 		unsigned int getFrameRate() const noexcept;
 
 	private:
+		GraphicsInstance graphicsInstance;
 		std::unique_ptr<Window> window;
 		unsigned int frameRate;
 		unsigned int tickRate;
