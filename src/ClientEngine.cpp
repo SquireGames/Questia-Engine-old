@@ -1,11 +1,11 @@
 #include <iostream>
-#include <QENG/graphics/opengl/GLRenderer.h>
+#include <QENG/graphics/opengl/GLInstance.h>
 #include "QENG/ClientEngine.h"
 
 namespace qe
 {
 	qe::ClientEngine::ClientEngine(qe::EngineSettings initSettings) noexcept :
-			renderer({new GLRenderer()}),
+			renderer({new GLInstance()}),
 			window(),
 			frameRate(initSettings.frameRate),
 			tickRate(initSettings.tickRate),

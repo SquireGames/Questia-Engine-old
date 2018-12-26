@@ -8,16 +8,16 @@ set(QUESTIAENGINE_HEADERS
         "../include/QENG/ClientEngine.h"
         "../include/QENG/graphics/Window.h"
         "../include/QENG/util/pimpl.h"
-        "../include/QENG/graphics/Renderer.h"
-        "../include/QENG/graphics/opengl/GLRenderer.h")
+        "../include/QENG/graphics/GraphicsAPI.h"
+        "../include/QENG/graphics/opengl/GLInstance.h" ../include/QENG/graphics/Monitor.h ../include/QENG/graphics/opengl/GLMonitor.h)
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
-    "ClientEngine.cpp")
+    "ClientEngine.cpp" graphics/Monitor.cpp graphics/opengl/GLMonitor.cpp)
 
 ## define implementations of graphics options dependant classes
 list(APPEND QUESTIAENGINE_SOURCES
-        "graphics/Renderer.cpp")
+        "graphics/GraphicsAPI.cpp")
 if(QENG_GRAPHICS MATCHES "none")
     list(APPEND QUESTIAENGINE_SOURCES
             "graphics/mock/Window.cpp")
@@ -25,7 +25,7 @@ else()
     if(QENG_GRAPHICS MATCHES "opengl")
         list(APPEND QUESTIAENGINE_SOURCES
                 "graphics/opengl/Window.cpp"
-                "graphics/opengl/GLRenderer.cpp")
+                "graphics/opengl/GLInstance.cpp")
     else()
         message(FATAL_ERROR "The Graphics option: " "${QENG_GRAPHICS}" " is not currently supported.")
     endif()

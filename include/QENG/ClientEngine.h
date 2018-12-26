@@ -2,7 +2,7 @@
 #define CLIENTENGINE_H
 
 #include <memory>
-#include <QENG/graphics/Renderer.h>
+#include <QENG/graphics/GraphicsAPI.h>
 
 #include "graphics/Window.h"
 
@@ -29,7 +29,7 @@ namespace qe
 		unsigned int getFrameRate() const noexcept;
 
 	private:
-		std::unique_ptr<Renderer> renderer;
+		std::unique_ptr<GraphicsAPI> renderer;
 		std::unique_ptr<Window> window;
 		unsigned int frameRate;
 		unsigned int tickRate;
