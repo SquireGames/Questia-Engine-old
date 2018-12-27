@@ -4,15 +4,18 @@
 #include <thread>
 #include <vector>
 #include <QENG/graphics/opengl/GLInstance.h>
+#include <QENG/graphics/GraphicsAPI.h>
 #include "QENG/ClientEngine.h"
 
 int main(int argc, char** argv)
 {
-	std::unique_ptr<qe::GraphicsAPI> api {new qe::GLInstance()};
+	qe::GraphicsAPI api {std::make_unique<qe::GLInstance>()};
 
-	std::vector<qe::Monitor*> monitors = api->getMonitors();
-
-
+	auto monitors = api.getMonitors();
+	for (auto& monitor : monitors)
+	{
+		std::cout << monitor.getMonitorName() << std::endl;
+	}
 
 	//qe::ClientEngine engine;
 	//engine.run();

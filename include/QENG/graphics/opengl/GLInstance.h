@@ -5,14 +5,14 @@
 
 namespace qe
 {
-	class GLInstance : public GraphicsAPI
+	class GLInstance : public GraphicsAPIBase
 	{
 	public:
 		explicit GLInstance() noexcept;
 		~GLInstance() noexcept final;
 
-		Monitor* getPrimaryMonitor() const noexcept final;
-		std::vector<Monitor*> getMonitors() const noexcept final;
+		Monitor getPrimaryMonitor() const noexcept final;
+		std::vector<Monitor> getMonitors() const noexcept final;
 
 	private:
 

@@ -2,7 +2,12 @@
 
 namespace qe
 {
-	GLMonitor::GLMonitor(GLFWmonitor* pMonitor) noexcept : Monitor(), pMonitor(pMonitor)
+	GLMonitor::GLMonitor(GLFWmonitor* pMonitor) noexcept : MonitorBase(), pMonitor(pMonitor)
 	{
+	}
+
+	std::string GLMonitor::getMonitorName()
+	{
+		return glfwGetMonitorName(const_cast<GLFWmonitor*>(pMonitor));
 	}
 }

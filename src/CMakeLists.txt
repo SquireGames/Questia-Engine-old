@@ -13,11 +13,9 @@ set(QUESTIAENGINE_HEADERS
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
-    "ClientEngine.cpp" graphics/Monitor.cpp graphics/opengl/GLMonitor.cpp)
+    "ClientEngine.cpp" graphics/opengl/GLMonitor.cpp)
 
 ## define implementations of graphics options dependant classes
-list(APPEND QUESTIAENGINE_SOURCES
-        "graphics/GraphicsAPI.cpp")
 if(QENG_GRAPHICS MATCHES "none")
     list(APPEND QUESTIAENGINE_SOURCES
             "graphics/mock/Window.cpp")

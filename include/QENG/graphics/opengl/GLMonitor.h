@@ -5,13 +5,14 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <string>
 
 namespace qe
 {
-	class GLMonitor : public Monitor
+	class GLMonitor : public MonitorBase
 	{
 	public:
-
+		std::string getMonitorName();
 	private:
 		friend class GLInstance;
 

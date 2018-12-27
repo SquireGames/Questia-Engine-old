@@ -6,7 +6,7 @@
 
 namespace qe
 {
-	GLInstance::GLInstance() noexcept : GraphicsAPI()
+	GLInstance::GLInstance() noexcept : GraphicsAPIBase()
 	{
 		if(!glfwInit())
 		{
@@ -23,27 +23,28 @@ namespace qe
 		glfwTerminate();
 	}
 
-	std::vector<Monitor*> GLInstance::getMonitors() const noexcept
+	std::vector<Monitor> GLInstance::getMonitors() const noexcept
 	{
 		int count;
 		GLFWmonitor** pMonitors = glfwGetMonitors(&count);
 
-		std::vector<Monitor*> monitors;
+		std::vector<Monitor> monitors;
 		monitors.reserve(static_cast<unsigned int>(count));
 
-		for (unsigned int i = 0; i < count; i++)
+		for (unsigned int i = 0; i < static_cast<unsigned int>(count); i++)
 		{
-			//monitors.emplace_back(new GLMonitor());
+			monitors.emplace_back(Monitor(std::unique_ptr<MonitorBase>(new GLMonitor(pMonitors[i]))));
 		}
 
-
-		return std::vector<Monitor*>();
+		return monitors;
 	}
 
-	Monitor* GLInstance::getPrimaryMonitor() const noexcept
+
+
+	Monitor GLInstance::getPrimaryMonitor() const noexcept
 	{
 		GLFWmonitor* pMonitor = glfwGetPrimaryMonitor();
-		return new GLMonitor(pMonitor);
+		return Monitor(std::unique_ptr<GLMonitor>(new GLMonitor(pMonitor)));
 	}
 
 }

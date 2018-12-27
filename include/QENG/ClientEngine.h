@@ -29,12 +29,17 @@ namespace qe
 		unsigned int getFrameRate() const noexcept;
 
 	private:
-		std::unique_ptr<GraphicsAPI> renderer;
+		std::unique_ptr<GraphicsAPIBase> renderer;
 		std::unique_ptr<Window> window;
 		unsigned int frameRate;
 		unsigned int tickRate;
 		unsigned long tickCount;
 	};
+
+	GraphicsAPI::GraphicsAPI(std::unique_ptr<GraphicsAPIBase> graphicsAPIBase) noexcept : graphicsAPIBase(std::move(graphicsAPIBase))
+	{
+	}
+
 }
 
 #endif // CLIENTENGINE_H
