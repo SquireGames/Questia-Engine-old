@@ -6,19 +6,27 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <string>
+#include <unordered_map>
 
 namespace qe
 {
 	class GLMonitor : public MonitorBase
 	{
 	public:
-		std::string getMonitorName();
+		~GLMonitor() noexcept final;
+
+		std::string getMonitorName() const noexcept final;
+		bool isConnected() const noexcept final;
+
 	private:
 		friend class GLInstance;
 
+		// must be initialized from main thread
 		explicit GLMonitor(GLFWmonitor* pMonitor) noexcept;
 
-		const GLFWmonitor* pMonitor;
+		static void monitorCallback(GLFWmonitor* pMonitor, int event);
+
+		GLFWmonitor* const pMonitor;
 	};
 
 }
