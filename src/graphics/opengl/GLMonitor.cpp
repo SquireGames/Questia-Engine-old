@@ -1,13 +1,18 @@
 #include "QENG/graphics/opengl/GLMonitor.h"
+#include <mutex>
 
 namespace qe
 {
 	static std::unordered_map<GLFWmonitor*, bool> monitorsValid = {};
+	static std::mutex monitorLock;
 	static int monitorRefCount = 0;
 
-	GLMonitor::GLMonitor(GLFWmonitor* pMonitor) noexcept : MonitorBase(), pMonitor(pMonitor)
+	GLMonitor::GLMonitor(GLFWmonitor* pMonitor) noexcept : MonitorBase(), pMonitor(pMonitor), monitorName(std::string(glfwGetMonitorName(pMonitor)))
 	{
-		if (monitorRefCount == 0)
+		std::lock_guard<std::mutex> lock(monitorLock);
+
+		// if this is the first initialized GLMonitor object
+		if(monitorRefCount == 0)
 		{
 			glfwSetMonitorCallback(GLMonitor::monitorCallback);
 			int count;
@@ -22,6 +27,8 @@ namespace qe
 
 	GLMonitor::~GLMonitor() noexcept
 	{
+		std::lock_guard<std::mutex> lock(monitorLock);
+
 		monitorRefCount--;
 		if(monitorRefCount == 0)
 		{
@@ -31,16 +38,18 @@ namespace qe
 
 	std::string GLMonitor::getMonitorName() const noexcept
 	{
-		return glfwGetMonitorName(pMonitor);
+		return monitorName;
 	}
 
 	bool GLMonitor::isConnected() const noexcept
 	{
+		std::lock_guard<std::mutex> lock(monitorLock);
 		return monitorsValid.count(pMonitor) ? monitorsValid.at(pMonitor) : false;
 	}
 
 	void GLMonitor::monitorCallback(GLFWmonitor* pMonitor, int event)
 	{
+		std::lock_guard<std::mutex> lock(monitorLock);
 		if (event == GLFW_CONNECTED)
 		{
 			monitorsValid[pMonitor] = true;
@@ -49,7 +58,6 @@ namespace qe
 		{
 			monitorsValid[pMonitor] = false;
 		}
-
 		// TODO create new event
 	}
 }

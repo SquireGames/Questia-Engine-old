@@ -21,12 +21,13 @@ namespace qe
 	private:
 		friend class GLInstance;
 
-		// must be initialized from main thread
+		// must be initialized from glfw thread
 		explicit GLMonitor(GLFWmonitor* pMonitor) noexcept;
 
 		static void monitorCallback(GLFWmonitor* pMonitor, int event);
 
 		GLFWmonitor* const pMonitor;
+		std::string monitorName;
 	};
 
 }
