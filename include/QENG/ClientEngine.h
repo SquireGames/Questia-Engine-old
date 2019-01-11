@@ -4,7 +4,7 @@
 #include <memory>
 #include <QENG/graphics/GraphicsAPI.h>
 
-#include "graphics/Window.h"
+//#include "graphics/Window.h"
 
 namespace qe
 {
@@ -30,7 +30,7 @@ namespace qe
 
 	private:
 		std::unique_ptr<GraphicsAPIBase> renderer;
-		std::unique_ptr<Window> window;
+	//	std::unique_ptr<Window> window;
 		unsigned int frameRate;
 		unsigned int tickRate;
 		unsigned long tickCount;

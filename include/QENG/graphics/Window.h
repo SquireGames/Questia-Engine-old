@@ -1,3 +1,5 @@
+/*
+
 #ifndef WINDOW_H
 #define WINDOW_H
 
@@ -34,3 +36,4 @@ namespace qe
 }
 
 #endif //WINDOW_H
+*/
