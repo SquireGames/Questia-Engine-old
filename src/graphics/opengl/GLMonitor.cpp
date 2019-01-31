@@ -1,11 +1,13 @@
 #include "QENG/graphics/opengl/GLMonitor.h"
 #include <mutex>
+#include <QENG/graphics/opengl/GLMonitor.h>
+
 
 namespace qe
 {
-	static std::unordered_map<GLFWmonitor*, bool> monitorsValid = {};
 	static std::mutex monitorLock;
 	static int monitorRefCount = 0;
+	static std::function<void(Monitor&&, Monitor::State)> monitorConnectionCallback = {};
 
 	GLMonitor::GLMonitor(GLFWmonitor* pMonitor) noexcept : MonitorBase(), pMonitor(pMonitor), monitorName(std::string(glfwGetMonitorName(pMonitor)))
 	{
@@ -15,25 +17,14 @@ namespace qe
 		if(monitorRefCount == 0)
 		{
 			glfwSetMonitorCallback(GLMonitor::monitorCallback);
-			int count;
-			GLFWmonitor** pMonitors = glfwGetMonitors(&count);
-			for (unsigned int i = 0; i < static_cast<unsigned int>(count); i++)
-			{
-				monitorsValid[pMonitors[i]] = true;
-			}
 		}
 		monitorRefCount++;
 	}
 
-	GLMonitor::~GLMonitor() noexcept
+    GLMonitor::~GLMonitor() noexcept
 	{
 		std::lock_guard<std::mutex> lock(monitorLock);
-
 		monitorRefCount--;
-		if(monitorRefCount == 0)
-		{
-			monitorsValid.clear();
-		}
 	}
 
 	std::string GLMonitor::getMonitorName() const noexcept
@@ -41,23 +32,43 @@ namespace qe
 		return monitorName;
 	}
 
-	bool GLMonitor::isConnected() const noexcept
-	{
-		std::lock_guard<std::mutex> lock(monitorLock);
-		return monitorsValid.count(pMonitor) ? monitorsValid.at(pMonitor) : false;
-	}
-
 	void GLMonitor::monitorCallback(GLFWmonitor* pMonitor, int event)
 	{
+		// only call the callback if the callback was set
+		{
+			std::lock_guard<std::mutex> lock(monitorLock);
+			if (!monitorConnectionCallback) {
+				return;
+			}
+		}
+		// ctor must not be locked because the constructor locks with the same mutex
+		Monitor monitor = Monitor(std::unique_ptr<MonitorBase>(new GLMonitor(pMonitor)));
+
 		std::lock_guard<std::mutex> lock(monitorLock);
 		if (event == GLFW_CONNECTED)
 		{
-			monitorsValid[pMonitor] = true;
+			monitorConnectionCallback(std::move(monitor), Monitor::State::connected);
 		}
 		else if (event == GLFW_DISCONNECTED)
 		{
-			monitorsValid[pMonitor] = false;
+			monitorConnectionCallback(std::move(monitor), Monitor::State::disconnected);
 		}
-		// TODO create new event
 	}
+
+	void GLMonitor::setMonitorCallback(std::function<void(Monitor&&, Monitor::State)> callback) const noexcept
+	{
+		std::lock_guard<std::mutex> lock(monitorLock);
+		qe::monitorConnectionCallback = callback;
+	}
+
+	bool GLMonitor::operator==(MonitorBase* other) const noexcept
+	{
+		return pMonitor == other->getMonitorHandle();
+	}
+
+	void *GLMonitor::getMonitorHandle() const noexcept
+	{
+		return pMonitor;
+	}
+
 }

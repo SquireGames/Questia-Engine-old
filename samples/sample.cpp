@@ -15,6 +15,8 @@ int main(int argc, char** argv)
 	for (auto& monitor : monitors)
 	{
 		std::cout << monitor.getMonitorName() << std::endl;
+        std::cout << std::to_string(monitor == monitor) << std::endl;
+        std::cout << std::to_string(monitor != monitor) << std::endl;
 	}
 
 	//qe::ClientEngine engine;
