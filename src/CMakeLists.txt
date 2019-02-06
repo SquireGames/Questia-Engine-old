@@ -8,7 +8,7 @@ set(QUESTIAENGINE_HEADERS
         "../include/QENG/ClientEngine.h"
         "../include/QENG/graphics/Window.h"
         "../include/QENG/graphics/GraphicsAPI.h"
-        "../include/QENG/graphics/opengl/GLInstance.h" ../include/QENG/graphics/Monitor.h ../include/QENG/graphics/opengl/GLMonitor.h)
+        "../include/QENG/graphics/opengl/GLInstance.h" ../include/QENG/graphics/Monitor.h ../include/QENG/graphics/opengl/GLMonitor.h ../include/QENG/math/Vector2.h)
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
