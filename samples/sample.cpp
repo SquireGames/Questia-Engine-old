@@ -7,26 +7,33 @@
 #include <QENG/graphics/GraphicsAPI.h>
 #include <QENG/math/Vector2.h>
 #include "QENG/ClientEngine.h"
+#include "QENG/math/Vector.h"
 
 int main(int argc, char** argv)
 {
-    qe::GraphicsAPI api {std::make_unique<qe::GLInstance>()};
+	{
+		auto a = Vector<int, 3>{5, 7, 11};
+		std::cout << std::to_string(a.get<0>()) << std::endl;
+		std::cout << std::to_string(a[1]) << std::endl;
+	}
 
-    auto monitors = api.getMonitors();
-    for (auto& monitor : monitors)
-    {
-        std::cout << monitor.getMonitorName() << std::endl;
-    }
+	qe::GraphicsAPI api {std::make_unique<qe::GLInstance>()};
 
-    qe::Vector2i test {1, 3};
-    std::cout << std::to_string(test.x) << std::endl;
-    std::cout << std::to_string(test.y) << std::endl;
+	auto monitors = api.getMonitors();
+	for (auto& monitor : monitors)
+	{
+		std::cout << monitor.getMonitorName() << std::endl;
+	}
 
-    qe::Vector2f a = test.normalize<float>();
-    std::cout << std::to_string(a.x);
+	qe::Vector2i test {1, 3};
+	std::cout << std::to_string(test.x) << std::endl;
+	std::cout << std::to_string(test.y) << std::endl;
 
-    //qe::ClientEngine engine;
-    //engine.run();
+	qe::Vector2f a = test.normalize<float>();
+	std::cout << std::to_string(a.x);
 
-    return 0;
+	//qe::ClientEngine engine;
+	//engine.run();
+
+	return 0;
 }
