@@ -7,14 +7,17 @@
 #include <QENG/graphics/GraphicsAPI.h>
 #include <QENG/math/Vector2.h>
 #include "QENG/ClientEngine.h"
-#include "QENG/math/Vector.h"
+#include "QENG/math/FixedVector.h"
 
 int main(int argc, char** argv)
 {
 	{
-		auto a = Vector<int, 3>{5, 7, 11};
+		auto a = FixedVector<int, 3>{5, 7, 11};
 		std::cout << std::to_string(a.get<0>()) << std::endl;
 		std::cout << std::to_string(a[1]) << std::endl;
+
+		auto b = FixedVector<int, 3>{7, 11, 2};
+		std::cout << std::to_string(a == b) << std::endl;
 	}
 
 	qe::GraphicsAPI api {std::make_unique<qe::GLInstance>()};
