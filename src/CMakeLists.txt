@@ -19,18 +19,20 @@ set(QUESTIAENGINE_SOURCES
     "graphics/opengl/GLMonitor.cpp")
 
 ## define implementations of graphics options dependant classes
-if(QENG_GRAPHICS MATCHES "none")
-    list(APPEND QUESTIAENGINE_SOURCES
-            "graphics/mock/Window.cpp")
-else()
-    if(QENG_GRAPHICS MATCHES "opengl")
-        list(APPEND QUESTIAENGINE_SOURCES
-                "graphics/opengl/Window.cpp"
-                "graphics/opengl/GLInstance.cpp")
-    else()
-        message(FATAL_ERROR "The Graphics option: " "${QENG_GRAPHICS}" " is not currently supported.")
-    endif()
+string(REPLACE "\"" "" QENG_GRAPHICS_LIST ${QENG_GRAPHICS})
+string(REPLACE "," ";" QENG_GRAPHICS_LIST ${QENG_GRAPHICS_LIST})
+
+if("none" IN_LIST QENG_GRAPHICS_LIST)
+    list(APPEND QUESTIAENGINE_SOURCES)
+           # "graphics/mock/Window.cpp")
 endif()
+
+if("opengl" IN_LIST QENG_GRAPHICS_LIST)
+    list(APPEND QUESTIAENGINE_SOURCES
+            "graphics/opengl/Window.cpp"
+            "graphics/opengl/GLInstance.cpp")
+endif()
+
 
 #----------------------------------------
 #		   Library naming scheme		 
