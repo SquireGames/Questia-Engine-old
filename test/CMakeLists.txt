@@ -12,7 +12,7 @@ set(QUESTIAENGINE_TEST_HEADERS
 
 set(QUESTIAENGINE_TEST_SOURCES
     "Test.cpp"
-)
+        math/Test_FixedVector.cpp)
 
 
 #----------------------------------------

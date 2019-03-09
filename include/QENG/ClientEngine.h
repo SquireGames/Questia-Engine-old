@@ -36,10 +36,6 @@ namespace qe
 		unsigned long tickCount;
 	};
 
-	GraphicsAPI::GraphicsAPI(std::unique_ptr<GraphicsAPIBase> graphicsAPIBase) noexcept : graphicsAPIBase(std::move(graphicsAPIBase))
-	{
-	}
-
 }
 
 #endif // CLIENTENGINE_H

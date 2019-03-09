@@ -12,11 +12,11 @@
 int main(int argc, char** argv)
 {
 	{
-		auto a = FixedVector<int, 3>{5, 7, 11};
+		auto a = qe::FixedVector<int, 3>{5, 7, 11};
 		std::cout << std::to_string(a.get<0>()) << std::endl;
 		std::cout << std::to_string(a[1]) << std::endl;
 
-		auto b = FixedVector<int, 3>{7, 11, 2};
+		auto b = qe::FixedVector<int, 3>{7, 11, 2};
 		std::cout << std::to_string(a == b) << std::endl;
 	}
 

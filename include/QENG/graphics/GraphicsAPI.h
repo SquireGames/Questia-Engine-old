@@ -23,9 +23,6 @@ namespace qe
 	};
 
 
-
-
-
 	class GraphicsAPIBase
 	{
 	public:
@@ -36,8 +33,9 @@ namespace qe
 		virtual std::vector<Monitor> getMonitors() const noexcept = 0;
 	};
 
-
-
+	inline GraphicsAPI::GraphicsAPI(std::unique_ptr<GraphicsAPIBase> graphicsAPIBase) noexcept : graphicsAPIBase(std::move(graphicsAPIBase))
+	{
+	}
 
 	inline Monitor GraphicsAPI::getPrimaryMonitor() const noexcept
 	{
