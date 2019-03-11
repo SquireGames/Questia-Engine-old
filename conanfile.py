@@ -12,13 +12,14 @@ class QengConan(ConanFile):
         "build_doc": [True, False],
         "build_samples": [True, False],
         "build_tests": [True, False],
-        "graphics": ["none", "opengl"]}
-    default_options = (
-        "shared=True",
-        "build_doc=False", 
-        "build_samples=False",
-        "build_tests=False",
-        "graphics=opengl")
+        "graphics": "ANY"}
+    default_options = {
+        "shared": True,
+        "build_doc": False,
+        "build_samples": False,
+        "build_tests": False,
+        "graphics": "opengl,none"
+    }
     generators = "cmake"
     requires = ()
     exports_sources = "cmake/*", "doc*", "include*", "samples*", "src*", "test*", "CMakeLists.txt"
@@ -27,7 +28,7 @@ class QengConan(ConanFile):
         if self.options.build_tests:
             self.requires("gtest/1.8.0@bincrafters/stable")
             self.options["gtest"].shared = self.options.shared
-        if self.options.graphics == "opengl":
+        if "opengl" in str(self.options.graphics).split(','):
             self.requires("glad/0.1.24@bincrafters/stable")
             self.requires("glfw/3.2.1.20180327@bincrafters/stable")
             self.options["glad"].shared = self.options.shared
@@ -42,7 +43,7 @@ class QengConan(ConanFile):
     def configure(self):
         for req in self.requires:
             self.options[req.split("/", 1)[0]].shared = self.options.shared
-        
+
         # ensure proper compiler settings when using Visual Studio
         if self.settings.compiler == "Visual Studio":
             if self.options.shared and self.settings.build_type == "Debug" and self.settings.compiler.runtime != "MDd":

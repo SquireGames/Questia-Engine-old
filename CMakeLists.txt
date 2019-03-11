@@ -19,8 +19,11 @@ option(QENG_GRAPHICS "")
 option(QENG_VERSION_MAJOR "")
 option(QENG_VERSION_MINOR "")
 option(QENG_VERSION_PATCH "")
-# enable this if you are working from an IDE or CMake GUI that does not directly support Conan, all it does
-# is import options from conanfile.py rather than from the command line
+option(BUILD_DOC "Build Documentation" OFF)
+option(QENG_BUILD_TESTS OFF)
+option(QENG_BUILD_SAMPLES OFF)
+# enable this if you are working from an IDE or CMake GUI that does not directly support Conan
+# it imports options from conanfile.py rather than from the command line
 option(QENG_IMPORT_CONANFILE_DEFINES OFF)
 
 ## set static/shared settings
@@ -63,14 +66,12 @@ add_subdirectory(src)
 add_subdirectory(doc)
 
 ## testing
-option(QENG_BUILD_TESTS OFF)
 if(QENG_BUILD_TESTS)
     enable_testing()
     add_subdirectory(test)
 endif()
 
 ## samples
-option(QENG_BUILD_SAMPLES OFF)
 if(QENG_BUILD_SAMPLES)
     ## needs to be called from top directory
     add_subdirectory(samples)

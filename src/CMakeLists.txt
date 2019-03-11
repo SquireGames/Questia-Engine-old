@@ -7,24 +7,32 @@ set(QUESTIAENGINE_HEADERS
         "${CMAKE_CURRENT_BINARY_DIR}/../include/QENG/config.h"
         "../include/QENG/ClientEngine.h"
         "../include/QENG/graphics/Window.h"
-        "../include/QENG/util/pimpl.h" ../include/QENG/graphics/GraphicsInstance.h)
+        "../include/QENG/graphics/GraphicsAPI.h"
+        "../include/QENG/graphics/opengl/GLInstance.h"
+        "../include/QENG/graphics/Monitor.h"
+        "../include/QENG/graphics/opengl/GLMonitor.h"
+        "../include/QENG/math/FixedVector.h")
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
-    "ClientEngine.cpp")
+    "ClientEngine.cpp"
+    "graphics/opengl/GLMonitor.cpp")
 
-## define implementations of generic classes
-if(QENG_GRAPHICS MATCHES "none")
-    list(APPEND QUESTIAENGINE_SOURCES
-            "graphics/mock/Window.cpp"
-            "graphics/mock/GraphicsInstance.cpp")
-elseif(QENG_GRAPHICS MATCHES "opengl")
+## define implementations of graphics options dependant classes
+string(REPLACE "\"" "" QENG_GRAPHICS_LIST ${QENG_GRAPHICS})
+string(REPLACE "," ";" QENG_GRAPHICS_LIST ${QENG_GRAPHICS_LIST})
+
+if("none" IN_LIST QENG_GRAPHICS_LIST)
+    list(APPEND QUESTIAENGINE_SOURCES)
+           # "graphics/mock/Window.cpp")
+endif()
+
+if("opengl" IN_LIST QENG_GRAPHICS_LIST)
     list(APPEND QUESTIAENGINE_SOURCES
             "graphics/opengl/Window.cpp"
-            "graphics/opengl/GraphicsInstance.cpp")
-else()
-    message(FATAL_ERROR "The Graphics option: " "${QENG_GRAPHICS}" " is not currently supported.")
+            "graphics/opengl/GLInstance.cpp")
 endif()
+
 
 #----------------------------------------
 #		   Library naming scheme		 

@@ -1,8 +1,9 @@
+/*
+
 #ifndef WINDOW_H
 #define WINDOW_H
 
 #include <string>
-#include "QENG/util/pimpl.h"
 
 namespace qe
 {
@@ -31,10 +32,8 @@ namespace qe
 
 		bool isClosed() const noexcept;
 
-	private:
-		class Impl;
-		pimpl<Impl> pImpl;
 	};
 }
 
 #endif //WINDOW_H
+*/

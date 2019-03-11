@@ -1,8 +1,12 @@
+/*
+
 #include <QENG/graphics/Window.h>
 #include <iostream>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+
 
 namespace qe
 {
@@ -159,3 +163,5 @@ namespace qe
 	}
 
 }
+
+ */

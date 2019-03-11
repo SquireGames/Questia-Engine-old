@@ -7,7 +7,6 @@ set(QUESTIAENGINE_SAMPLE_SOURCES
     "sample.cpp"
 )
 
-
 #----------------------------------------
 #				Create samples			 
 #----------------------------------------
