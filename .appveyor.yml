@@ -7,9 +7,9 @@ platform:
   
 install:
   - ps: echo "Downloading conan"
-  - cmmd: set PATH=%PATH%;%PYTHON%/Scripts/
-  - ps: python.exe -m pip install --upgrade pip
-  - ps: pip.exe install conan
+  - cmd: set PATH=%PATH%;C:\Python37\Scripts;C:\Python37
+  - ps: C:\\Python37\\python.exe -m pip install --upgrade pip
+  - ps: C:\\Python37\\Scripts\\pip.exe install conan --no-warn-script-location
   - ps: conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
   - ps: conan user
   - ps: conan --version
