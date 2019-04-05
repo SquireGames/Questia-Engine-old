@@ -33,11 +33,11 @@ endmacro()
 # links the target qeng lib
 macro(qeng_target_link_libraries_libqeng target)
     # link conan except for GTest
-    set(CONAL_LIBS_NO_GTEST ${CONAN_LIBS})
+    set(CONAN_LIBS_NO_GTEST ${CONAN_LIBS})
     if(CONAN_LIBS_GTEST)
-        list(REMOVE_ITEM CONAL_LIBS_NO_GTEST ${CONAN_LIBS_GTEST})
+        list(REMOVE_ITEM CONAN_LIBS_NO_GTEST ${CONAN_LIBS_GTEST})
     endif()
-    target_link_libraries(${target} ${CONAL_LIBS_NO_GTEST})
+    target_link_libraries(${target} ${CONAN_LIBS_NO_GTEST})
     
      # use pthread if on UNIX
     if(UNIX)
@@ -46,7 +46,7 @@ macro(qeng_target_link_libraries_libqeng target)
         target_link_libraries(${target} Threads::Threads)
     endif()   
     
-    # link proper static libraries for Visual Studio
+    # link proper static libraries for Visuall Studio
     if(CMAKE_GENERATOR MATCHES "Visual Studio" AND NOT BUILD_SHARED_LIBS)
         target_link_libraries(${target} debug MSVCRTD.lib optimized MSVCRT.lib)
     endif()

@@ -1,6 +1,5 @@
-
 sudo: required
-dist: trusty
+dist: xenial # TODO upgrade to bionic when Travis CI supports it
 
 language: cpp
   
@@ -9,12 +8,16 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew upgrade gcc || brew install gcc || true; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --overwrite gcc || true; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew upgrade python; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo python --version; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo -H pip install --ignore-installed matplotlib; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo -H pip install --ignore-installed pyOpenSSL; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo pip install --upgrade cmake; fi
-  - sudo pip install conan
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo python3 --version; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python3; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo -H pip3 install --ignore-installed matplotlib; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo -H pip3 install --ignore-installed pyOpenSSL; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo pip3 install --ignore-installed conan; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo python3 get-pip.py; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 70 --slave /usr/bin/g++ g++ /usr/bin/g++-8; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo python3 -m pip install --upgrade cmake; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo python3 -m pip install --ignore-installed conan; fi
   - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
   - conan user
   - conan --version
@@ -38,12 +41,12 @@ matrix:
           sources:
            - ubuntu-toolchain-r-test
           packages:
-           - g++-6
+           - gcc-8
+           - g++-8
            - cmake
            - cmake-data
            - python3
-           - python3-pip
-     env: COMPILER=g++-6 BUILD_SHARED_LIBS=True CONFIG=Debug
+     env: CC=gcc-8 CXX=g++-8 COMPILER=g++-8 BUILD_SHARED_LIBS=True CONFIG=Debug 
    - os: linux
      compiler: gcc
      addons:
@@ -51,12 +54,12 @@ matrix:
           sources:
            - ubuntu-toolchain-r-test
           packages:
-           - g++-6
+           - gcc-8
+           - g++-8
            - cmake
            - cmake-data
            - python3
-           - python3-pip
-     env: COMPILER=g++-6 BUILD_SHARED_LIBS=True CONFIG=Release
+     env: CC=gcc-8 CXX=g++-8 COMPILER=g++-8 BUILD_SHARED_LIBS=True CONFIG=Release
    - os: linux
      compiler: gcc
      addons:
@@ -64,12 +67,12 @@ matrix:
           sources:
            - ubuntu-toolchain-r-test
           packages:
-           - g++-6
+           - gcc-8
+           - g++-8
            - cmake
            - cmake-data
            - python3
-           - python3-pip
-     env: COMPILER=g++-6 BUILD_SHARED_LIBS=False CONFIG=Debug
+     env: CC=gcc-8 CXX=g++-8 COMPILER=g++-8 BUILD_SHARED_LIBS=False CONFIG=Debug
    - os: linux
      compiler: gcc
      addons:
@@ -77,12 +80,12 @@ matrix:
           sources:
            - ubuntu-toolchain-r-test
           packages:
-           - g++-6
+           - gcc-8
+           - g++-8
            - cmake
            - cmake-data
            - python3
-           - python3-pip
-     env: COMPILER=g++-6 BUILD_SHARED_LIBS=False CONFIG=Release
+     env: CC=gcc-8 CXX=g++-8 COMPILER=g++-8 BUILD_SHARED_LIBS=False CONFIG=Release
    - os: osx
      env: BUILD_SHARED_LIBS=True CONFIG=Debug
    - os: osx
@@ -91,4 +94,31 @@ matrix:
      env: BUILD_SHARED_LIBS=False CONFIG=Debug
    - os: osx
      env: BUILD_SHARED_LIBS=False CONFIG=Release
+  allow_failures: # TODO remove when Travis CI supports bionic in order link glibc2.27
+   - os: linux
+     compiler: gcc
+     addons:
+        apt:
+          sources:
+           - ubuntu-toolchain-r-test
+          packages:
+           - gcc-8
+           - g++-8
+           - cmake
+           - cmake-data
+           - python3
+     env: CC=gcc-8 CXX=g++-8 COMPILER=g++-8 BUILD_SHARED_LIBS=True CONFIG=Debug 
+   - os: linux
+     compiler: gcc
+     addons:
+        apt:
+          sources:
+           - ubuntu-toolchain-r-test
+          packages:
+           - gcc-8
+           - g++-8
+           - cmake
+           - cmake-data
+           - python3
+     env: CC=gcc-8 CXX=g++-8 COMPILER=g++-8 BUILD_SHARED_LIBS=True CONFIG=Release
      
