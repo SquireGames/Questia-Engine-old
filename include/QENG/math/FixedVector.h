@@ -2,6 +2,7 @@
 #define QUESTIAENGINE_FIXEDVECTOR_H
 
 #include <cstddef>
+#include <initializer_list>
 
 namespace qe
 {
@@ -23,10 +24,11 @@ namespace qe
 		constexpr T& operator[](std::size_t index) noexcept;
 		constexpr bool operator==(const FixedVector<T, N>& rhs) const noexcept;
 		constexpr bool operator!=(const FixedVector<T, N>& rhs) const noexcept;
-		template <class T, std::size_t N> constexpr friend FixedVector<T, N> operator+(FixedVector<T, N> lhs, const FixedVector<T, N>& rhs) noexcept;
+		constexpr FixedVector<T, N> operator+(const FixedVector<T, N>& rhs) noexcept;
 		constexpr FixedVector<T, N>& operator+=(const FixedVector<T, N>& rhs) noexcept;
-		template <class T, std::size_t N> constexpr friend FixedVector<T, N> operator-(FixedVector<T, N> lhs, const FixedVector<T, N>& rhs) noexcept;
+		constexpr FixedVector<T, N> operator-(const FixedVector<T, N>& rhs) noexcept;
 		constexpr FixedVector<T, N>& operator-=(const FixedVector<T, N>& rhs) noexcept;
+
 
 		// utility functions
 		template<std::size_t Index> constexpr T get() const noexcept;
@@ -97,10 +99,15 @@ namespace qe
 	}
 
 	template<class T, std::size_t N>
-	inline constexpr FixedVector<T, N> operator+(FixedVector<T, N> lhs, const FixedVector<T, N>& rhs) noexcept
+	inline constexpr FixedVector<T, N> FixedVector<T, N>::operator+(const FixedVector<T, N>& rhs) noexcept
 	{
-		lhs += rhs;
-		return lhs;
+		return FixedVector<T, N>(*this) += rhs;
+	}
+
+	template<class T, std::size_t N>
+	inline constexpr FixedVector<T, N> FixedVector<T, N>::operator-(const FixedVector<T, N>& rhs) noexcept
+	{
+		return FixedVector<T, N>(*this) -= rhs;
 	}
 
 	template<class T, std::size_t N>
@@ -129,12 +136,6 @@ namespace qe
 		return *this;
 	}
 
-	template<class T, std::size_t N>
-	inline constexpr FixedVector<T, N> operator-(FixedVector<T, N> lhs, const FixedVector<T, N>& rhs) noexcept
-	{
-		lhs -= rhs;
-		return lhs;
-	}
 }
 
 #endif //QUESTIAENGINE_FIXEDVECTOR_H
