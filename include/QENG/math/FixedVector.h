@@ -2,7 +2,6 @@
 #define QUESTIAENGINE_FIXEDVECTOR_H
 
 #include <cstddef>
-#include <initializer_list>
 
 namespace qe
 {
