@@ -16,7 +16,7 @@ namespace qe
 		~GLMonitor() noexcept final;
 
 		std::string getMonitorName() const noexcept final;
-		void setMonitorCallback(std::function<void(Monitor&&, Monitor::State)> callback) const noexcept final;
+		void setMonitorCallback(std::function<void(const Monitor&, Monitor::State)> callback) const noexcept final;
 
 		void* getMonitorHandle() const noexcept final;
 

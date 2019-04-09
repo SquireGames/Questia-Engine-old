@@ -1,13 +1,11 @@
 #include "QENG/graphics/opengl/GLMonitor.h"
 #include <mutex>
-#include <QENG/graphics/opengl/GLMonitor.h>
-
 
 namespace qe
 {
 	static std::mutex monitorLock;
 	static int monitorRefCount = 0;
-	static std::function<void(Monitor&&, Monitor::State)> monitorConnectionCallback = {};
+	static std::function<void(const Monitor&, Monitor::State)> monitorConnectionCallback = {};
 
 	GLMonitor::GLMonitor(GLFWmonitor* pMonitor) noexcept : MonitorBase(), pMonitor(pMonitor), monitorName(std::string(glfwGetMonitorName(pMonitor)))
 	{
@@ -47,15 +45,15 @@ namespace qe
 		std::lock_guard<std::mutex> lock(monitorLock);
 		if (event == GLFW_CONNECTED)
 		{
-			monitorConnectionCallback(std::move(monitor), Monitor::State::connected);
+			monitorConnectionCallback(monitor, Monitor::State::connected);
 		}
 		else if (event == GLFW_DISCONNECTED)
 		{
-			monitorConnectionCallback(std::move(monitor), Monitor::State::disconnected);
+			monitorConnectionCallback(monitor, Monitor::State::disconnected);
 		}
 	}
 
-	void GLMonitor::setMonitorCallback(std::function<void(Monitor&&, Monitor::State)> callback) const noexcept
+	void GLMonitor::setMonitorCallback(std::function<void(const Monitor&, Monitor::State)> callback) const noexcept
 	{
 		std::lock_guard<std::mutex> lock(monitorLock);
 		qe::monitorConnectionCallback = callback;

@@ -26,7 +26,7 @@ namespace qe
 		bool operator!=(const Monitor& other) const noexcept;
 
 		std::string getMonitorName() const noexcept;
-		void setMonitorCallback(std::function<void(Monitor&&, State)> callback) const noexcept;
+		void setMonitorCallback(std::function<void(const Monitor&, State)> callback) noexcept;
 
 	private:
 		std::unique_ptr<MonitorBase> monitorBase;
@@ -39,7 +39,7 @@ namespace qe
 	public:
 		virtual ~MonitorBase() noexcept = default;
 		virtual std::string getMonitorName() const noexcept = 0;
-		virtual void setMonitorCallback(std::function<void(Monitor&& monitor, Monitor::State state)> callback) const noexcept = 0;
+		virtual void setMonitorCallback(std::function<void(const Monitor& monitor, Monitor::State state)> callback) const noexcept = 0;
 
 		virtual bool operator==(MonitorBase* other) const noexcept = 0;
 
@@ -57,7 +57,7 @@ namespace qe
 		return monitorBase->getMonitorName();
 	}
 
-	inline void Monitor::setMonitorCallback(std::function<void(Monitor&&, Monitor::State)> callback) const noexcept
+	inline void Monitor::setMonitorCallback(std::function<void(const Monitor&, Monitor::State)> callback) noexcept
 	{
 		monitorBase->setMonitorCallback(std::move(callback));
 	}

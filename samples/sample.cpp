@@ -3,26 +3,35 @@
 #include <chrono>
 #include <thread>
 #include <vector>
-#include <QENG/graphics/opengl/GLInstance.h>
-#include <QENG/graphics/GraphicsAPI.h>
+#include <GLFW/glfw3.h>
+#include "QENG/graphics/opengl/GLInstance.h"
+#include "QENG/graphics/GraphicsAPI.h"
 #include "QENG/ClientEngine.h"
 #include "QENG/math/FixedVector.h"
 
 int main(int argc, char** argv)
 {
-	auto a = qe::FixedVector<int, 3>{5, 7, 11};
-	std::cout << std::to_string(a.get<0>()) << std::endl;
-	std::cout << std::to_string(a[1]) << std::endl;
-
-	auto b = qe::FixedVector<int, 3>{7, 11, 2};
-	std::cout << std::to_string(a == b) << std::endl;
-
 	qe::GraphicsAPI api {std::make_unique<qe::GLInstance>()};
+
+	auto monitorCallback = [](const qe::Monitor& m, qe::Monitor::State s)
+	{
+		switch(s)
+		{
+			case qe::Monitor::State::connected:     std::cout << "Connected " << m.getMonitorName() << std::endl; break;
+			case qe::Monitor::State::disconnected:  std::cout << "Disconnected " << m.getMonitorName()  << std::endl; break;
+		}
+	};
 
 	auto monitors = api.getMonitors();
 	for (auto& monitor : monitors)
 	{
 		std::cout << monitor.getMonitorName() << std::endl;
+		monitor.setMonitorCallback(monitorCallback);
+	}
+
+	while(1)
+	{
+		glfwPollEvents();
 	}
 
 	return 0;
