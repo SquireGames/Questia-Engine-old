@@ -22,5 +22,20 @@ TEST(FixedVector, op_plus)
 	EXPECT_EQ(v3, v1 + v2);
 }
 
+TEST(FixedVector, op_overall)
+{
+	qe::FixedVector<int, 3> v1 (4, 2, 6);
+	qe::FixedVector<int, 3> v2 (2, 3, 7);
+	qe::FixedVector<int, 3> v3 (3, 5, 7);
+	qe::FixedVector<int, 3> s (45, 0, 90);
+
+	auto a = v1 - v3 + v2;
+	a *= 6;
+	a /= 2;
+	a = 10 * a;
+	a = a / 2;
+	EXPECT_EQ(s, a);
+}
+
 
 

@@ -23,11 +23,15 @@ namespace qe
 		constexpr T& operator[](std::size_t index) noexcept;
 		constexpr bool operator==(const FixedVector<T, N>& rhs) const noexcept;
 		constexpr bool operator!=(const FixedVector<T, N>& rhs) const noexcept;
-		constexpr FixedVector<T, N> operator+(const FixedVector<T, N>& rhs) noexcept;
+		constexpr FixedVector<T, N> operator+(const FixedVector<T, N>& rhs) const noexcept;
 		constexpr FixedVector<T, N>& operator+=(const FixedVector<T, N>& rhs) noexcept;
-		constexpr FixedVector<T, N> operator-(const FixedVector<T, N>& rhs) noexcept;
+		constexpr FixedVector<T, N> operator-(const FixedVector<T, N>& rhs) const noexcept;
 		constexpr FixedVector<T, N>& operator-=(const FixedVector<T, N>& rhs) noexcept;
-
+		constexpr FixedVector<T, N> operator*(T rhs) const noexcept;
+		template<class T2, std::size_t N2> constexpr friend FixedVector<T2, N2> operator*(T2 lhs, const FixedVector<T2, N2>& rhs) noexcept;
+		constexpr FixedVector<T, N>& operator*=(T rhs) noexcept;
+		constexpr FixedVector<T, N> operator/(T rhs) const noexcept;
+		constexpr FixedVector<T, N>& operator/=(T rhs) noexcept;
 
 		// utility functions
 		template<std::size_t Index> constexpr T get() const noexcept;
@@ -98,13 +102,13 @@ namespace qe
 	}
 
 	template<class T, std::size_t N>
-	inline constexpr FixedVector<T, N> FixedVector<T, N>::operator+(const FixedVector<T, N>& rhs) noexcept
+	inline constexpr FixedVector<T, N> FixedVector<T, N>::operator+(const FixedVector<T, N>& rhs) const noexcept
 	{
 		return FixedVector<T, N>(*this) += rhs;
 	}
 
 	template<class T, std::size_t N>
-	inline constexpr FixedVector<T, N> FixedVector<T, N>::operator-(const FixedVector<T, N>& rhs) noexcept
+	inline constexpr FixedVector<T, N> FixedVector<T, N>::operator-(const FixedVector<T, N>& rhs) const noexcept
 	{
 		return FixedVector<T, N>(*this) -= rhs;
 	}
@@ -133,6 +137,44 @@ namespace qe
 			this->values[i] -= rhs.values[i];
 		}
 		return *this;
+	}
+
+	template<class T, std::size_t N>
+	inline constexpr FixedVector<T, N> FixedVector<T, N>::operator*(T rhs) const noexcept
+	{
+		return FixedVector<T, N>(*this) *= rhs;
+	}
+
+	template<class T, std::size_t N>
+	inline constexpr FixedVector<T, N>& FixedVector<T, N>::operator*=(T rhs) noexcept
+	{
+		for(std::size_t i = 0; i < N; i++)
+		{
+			this->values[i] *= rhs;
+		}
+		return *this;
+	}
+
+	template<class T, std::size_t N>
+	inline constexpr FixedVector<T, N> FixedVector<T, N>::operator/(T rhs) const noexcept
+	{
+		return FixedVector<T, N>(*this) /= rhs;
+	}
+
+	template<class T, std::size_t N>
+	inline constexpr FixedVector<T, N>& FixedVector<T, N>::operator/=(T rhs) noexcept
+	{
+		for(std::size_t i = 0; i < N; i++)
+		{
+			this->values[i] /= rhs;
+		}
+		return *this;
+	}
+
+	template<class T, std::size_t N>
+	inline constexpr FixedVector<T, N> operator*(T lhs, const FixedVector<T, N>& rhs) noexcept
+	{
+		return FixedVector<T, N>(rhs) *= lhs;
 	}
 
 }
