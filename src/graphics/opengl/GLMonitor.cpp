@@ -25,7 +25,7 @@ namespace qe
 		monitorRefCount--;
 	}
 
-	std::string GLMonitor::getMonitorName() const noexcept
+	std::string GLMonitor::getName() const noexcept
 	{
 		return monitorName;
 	}
@@ -64,9 +64,23 @@ namespace qe
 		return pMonitor == other->getMonitorHandle();
 	}
 
-	void *GLMonitor::getMonitorHandle() const noexcept
+	void* GLMonitor::getMonitorHandle() const noexcept
 	{
 		return pMonitor;
+	}
+
+	Vector2i GLMonitor::getPosition() const noexcept
+	{
+		int xpos, ypos;
+		glfwGetMonitorPos(pMonitor, &xpos, &ypos);
+		return Vector2i{xpos, ypos};
+	}
+
+	Vector2ui GLMonitor::getPhysicalSize() const noexcept
+	{
+		int xmm, ymm;
+		glfwGetMonitorPhysicalSize(pMonitor, &xmm, &ymm);
+		return qe::Vector2ui(static_cast<unsigned int>(xmm), static_cast<unsigned int>(ymm));
 	}
 
 }

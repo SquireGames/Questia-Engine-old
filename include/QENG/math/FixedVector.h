@@ -37,10 +37,23 @@ namespace qe
 		template<std::size_t Index> constexpr T get() const noexcept;
 		template<std::size_t Index> constexpr void set(T newValue) noexcept;
 		constexpr std::size_t getSize() const noexcept;
+		constexpr T x() const noexcept;
+		constexpr T y() const noexcept;
+		constexpr T z() const noexcept;
 
 		// value
 		T values[N];
 	};
+
+	using Vector2i = FixedVector<int, 2>;
+	using Vector2ui = FixedVector<unsigned int, 2>;
+	using Vector2f = FixedVector<float, 2>;
+	using Vector2d = FixedVector<double, 2>;
+
+	using Vector3i = FixedVector<int, 3>;
+	using Vector3ui = FixedVector<unsigned int, 3>;
+	using Vector3f = FixedVector<float, 3>;
+	using Vector3d = FixedVector<double, 3>;
 
 
 	template <class T, std::size_t N>
@@ -175,6 +188,26 @@ namespace qe
 	inline constexpr FixedVector<T, N> operator*(T lhs, const FixedVector<T, N>& rhs) noexcept
 	{
 		return FixedVector<T, N>(rhs) *= lhs;
+	}
+
+	template<class T, std::size_t N>
+	inline constexpr T FixedVector<T, N>::x() const noexcept
+	{
+		return values[0];
+	}
+
+	template<class T, std::size_t N>
+	inline constexpr T FixedVector<T, N>::y() const noexcept
+	{
+		static_assert(N > 1, "FixedVector must be at least size 2 to call .y()");
+		return values[1];
+	}
+
+	template<class T, std::size_t N>
+	inline constexpr T FixedVector<T, N>::z() const noexcept
+	{
+		static_assert(N > 2, "FixedVector must be at least size 3 to call .z()");
+		return values[2];
 	}
 
 }

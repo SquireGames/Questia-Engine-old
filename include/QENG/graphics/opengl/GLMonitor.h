@@ -15,12 +15,15 @@ namespace qe
 	public:
 		~GLMonitor() noexcept final;
 
-		std::string getMonitorName() const noexcept final;
+		bool operator==(MonitorBase* other) const noexcept final;
+
+		std::string getName() const noexcept final;
+		Vector2i getPosition() const noexcept final;
+		Vector2ui getPhysicalSize() const noexcept final;
+
 		void setMonitorCallback(std::function<void(const Monitor&, Monitor::State)> callback) const noexcept final;
 
 		void* getMonitorHandle() const noexcept final;
-
-		bool operator==(MonitorBase* other) const noexcept final;
 
 	private:
 		friend class GLInstance;

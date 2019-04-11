@@ -17,22 +17,24 @@ int main(int argc, char** argv)
 	{
 		switch(s)
 		{
-			case qe::Monitor::State::connected:     std::cout << "Connected " << m.getMonitorName() << std::endl; break;
-			case qe::Monitor::State::disconnected:  std::cout << "Disconnected " << m.getMonitorName()  << std::endl; break;
+			case qe::Monitor::State::connected:     std::cout << "Connected " << m.getName() << std::endl; break;
+			case qe::Monitor::State::disconnected:  std::cout << "Disconnected " << m.getName()  << std::endl; break;
 		}
 	};
 
 	auto monitors = api.getMonitors();
 	for (auto& monitor : monitors)
 	{
-		std::cout << monitor.getMonitorName() << std::endl;
+		std::cout << monitor.getName() << std::endl;
+		std::cout << "Position: " << std::to_string(monitor.getPosition().x()) << ", " << std::to_string(monitor.getPosition().y()) << std::endl;
+		std::cout << "Physical Size: " << std::to_string(monitor.getPhysicalSize().x()) << ", " << std::to_string(monitor.getPhysicalSize().y()) << std::endl;
 		monitor.setMonitorCallback(monitorCallback);
+		std::cout << std::endl;
 	}
 
 	while(1)
 	{
 		glfwPollEvents();
 	}
-
 	return 0;
 }
