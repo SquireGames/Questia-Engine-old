@@ -34,6 +34,8 @@ namespace qe
 
 		void* getMonitorHandle() const noexcept final;
 
+		std::unique_ptr<MonitorBase> clone() const noexcept final;
+
 	private:
 		friend class GLInstance;
 

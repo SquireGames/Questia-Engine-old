@@ -130,6 +130,11 @@ namespace qe
 		return ramp;
 	}
 
+	std::unique_ptr<MonitorBase> GLMonitor::clone() const noexcept
+	{
+		return std::unique_ptr<MonitorBase>(reinterpret_cast<MonitorBase*>(new GLMonitor(pMonitor)));
+	}
+
 	bool GLMonitor::setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept
 	{
 		const int redSize = static_cast<int>(ramp.red.size());

@@ -23,14 +23,13 @@ namespace qe
 		struct VideoMode { unsigned int width, height, redBits, greenBits, blueBits, refreshRate;};
 		struct GammaRamp { std::vector<unsigned short> red, green, blue;};
 
-		// Monitor is a move-only class
-		// TODO reconsider move-only
+		// Monitor is copyable and movable
 		explicit Monitor(std::unique_ptr<MonitorBase> monitorBase) noexcept;
-		~Monitor() noexcept = default;
 		Monitor(Monitor&& monitor) = default;
-		Monitor(Monitor&) = delete;
-		Monitor operator=(Monitor&) = delete;
-		Monitor operator=(Monitor&&) = delete;
+		Monitor(const Monitor&) noexcept;
+		Monitor& operator=(const Monitor&) noexcept;
+		Monitor& operator=(Monitor&&) noexcept;
+		~Monitor() noexcept = default;
 
 		bool operator==(const Monitor& other) const noexcept;
 		bool operator!=(const Monitor& other) const noexcept;
@@ -83,11 +82,16 @@ namespace qe
 		virtual bool setGamma(float gamma) noexcept = 0;
 
 		virtual std::function<WindowBase*(const std::string&, unsigned int, unsigned int, const Monitor&)> getWindowConstructor() const noexcept = 0;
+		virtual std::unique_ptr<MonitorBase> clone() const noexcept = 0;
 	protected:
 		explicit MonitorBase() noexcept = default;
 	};
 
 	inline Monitor::Monitor(std::unique_ptr<MonitorBase> monitorBase) noexcept : monitorBase(std::move(monitorBase))
+	{
+	}
+
+	inline Monitor::Monitor(const Monitor& m) noexcept : monitorBase(std::move(m.monitorBase->clone()))
 	{
 	}
 
@@ -151,12 +155,22 @@ namespace qe
 		return monitorBase->getWindowConstructor();
 	}
 
+	inline Monitor& Monitor::operator=(const Monitor& m) noexcept
+	{
+		this->monitorBase = std::unique_ptr<MonitorBase>(m.monitorBase->clone());
+		return *this;
+	}
+
+	inline Monitor& Monitor::operator=(Monitor&& m) noexcept
+	{
+		this->monitorBase = std::move(m.monitorBase);
+		return *this;
+	}
+
 	inline void* MonitorBase::getMonitorHandle() const noexcept
 	{
 		return nullptr;
 	}
-
-
 }
 
 #endif //QUESTIAENGINE_MONITOR_H
