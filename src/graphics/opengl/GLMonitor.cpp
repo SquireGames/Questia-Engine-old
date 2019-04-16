@@ -1,5 +1,6 @@
 #include "QENG/graphics/opengl/GLMonitor.h"
 #include <mutex>
+#include <assert.h>
 
 namespace qe
 {
@@ -81,6 +82,77 @@ namespace qe
 		int xmm, ymm;
 		glfwGetMonitorPhysicalSize(pMonitor, &xmm, &ymm);
 		return qe::Vector2ui(static_cast<unsigned int>(xmm), static_cast<unsigned int>(ymm));
+	}
+
+	Monitor::VideoMode GLMonitor::getVideoMode() const noexcept
+	{
+		const GLFWvidmode* videoMode = glfwGetVideoMode(pMonitor);
+		return {static_cast<unsigned int>(videoMode->width), static_cast<unsigned int>(videoMode->height), static_cast<unsigned int>(videoMode->redBits)
+		        , static_cast<unsigned int>(videoMode->greenBits), static_cast<unsigned int>(videoMode->blueBits), static_cast<unsigned int>(videoMode->refreshRate)};
+	}
+
+	std::vector<Monitor::VideoMode> GLMonitor::getVideoModes() const noexcept
+	{
+		int modeCount;
+		const GLFWvidmode* videoModes = glfwGetVideoModes(pMonitor, &modeCount);
+		std::vector<Monitor::VideoMode> modes;
+		modes.reserve(modeCount);
+		for(unsigned int i = 0; i < static_cast<unsigned int>(modeCount); i++)
+		{
+			modes.emplace_back(Monitor::VideoMode{static_cast<unsigned int>(videoModes[i].width), static_cast<unsigned int>(videoModes[i].height)
+					             , static_cast<unsigned int>(videoModes[i].redBits), static_cast<unsigned int>(videoModes[i].greenBits)
+					             , static_cast<unsigned int>(videoModes[i].blueBits), static_cast<unsigned int>(videoModes[i].refreshRate)});
+		}
+		return modes;
+	}
+
+	Monitor::GammaRamp GLMonitor::getGammaRamp() const noexcept
+	{
+		const GLFWgammaramp* pRamp = glfwGetGammaRamp(pMonitor);
+		unsigned int size = pRamp->size;
+		Monitor::GammaRamp ramp;
+		ramp.red.reserve(size);
+		ramp.green.reserve(size);
+		ramp.blue.reserve(size);
+		for(unsigned int i = 0; i < size; i++)
+		{
+			ramp.red.emplace_back(pRamp->red[i]);
+		}
+		for(unsigned int i = 0; i < size; i++)
+		{
+			ramp.green.emplace_back(pRamp->green[i]);
+		}
+		for(unsigned int i = 0; i < size; i++)
+		{
+			ramp.blue.emplace_back(pRamp->blue[i]);
+		}
+		return ramp;
+	}
+
+	bool GLMonitor::setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept
+	{
+		const int redSize = static_cast<int>(ramp.red.size());
+		const int greenSize = static_cast<int>(ramp.red.size());
+		const int blueSize = static_cast<int>(ramp.blue.size());
+		if(redSize != greenSize || greenSize != blueSize)
+		{
+			return false;
+		}
+		const GLFWgammaramp glfwRamp {const_cast<unsigned short*>(ramp.red.data()), const_cast<unsigned short*>(ramp.green.data())
+									, const_cast<unsigned short*>(ramp.blue.data()), static_cast<unsigned int>(redSize)};
+		// fails silently
+		glfwSetGammaRamp(pMonitor, &glfwRamp);
+		return true;
+	}
+
+	bool GLMonitor::setGamma(float gamma) noexcept
+	{
+		if(gamma <= 0)
+		{
+			return false;
+		}
+		glfwSetGamma(pMonitor, gamma);
+		return true;
 	}
 
 }
