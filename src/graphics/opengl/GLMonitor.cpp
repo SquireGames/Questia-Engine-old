@@ -1,6 +1,6 @@
 #include "QENG/graphics/opengl/GLMonitor.h"
 #include <mutex>
-#include <assert.h>
+#include <vector>
 
 namespace qe
 {
