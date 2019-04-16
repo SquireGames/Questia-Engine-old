@@ -1,6 +1,7 @@
 #include "QENG/graphics/opengl/GLMonitor.h"
 #include <mutex>
 #include <vector>
+#include "QENG/graphics/opengl/GLWindow.h"
 
 namespace qe
 {
@@ -8,10 +9,10 @@ namespace qe
 	static int monitorRefCount = 0;
 	static std::function<void(const Monitor&, Monitor::State)> monitorConnectionCallback = {};
 
-	GLMonitor::GLMonitor(GLFWmonitor* pMonitor) noexcept : MonitorBase(), pMonitor(pMonitor), monitorName(std::string(glfwGetMonitorName(pMonitor)))
+	GLMonitor::GLMonitor(GLFWmonitor* pMonitor) noexcept
+		: MonitorBase(), pMonitor(pMonitor), monitorName(std::string(glfwGetMonitorName(pMonitor)))
 	{
 		std::lock_guard<std::mutex> lock(monitorLock);
-
 		// if this is the first initialized GLMonitor object
 		if(monitorRefCount == 0)
 		{
@@ -155,4 +156,8 @@ namespace qe
 		return true;
 	}
 
+	std::function<WindowBase*(const std::string&, unsigned int, unsigned int, const Monitor&)> GLMonitor::getWindowConstructor() const noexcept
+	{
+		return [](const std::string& name, unsigned int width, unsigned int height, const Monitor& monitor) {return new GLWindow(name, width, height, monitor);};
+	}
 }

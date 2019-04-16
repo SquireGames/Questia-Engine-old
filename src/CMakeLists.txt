@@ -11,12 +11,14 @@ set(QUESTIAENGINE_HEADERS
         "../include/QENG/graphics/opengl/GLInstance.h"
         "../include/QENG/graphics/Monitor.h"
         "../include/QENG/graphics/opengl/GLMonitor.h"
-        "../include/QENG/math/FixedVector.h")
+        "../include/QENG/math/FixedVector.h"
+        "../include/QENG/graphics/opengl/GLWindow.h"
+        )
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
     "ClientEngine.cpp"
-    "graphics/opengl/GLMonitor.cpp")
+    )
 
 ## define implementations of graphics options dependant classes
 string(REPLACE "\"" "" QENG_GRAPHICS_LIST ${QENG_GRAPHICS})
@@ -29,8 +31,10 @@ endif()
 
 if("opengl" IN_LIST QENG_GRAPHICS_LIST)
     list(APPEND QUESTIAENGINE_SOURCES
-            "graphics/opengl/Window.cpp"
-            "graphics/opengl/GLInstance.cpp")
+            "graphics/opengl/GLWindow.cpp"
+            "graphics/opengl/GLInstance.cpp"
+            "graphics/opengl/GLMonitor.cpp"
+        )
 endif()
 
 

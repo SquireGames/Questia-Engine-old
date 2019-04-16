@@ -1,9 +1,9 @@
-#ifndef QUESTIAENGINE_RENDERER_H
-#define QUESTIAENGINE_RENDERER_H
+#ifndef QUESTIAENGINE_GRAPHICSAPI_H
+#define QUESTIAENGINE_GRAPHICSAPI_H
 
 #include <vector>
 #include <memory>
-#include "Monitor.h"
+#include "QENG/graphics/Monitor.h"
 
 namespace qe
 {
@@ -48,4 +48,4 @@ namespace qe
 	}
 }
 
-#endif //QUESTIAENGINE_RENDERER_H
+#endif //QUESTIAENGINE_GRAPHICSAPI_H

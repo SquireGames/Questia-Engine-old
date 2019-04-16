@@ -1,12 +1,75 @@
-/*
-
 #include <QENG/graphics/Window.h>
 #include <iostream>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <QENG/graphics/opengl/GLWindow.h>
 
 
+namespace qe
+{
+	void qe::GLWindow::update() noexcept
+	{
+
+	}
+
+	void GLWindow::toFullScreen() noexcept
+	{
+
+	}
+
+	void GLWindow::toWindowed(unsigned int width, unsigned int height) noexcept
+	{
+
+	}
+
+	void GLWindow::resize(unsigned int width, unsigned int height) noexcept
+	{
+
+	}
+
+	void GLWindow::setTitle(const std::string& title) noexcept
+	{
+
+	}
+
+	unsigned int GLWindow::getWidth() const noexcept
+	{
+		return 100;
+	}
+
+	unsigned int GLWindow::getHeight() const noexcept
+	{
+		return 0;
+	}
+
+	Window::Mode GLWindow::getMode() const noexcept
+	{
+		return qe::Window::Mode::fullscreen;
+	}
+
+	void* GLWindow::getUnderlyingWindow() const noexcept
+	{
+		return nullptr;
+	}
+
+	bool GLWindow::isClosed() const noexcept
+	{
+		return false;
+	}
+
+	GLWindow::~GLWindow() noexcept
+	{
+	}
+
+	GLWindow::GLWindow(const std::string& title, unsigned int width, unsigned int height, const qe::Monitor& monitor) noexcept
+	{
+	}
+}
+
+
+
+/*
 
 namespace qe
 {

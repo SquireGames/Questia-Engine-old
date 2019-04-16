@@ -13,9 +13,6 @@ namespace qe
 
 		Monitor getPrimaryMonitor() const noexcept final;
 		std::vector<Monitor> getMonitors() const noexcept final;
-
-	private:
-
 	};
 }
 

@@ -10,6 +10,8 @@
 namespace qe
 {
 	class MonitorBase;
+	class WindowBase;
+	class Window;
 
 	// this class is partially thread safe, but TODO document the functions that need to be run on the main graphics thread
 	class Monitor
@@ -21,6 +23,7 @@ namespace qe
 		struct GammaRamp { std::vector<unsigned short> red, green, blue;};
 
 		// Monitor is a move-only class
+		// TODO reconsider move-only
 		explicit Monitor(std::unique_ptr<MonitorBase> monitorBase) noexcept;
 		~Monitor() noexcept = default;
 		Monitor(Monitor&& monitor) = default;
@@ -48,6 +51,9 @@ namespace qe
 		void setMonitorCallback(std::function<void(const Monitor&, State)> callback) noexcept;
 
 	private:
+		friend Window;
+		std::function<WindowBase*(const std::string&, unsigned int, unsigned int, const Monitor&)> getWindowConstructor() const noexcept;
+
 		std::unique_ptr<MonitorBase> monitorBase;
 	};
 
@@ -74,6 +80,8 @@ namespace qe
 		virtual qe::Monitor::GammaRamp getGammaRamp() const noexcept = 0;
 		virtual bool setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept = 0;
 		virtual bool setGamma(float gamma) noexcept = 0;
+
+		virtual std::function<WindowBase*(const std::string&, unsigned int, unsigned int, const Monitor&)> getWindowConstructor() const noexcept = 0;
 	protected:
 		explicit MonitorBase() noexcept = default;
 	};
@@ -137,10 +145,17 @@ namespace qe
 		return monitorBase->setGamma(gamma);
 	}
 
+	inline std::function<WindowBase*(const std::string&, unsigned int, unsigned int, const Monitor&)> Monitor::getWindowConstructor() const noexcept
+	{
+		return monitorBase->getWindowConstructor();
+	}
+
 	inline void* MonitorBase::getMonitorHandle() const noexcept
 	{
 		return nullptr;
 	}
+
+
 }
 
 #endif //QUESTIAENGINE_MONITOR_H

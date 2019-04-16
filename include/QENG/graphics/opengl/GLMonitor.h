@@ -1,5 +1,5 @@
-#ifndef QUESTIAENGINE_GLWINDOW_H
-#define QUESTIAENGINE_GLWINDOW_H
+#ifndef QUESTIAENGINE_GLMONITOR_H
+#define QUESTIAENGINE_GLMONITOR_H
 
 #include "QENG/graphics/Monitor.h"
 
@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <unordered_map>
+#include "QENG/graphics/Window.h"
 
 namespace qe
 {
@@ -16,7 +17,7 @@ namespace qe
 		~GLMonitor() noexcept final;
 
 		bool operator==(MonitorBase* other) const noexcept final;
-
+		std::function<WindowBase*(const std::string&, unsigned int, unsigned int, const Monitor&)> getWindowConstructor() const noexcept final;
 		std::string getName() const noexcept final;
 		Vector2i getPosition() const noexcept final;
 		Vector2ui getPhysicalSize() const noexcept final;
@@ -24,6 +25,7 @@ namespace qe
 		void setMonitorCallback(std::function<void(const Monitor&, Monitor::State)> callback) const noexcept final;
 
 		Monitor::VideoMode getVideoMode() const noexcept final;
+		// TODO consider caching
 		std::vector<Monitor::VideoMode> getVideoModes() const noexcept final;
 
 		Monitor::GammaRamp getGammaRamp() const noexcept final;
@@ -46,4 +48,4 @@ namespace qe
 
 }
 
-#endif //QUESTIAENGINE_GLWINDOW_H
+#endif //QUESTIAENGINE_GLMONITOR_H

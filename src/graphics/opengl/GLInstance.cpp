@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <QENG/graphics/opengl/GLMonitor.h>
+#include "QENG/graphics/opengl/GLMonitor.h"
 
 namespace qe
 {
@@ -39,13 +39,10 @@ namespace qe
 		return monitors;
 	}
 
-
-
 	Monitor GLInstance::getPrimaryMonitor() const noexcept
 	{
 		GLFWmonitor* pMonitor = glfwGetPrimaryMonitor();
 		return Monitor(std::unique_ptr<GLMonitor>(new GLMonitor(pMonitor)));
 	}
-
 }
 
