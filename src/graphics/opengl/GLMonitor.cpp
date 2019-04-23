@@ -161,8 +161,9 @@ namespace qe
 		return true;
 	}
 
-	std::function<WindowBase*(const std::string&, unsigned int, unsigned int, const Monitor&)> GLMonitor::getWindowConstructor() const noexcept
+	std::function<WindowBase*(const std::string&, const WindowOptions&, const Monitor&)> GLMonitor::getWindowConstructor() const noexcept
 	{
-		return [](const std::string& name, unsigned int width, unsigned int height, const Monitor& monitor) {return new GLWindow(name, width, height, monitor);};
+		return [](const std::string& name, const WindowOptions& options, const Monitor& monitor)
+			{return new GLWindow(name, options, monitor);};
 	}
 }

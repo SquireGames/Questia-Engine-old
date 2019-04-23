@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "QENG/graphics/Monitor.h"
+#include "QENG/graphics/WindowOptions.h"
 
 namespace qe
 {
@@ -15,28 +16,7 @@ namespace qe
 	public:
 		enum class Mode { windowed, fullscreen };
 
-		struct WindowedOptions
-		{
-			explicit WindowedOptions(bool resizable = true, bool initiallyVisible = true, bool initiallyFocused = true, bool initiallyMaximized = false, bool alwaysOnTop = false)
-			: resizable(resizable), initiallyVisible(initiallyVisible), initiallyFocused(initiallyFocused), initiallyMaximized(initiallyMaximized), alwaysOnTop(alwaysOnTop)
-			{}
-			bool resizable : 1;
-			bool initiallyVisible : 1;
-			bool initiallyFocused : 1;
-			bool initiallyMaximized : 1;
-			bool alwaysOnTop : 1;
-		};
-		struct FullscreenOptions
-		{
-			bool auto_iconify : 1;
-			bool center_cursor : 1;
-		};
-
-
-		static explicit Window createFullScreen(const std::string& title, qe::VideoMode videoMode, const qe::Monitor& monitor);
-		// static explicit Window createWindowed(const std::string& title, unsigned int width, unsigned int height, const qe::Monitor& monitor);
-
-		explicit Window(const std::string& title, unsigned int width, unsigned int height, const qe::Monitor& monitor) noexcept;
+		explicit Window(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor) noexcept;
 		Window(const Window&) = delete;
 		Window(Window&&) noexcept = default;
 		Window& operator=(Window) noexcept = delete;
@@ -48,7 +28,6 @@ namespace qe
 		void toWindowed(unsigned int width, unsigned int height) noexcept;
 		void resize(unsigned int width, unsigned int height) noexcept;
 		void setTitle(const std::string& title) noexcept;
-
 		unsigned int getWidth() const noexcept;
 		unsigned int getHeight() const noexcept;
 		Mode getMode() const noexcept;
@@ -83,8 +62,9 @@ namespace qe
 	};
 
 
-	inline qe::Window::Window(const std::string& title, unsigned int width, unsigned int height, const qe::Monitor& monitor) noexcept
-			: windowBase(monitor.getWindowConstructor()(title, width, height, monitor))
+	inline qe::Window::Window(const std::string& title, const WindowOptions& options,
+							  const qe::Monitor& monitor) noexcept
+			: windowBase(monitor.getWindowConstructor()(title, options, monitor))
 	{
 	}
 

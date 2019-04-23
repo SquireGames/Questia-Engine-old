@@ -8,6 +8,7 @@
 
 #include "QENG/math/FixedVector.h"
 #include "QENG/graphics/VideoMode.h"
+#include "QENG/graphics/WindowOptions.h"
 
 namespace qe
 {
@@ -40,7 +41,6 @@ namespace qe
 		// in mm
 		qe::Vector2ui getPhysicalSize() const noexcept;
 
-		// TODO test the following until the end of the class:
 		qe::VideoMode getVideoMode() const noexcept;
 		std::vector<qe::VideoMode> getVideoModes() const noexcept;
 
@@ -53,7 +53,7 @@ namespace qe
 
 	private:
 		friend Window;
-		std::function<WindowBase*(const std::string&, unsigned int, unsigned int, const Monitor&)> getWindowConstructor() const noexcept;
+		std::function<WindowBase *(const std::string&, const WindowOptions&, const Monitor&)> getWindowConstructor() const noexcept;
 
 		std::unique_ptr<MonitorBase> monitorBase;
 	};
@@ -82,7 +82,7 @@ namespace qe
 		virtual bool setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept = 0;
 		virtual bool setGamma(float gamma) noexcept = 0;
 
-		virtual std::function<WindowBase*(const std::string&, unsigned int, unsigned int, const Monitor&)> getWindowConstructor() const noexcept = 0;
+		virtual std::function<WindowBase*(const std::string&, const WindowOptions&, const Monitor&)> getWindowConstructor() const noexcept = 0;
 		virtual std::unique_ptr<MonitorBase> clone() const noexcept = 0;
 	protected:
 		explicit MonitorBase() noexcept = default;
@@ -151,7 +151,7 @@ namespace qe
 		return monitorBase->setGamma(gamma);
 	}
 
-	inline std::function<WindowBase*(const std::string&, unsigned int, unsigned int, const Monitor&)> Monitor::getWindowConstructor() const noexcept
+	inline std::function<WindowBase *(const std::string&, const WindowOptions&, const Monitor&)> Monitor::getWindowConstructor() const noexcept
 	{
 		return monitorBase->getWindowConstructor();
 	}
