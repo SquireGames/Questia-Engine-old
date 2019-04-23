@@ -62,7 +62,7 @@ namespace qe
 	{
 	}
 
-	GLWindow::GLWindow(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor) noexcept
+	GLWindow::GLWindow(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, const Window* pSharedContext) noexcept
 	{
 	}
 }

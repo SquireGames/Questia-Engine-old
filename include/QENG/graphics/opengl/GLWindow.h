@@ -30,7 +30,7 @@ namespace qe
 		friend class GLMonitor;
 
 		// must be initialized from glfw thread
-		explicit GLWindow(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor) noexcept;
+		explicit GLWindow(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, const Window* pSharedContext) noexcept;
 	};
 }
 

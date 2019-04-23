@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <optional>
 
 #include "QENG/graphics/Monitor.h"
 #include "QENG/graphics/WindowOptions.h"
@@ -16,7 +17,8 @@ namespace qe
 	public:
 		enum class Mode { windowed, fullscreen };
 
-		explicit Window(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor) noexcept;
+		explicit Window(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor,
+				std::optional<const Window*> sharedContext = {}) noexcept;
 		Window(const Window&) = delete;
 		Window(Window&&) noexcept = default;
 		Window& operator=(Window) noexcept = delete;
@@ -63,8 +65,9 @@ namespace qe
 
 
 	inline qe::Window::Window(const std::string& title, const WindowOptions& options,
-							  const qe::Monitor& monitor) noexcept
-			: windowBase(monitor.getWindowConstructor()(title, options, monitor))
+							  const qe::Monitor& monitor, std::optional<const Window*> sharedContext) noexcept
+			: windowBase(monitor.getWindowConstructor()(title, options, monitor
+														, sharedContext ? sharedContext.value() : nullptr))
 	{
 	}
 

@@ -7,9 +7,8 @@
 
 namespace qe
 {
-	class WindowOptions
+	struct WindowOptions
 	{
-	public:
 		struct Windowed
 		{
 			explicit Windowed(bool resizable = true, bool initiallyVisible = true, bool initiallyFocused = true
@@ -40,7 +39,6 @@ namespace qe
 				specificOptions(options), videoMode(videoMode)
 		{}
 
-	private:
 		std::variant<Windowed, Fullscreen> specificOptions;
 		VideoMode videoMode;
 	};

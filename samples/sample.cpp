@@ -20,7 +20,10 @@ int main(int argc, char** argv)
 	std::cout << monitor.getName() << std::endl;
 	std::cout << std::to_string(monitor.getVideoMode().redBits) << std::endl;
 
-	qe::Window window("Window", qe::WindowOptions(qe::VideoMode(100, 100), qe::WindowOptions::Fullscreen()), monitor);
+
+	qe::WindowOptions wo {qe::VideoMode(100, 100), qe::WindowOptions::Fullscreen()};
+	qe::Window window("Window", wo, monitor);
+	qe::Window window2("Window2", wo, monitor, &window);
 
 	auto a = window.getWidth();
 	std::cout << std::to_string(a) << std::endl;
