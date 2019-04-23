@@ -24,9 +24,9 @@ namespace qe
 
 		void setMonitorCallback(std::function<void(const Monitor&, Monitor::State)> callback) const noexcept final;
 
-		Monitor::VideoMode getVideoMode() const noexcept final;
+		VideoMode getVideoMode() const noexcept final;
 		// TODO consider caching
-		std::vector<Monitor::VideoMode> getVideoModes() const noexcept final;
+		std::vector<VideoMode> getVideoModes() const noexcept final;
 
 		Monitor::GammaRamp getGammaRamp() const noexcept final;
 		bool setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept final;

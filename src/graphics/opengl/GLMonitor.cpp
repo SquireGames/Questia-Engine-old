@@ -85,24 +85,24 @@ namespace qe
 		return qe::Vector2ui(static_cast<unsigned int>(xmm), static_cast<unsigned int>(ymm));
 	}
 
-	Monitor::VideoMode GLMonitor::getVideoMode() const noexcept
+	VideoMode GLMonitor::getVideoMode() const noexcept
 	{
 		const GLFWvidmode* videoMode = glfwGetVideoMode(pMonitor);
-		return {static_cast<unsigned int>(videoMode->width), static_cast<unsigned int>(videoMode->height), static_cast<unsigned int>(videoMode->redBits)
-		        , static_cast<unsigned int>(videoMode->greenBits), static_cast<unsigned int>(videoMode->blueBits), static_cast<unsigned int>(videoMode->refreshRate)};
+		return {static_cast<unsigned int>(videoMode->width), static_cast<unsigned int>(videoMode->height), static_cast<unsigned int>(videoMode->refreshRate)
+		        , static_cast<unsigned int>(videoMode->redBits), static_cast<unsigned int>(videoMode->greenBits), static_cast<unsigned int>(videoMode->blueBits)};
 	}
 
-	std::vector<Monitor::VideoMode> GLMonitor::getVideoModes() const noexcept
+	std::vector<VideoMode> GLMonitor::getVideoModes() const noexcept
 	{
 		int modeCount;
 		const GLFWvidmode* videoModes = glfwGetVideoModes(pMonitor, &modeCount);
-		std::vector<Monitor::VideoMode> modes;
+		std::vector<VideoMode> modes;
 		modes.reserve(modeCount);
 		for(unsigned int i = 0; i < static_cast<unsigned int>(modeCount); i++)
 		{
-			modes.emplace_back(Monitor::VideoMode{static_cast<unsigned int>(videoModes[i].width), static_cast<unsigned int>(videoModes[i].height)
-					             , static_cast<unsigned int>(videoModes[i].redBits), static_cast<unsigned int>(videoModes[i].greenBits)
-					             , static_cast<unsigned int>(videoModes[i].blueBits), static_cast<unsigned int>(videoModes[i].refreshRate)});
+			modes.emplace_back(VideoMode{static_cast<unsigned int>(videoModes[i].width), static_cast<unsigned int>(videoModes[i].height)
+			                             , static_cast<unsigned int>(videoModes[i].refreshRate), static_cast<unsigned int>(videoModes[i].redBits)
+			                             , static_cast<unsigned int>(videoModes[i].greenBits), static_cast<unsigned int>(videoModes[i].blueBits)});
 		}
 		return modes;
 	}

@@ -18,16 +18,7 @@ int main(int argc, char** argv)
 	auto monitor = api.getPrimaryMonitor();
 
 	std::cout << monitor.getName() << std::endl;
-
-	monitor.setGamma(1);
-
-	qe::Monitor m2 = api.getPrimaryMonitor();
-	qe::Monitor m3 = api.getPrimaryMonitor();
-	m2 = monitor;
-	m3 = std::move(m2);
-
-	std::cout << m3.getName() << std::endl;
-	std::cout << monitor.getName() << std::endl;
+	std::cout << std::to_string(monitor.getVideoMode().redBits) << std::endl;
 
 	qe::Window window ("Window", 100, 200, monitor);
 
@@ -37,6 +28,7 @@ int main(int argc, char** argv)
 	while(1)
 	{
 		glfwPollEvents();
+		break;
 	}
 	return 0;
 }

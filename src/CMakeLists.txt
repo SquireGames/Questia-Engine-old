@@ -13,7 +13,7 @@ set(QUESTIAENGINE_HEADERS
         "../include/QENG/graphics/opengl/GLMonitor.h"
         "../include/QENG/math/FixedVector.h"
         "../include/QENG/graphics/opengl/GLWindow.h"
-        )
+        ../include/QENG/graphics/VideoMode.h ../include/QENG/util/FlagHelpers.h)
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "QENG/math/FixedVector.h"
+#include "QENG/graphics/VideoMode.h"
 
 namespace qe
 {
@@ -20,10 +21,10 @@ namespace qe
 	public:
 		enum class State {connected, disconnected};
 
-		struct VideoMode { unsigned int width, height, redBits, greenBits, blueBits, refreshRate;};
 		struct GammaRamp { std::vector<unsigned short> red, green, blue;};
 
 		// Monitor is copyable and movable
+		// TODO assert() that moved Monitors are not being used in Debug mode
 		explicit Monitor(std::unique_ptr<MonitorBase> monitorBase) noexcept;
 		Monitor(Monitor&& monitor) = default;
 		Monitor(const Monitor&) noexcept;
@@ -40,8 +41,8 @@ namespace qe
 		qe::Vector2ui getPhysicalSize() const noexcept;
 
 		// TODO test the following until the end of the class:
-		qe::Monitor::VideoMode getVideoMode() const noexcept;
-		std::vector<qe::Monitor::VideoMode> getVideoModes() const noexcept;
+		qe::VideoMode getVideoMode() const noexcept;
+		std::vector<qe::VideoMode> getVideoModes() const noexcept;
 
 		qe::Monitor::GammaRamp getGammaRamp() const noexcept;
 		// most platforms only support gamma ramps with 256 elements, this will fail silently if it fails for that reason
@@ -74,8 +75,8 @@ namespace qe
 
 		virtual void* getMonitorHandle() const noexcept;
 
-		virtual qe::Monitor::VideoMode getVideoMode() const noexcept = 0;
-		virtual std::vector<qe::Monitor::VideoMode> getVideoModes() const noexcept = 0;
+		virtual qe::VideoMode getVideoMode() const noexcept = 0;
+		virtual std::vector<qe::VideoMode> getVideoModes() const noexcept = 0;
 
 		virtual qe::Monitor::GammaRamp getGammaRamp() const noexcept = 0;
 		virtual bool setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept = 0;
@@ -125,12 +126,12 @@ namespace qe
 		return monitorBase->getPhysicalSize();
 	}
 
-	inline qe::Monitor::VideoMode Monitor::getVideoMode() const noexcept
+	inline qe::VideoMode Monitor::getVideoMode() const noexcept
 	{
 		return monitorBase->getVideoMode();
 	}
 
-	inline std::vector<qe::Monitor::VideoMode> Monitor::getVideoModes() const noexcept
+	inline std::vector<qe::VideoMode> Monitor::getVideoModes() const noexcept
 	{
 		return monitorBase->getVideoModes();
 	}
