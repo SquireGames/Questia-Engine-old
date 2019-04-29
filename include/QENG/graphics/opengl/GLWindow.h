@@ -22,7 +22,7 @@ namespace qe
 		unsigned int getHeight() const noexcept final;
 		WindowMode getMode() const noexcept final;
 
-		bool isClosed() const noexcept final;
+		bool shouldClose() const noexcept final;
 
 	private:
 		friend class GLInstance;

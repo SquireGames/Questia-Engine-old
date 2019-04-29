@@ -17,11 +17,19 @@ namespace qe
 	public:
 		explicit Window(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor,
 				std::optional<const Window*> sharedContext = {}) noexcept;
+		constexpr Window() noexcept = default;
 		Window(const Window&) = delete;
 		Window(Window&&) noexcept = default;
 		Window& operator=(Window) noexcept = delete;
 		Window& operator=(Window&&) noexcept = default;
 		~Window() noexcept = default;
+
+		void create(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor,
+					std::optional<const Window*> sharedContext = {}) noexcept;
+		void close() noexcept;
+
+		bool shouldClose() const noexcept;
+		bool isClosed() noexcept;
 
 		void update() noexcept;
 		void toFullscreen() noexcept;
@@ -32,9 +40,6 @@ namespace qe
 		unsigned int getHeight() const noexcept;
 		WindowMode getMode() const noexcept;
 		WindowBase* getWindowPtr() const noexcept;
-
-		bool isClosed() const noexcept;
-
 	private:
 		std::unique_ptr<WindowBase> windowBase;
 	};
@@ -55,17 +60,33 @@ namespace qe
 		virtual unsigned int getHeight() const noexcept = 0;
 		virtual WindowMode getMode() const noexcept = 0;
 
-		virtual bool isClosed() const noexcept = 0;
+		virtual bool shouldClose() const noexcept = 0;
 	protected:
 		explicit WindowBase() noexcept = default;
 	};
 
 
 	inline qe::Window::Window(const std::string& title, const WindowOptions& options,
-							  const qe::Monitor& monitor, std::optional<const Window*> sharedContext) noexcept
-			: windowBase(monitor.getWindowConstructor()(title, options, monitor
-														, sharedContext ? sharedContext.value() : nullptr))
+							  const qe::Monitor& monitor, std::optional<const Window*> sharedContext) noexcept :
+		windowBase(monitor.getWindowConstructor()(title, options, monitor, sharedContext ? sharedContext.value() : nullptr))
 	{
+	}
+
+	inline void Window::create(const std::string &title, const WindowOptions &options, const qe::Monitor &monitor,
+							   std::optional<const Window*> sharedContext) noexcept
+	{
+		if(isClosed())
+		{
+			windowBase = std::unique_ptr<WindowBase>(monitor.getWindowConstructor()(title, options, monitor, sharedContext ? sharedContext.value() : nullptr));
+		}
+	}
+
+	inline void Window::close() noexcept
+	{
+		if(!isClosed())
+		{
+			windowBase.reset();
+		}
 	}
 
 	inline void Window::update() noexcept
@@ -113,9 +134,14 @@ namespace qe
 		return windowBase.get();
 	}
 
-	inline bool Window::isClosed() const noexcept
+	inline bool Window::shouldClose() const noexcept
 	{
-		return windowBase->isClosed();
+		return windowBase->shouldClose();
+	}
+
+	inline bool Window::isClosed() noexcept
+	{
+		return !static_cast<bool>(windowBase);
 	}
 }
 

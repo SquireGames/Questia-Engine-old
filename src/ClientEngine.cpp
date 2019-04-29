@@ -17,7 +17,7 @@ namespace qe
 	void ClientEngine::run() noexcept
 	{
 		/*
-		while(!window->isClosed())
+		while(!window->shouldClose())
 		{
 			window->update();
 		}

@@ -18,10 +18,18 @@ int main(int argc, char** argv)
 	auto monitor = api.getPrimaryMonitor();
 
 	qe::WindowOptions wo (qe::VideoMode(300, 300), qe::WindowOptions::Windowed());
-	qe::Window window("Window", wo, monitor);
-	qe::Window window2("Window2", wo, monitor);
 
-	while(!window.isClosed() && !window2.isClosed())
+	qe::Window window("Window", wo, monitor);
+
+	while(!window.shouldClose())
+	{
+		glfwPollEvents();
+	}
+
+	qe::Window window2("Window2", wo, monitor);
+	window.close();
+
+	while(!window2.shouldClose())
 	{
 		glfwPollEvents();
 	}

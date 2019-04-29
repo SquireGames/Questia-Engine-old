@@ -137,15 +137,15 @@ namespace qe
 
 	bool GLMonitor::setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept
 	{
-		const int redSize = static_cast<int>(ramp.red.size());
-		const int greenSize = static_cast<int>(ramp.red.size());
-		const int blueSize = static_cast<int>(ramp.blue.size());
+		const unsigned int redSize = static_cast<int>(ramp.red.size());
+		const unsigned int greenSize = static_cast<int>(ramp.red.size());
+		const unsigned int blueSize = static_cast<int>(ramp.blue.size());
 		if(redSize != greenSize || greenSize != blueSize)
 		{
 			return false;
 		}
 		const GLFWgammaramp glfwRamp {const_cast<unsigned short*>(ramp.red.data()), const_cast<unsigned short*>(ramp.green.data())
-									, const_cast<unsigned short*>(ramp.blue.data()), static_cast<unsigned int>(redSize)};
+									, const_cast<unsigned short*>(ramp.blue.data()), redSize};
 		// fails silently
 		glfwSetGammaRamp(pMonitor, &glfwRamp);
 		return true;

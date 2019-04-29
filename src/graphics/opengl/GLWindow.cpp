@@ -100,7 +100,7 @@ namespace qe
 		return mode;
 	}
 
-	bool GLWindow::isClosed() const noexcept
+	bool GLWindow::shouldClose() const noexcept
 	{
 		return static_cast<bool>(glfwWindowShouldClose(pWindow));
 	}
