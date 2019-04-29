@@ -27,7 +27,6 @@ int main(int argc, char** argv)
 	}
 
 	qe::Window window2("Window2", wo, monitor);
-	window.close();
 
 	while(!window2.shouldClose())
 	{

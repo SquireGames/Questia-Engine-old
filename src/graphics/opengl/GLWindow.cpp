@@ -19,7 +19,9 @@ namespace qe
 		glfwWindowHint(GLFW_GREEN_BITS, options.videoMode.greenBits ? options.videoMode.greenBits : GLFW_DONT_CARE);
 		glfwWindowHint(GLFW_BLUE_BITS, options.videoMode.blueBits ? options.videoMode.blueBits : GLFW_DONT_CARE);
 
-		pWindow = glfwCreateWindow(width, height, title.c_str(), options.initMode == WindowMode::fullscreen ? pMonitor : nullptr, nullptr);
+		GLFWwindow* pSharedContextWindow = pSharedContext ? dynamic_cast<GLWindow*>(pSharedContext->getWindowPtr())->pWindow : nullptr;
+		pWindow = glfwCreateWindow(width, height, title.c_str()
+				, options.initMode == WindowMode::fullscreen ? pMonitor : nullptr, pSharedContextWindow);
 		if(!pWindow)
 		{
 			std::cout << "Error creating window" << std::endl;

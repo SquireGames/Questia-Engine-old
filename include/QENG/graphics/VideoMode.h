@@ -5,7 +5,6 @@ namespace qe
 {
 	struct VideoMode
 	{
-		// TODO verify that when refresh rate and color channel bits are zero that default values are set
 		VideoMode(unsigned int width, unsigned int height, unsigned int refreshRate = 0) :
 				width(width), height(height), refreshRate(refreshRate), redBits(0), greenBits(0), blueBits(0)
 		{}
