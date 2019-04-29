@@ -21,7 +21,6 @@ namespace qe
 	{
 	public:
 		enum class State {connected, disconnected};
-
 		struct GammaRamp { std::vector<unsigned short> red, green, blue;};
 
 		// Monitor is copyable and movable
@@ -50,6 +49,8 @@ namespace qe
 		bool setGamma(float gamma) noexcept;
 
 		void setMonitorCallback(std::function<void(const Monitor&, State)> callback) noexcept;
+
+		MonitorBase* getMonitorPtr() const noexcept;
 
 	private:
 		friend Window;
@@ -166,6 +167,11 @@ namespace qe
 	{
 		this->monitorBase = std::move(m.monitorBase);
 		return *this;
+	}
+
+	inline MonitorBase* Monitor::getMonitorPtr() const noexcept
+	{
+		return monitorBase.get();
 	}
 
 	inline void* MonitorBase::getMonitorHandle() const noexcept

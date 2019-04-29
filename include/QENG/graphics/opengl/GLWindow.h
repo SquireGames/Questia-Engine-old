@@ -20,14 +20,21 @@ namespace qe
 
 		unsigned int getWidth() const noexcept final;
 		unsigned int getHeight() const noexcept final;
-		Window::Mode getMode() const noexcept final;
+		WindowMode getMode() const noexcept final;
 
 		bool isClosed() const noexcept final;
 
-		void* getUnderlyingWindow() const noexcept final;
 	private:
 		friend class GLInstance;
 		friend class GLMonitor;
+
+		void initGladLoader() const noexcept;
+
+		GLFWmonitor* pMonitor;
+		GLFWwindow* pWindow;
+		unsigned int width;
+		unsigned int height;
+		WindowMode mode;
 
 		// must be initialized from glfw thread
 		explicit GLWindow(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, const Window* pSharedContext) noexcept;

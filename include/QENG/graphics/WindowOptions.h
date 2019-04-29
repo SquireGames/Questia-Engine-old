@@ -7,11 +7,13 @@
 
 namespace qe
 {
+	enum class WindowMode { windowed, fullscreen };
+
 	struct WindowOptions
 	{
 		struct Windowed
 		{
-			explicit Windowed(bool resizable = true, bool initiallyVisible = true, bool initiallyFocused = true
+			Windowed(bool resizable = true, bool initiallyVisible = true, bool initiallyFocused = true
 					, bool initiallyMaximized = false, bool alwaysOnTop = false) noexcept:
 					resizable(resizable), initiallyVisible(initiallyVisible), initiallyFocused(initiallyFocused),
 					initiallyMaximized(initiallyMaximized), alwaysOnTop(alwaysOnTop)
@@ -24,23 +26,28 @@ namespace qe
 		};
 		struct Fullscreen
 		{
-			explicit Fullscreen(bool centerCursor = false, bool autoIconify = true) :
+			Fullscreen(bool centerCursor = false, bool autoIconify = true) :
 					center_cursor(centerCursor), auto_iconify(autoIconify)
 			{}
 			bool center_cursor : 1;
 			bool auto_iconify : 1;
 		};
 
-		// ctor
+		// ctors
 		explicit WindowOptions(VideoMode videoMode, Windowed options) :
-				specificOptions(options), videoMode(videoMode)
+				windowedOptions(options), fullscreenOptions(), videoMode(videoMode), initMode(WindowMode::windowed)
 		{}
 		explicit WindowOptions(VideoMode videoMode, Fullscreen options) :
-				specificOptions(options), videoMode(videoMode)
+				windowedOptions(), fullscreenOptions(options), videoMode(videoMode), initMode(WindowMode::fullscreen)
+		{}
+		explicit WindowOptions(VideoMode videoMode, WindowMode initMode = WindowMode::windowed, Windowed windowedOptions = {}, Fullscreen fullscreenOptions = {}) :
+				windowedOptions(windowedOptions), fullscreenOptions(fullscreenOptions), videoMode(videoMode), initMode(initMode)
 		{}
 
-		std::variant<Windowed, Fullscreen> specificOptions;
+		Windowed windowedOptions;
+		Fullscreen fullscreenOptions;
 		VideoMode videoMode;
+		WindowMode initMode;
 	};
 }
 

@@ -15,8 +15,6 @@ namespace qe
 	class Window
 	{
 	public:
-		enum class Mode { windowed, fullscreen };
-
 		explicit Window(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor,
 				std::optional<const Window*> sharedContext = {}) noexcept;
 		Window(const Window&) = delete;
@@ -32,8 +30,8 @@ namespace qe
 		void setTitle(const std::string& title) noexcept;
 		unsigned int getWidth() const noexcept;
 		unsigned int getHeight() const noexcept;
-		Mode getMode() const noexcept;
-		void* getUnderlyingWindow() const noexcept;
+		WindowMode getMode() const noexcept;
+		WindowBase* getWindowPtr() const noexcept;
 
 		bool isClosed() const noexcept;
 
@@ -55,8 +53,7 @@ namespace qe
 
 		virtual unsigned int getWidth() const noexcept = 0;
 		virtual unsigned int getHeight() const noexcept = 0;
-		virtual Window::Mode getMode() const noexcept = 0;
-		virtual void* getUnderlyingWindow() const noexcept = 0;
+		virtual WindowMode getMode() const noexcept = 0;
 
 		virtual bool isClosed() const noexcept = 0;
 	protected:
@@ -106,14 +103,14 @@ namespace qe
 		return windowBase->getHeight();
 	}
 
-	inline Window::Mode Window::getMode() const noexcept
+	inline WindowMode Window::getMode() const noexcept
 	{
 		return windowBase->getMode();
 	}
 
-	inline void* Window::getUnderlyingWindow() const noexcept
+	inline WindowBase* Window::getWindowPtr() const noexcept
 	{
-		return windowBase->getUnderlyingWindow();
+		return windowBase.get();
 	}
 
 	inline bool Window::isClosed() const noexcept

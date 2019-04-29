@@ -17,21 +17,13 @@ int main(int argc, char** argv)
 
 	auto monitor = api.getPrimaryMonitor();
 
-	std::cout << monitor.getName() << std::endl;
-	std::cout << std::to_string(monitor.getVideoMode().redBits) << std::endl;
-
-
-	qe::WindowOptions wo {qe::VideoMode(100, 100), qe::WindowOptions::Fullscreen()};
+	qe::WindowOptions wo (qe::VideoMode(300, 300), qe::WindowOptions::Windowed());
 	qe::Window window("Window", wo, monitor);
-	qe::Window window2("Window2", wo, monitor, &window);
+	qe::Window window2("Window2", wo, monitor);
 
-	auto a = window.getWidth();
-	std::cout << std::to_string(a) << std::endl;
-
-	while(1)
+	while(!window.isClosed() && !window2.isClosed())
 	{
 		glfwPollEvents();
-		break;
 	}
 	return 0;
 }
