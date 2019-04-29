@@ -30,6 +30,7 @@ namespace qe
 
 		bool shouldClose() const noexcept;
 		bool isClosed() noexcept;
+		void resetShouldClose() noexcept;
 
 		void update() noexcept;
 		void toFullscreen() noexcept;
@@ -61,6 +62,7 @@ namespace qe
 		virtual WindowMode getMode() const noexcept = 0;
 
 		virtual bool shouldClose() const noexcept = 0;
+		virtual void resetShouldClose() noexcept = 0;
 	protected:
 		explicit WindowBase() noexcept = default;
 	};
@@ -137,6 +139,11 @@ namespace qe
 	inline bool Window::shouldClose() const noexcept
 	{
 		return windowBase->shouldClose();
+	}
+
+	inline void Window::resetShouldClose() noexcept
+	{
+		return windowBase->resetShouldClose();
 	}
 
 	inline bool Window::isClosed() noexcept

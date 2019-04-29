@@ -24,6 +24,8 @@ namespace qe
 
 		bool shouldClose() const noexcept final;
 
+		void resetShouldClose() noexcept final;
+
 	private:
 		friend class GLInstance;
 		friend class GLMonitor;

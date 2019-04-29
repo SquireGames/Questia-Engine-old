@@ -26,11 +26,5 @@ int main(int argc, char** argv)
 		glfwPollEvents();
 	}
 
-	qe::Window window2("Window2", wo, monitor);
-
-	while(!window2.shouldClose())
-	{
-		glfwPollEvents();
-	}
 	return 0;
 }
