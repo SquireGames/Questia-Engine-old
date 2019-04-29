@@ -10,7 +10,7 @@ namespace qe
 	public:
 		~GLWindow() noexcept final;
 
-		void update() noexcept final;
+		void display() noexcept final;
 
 		void toFullScreen() noexcept final;
 		void toWindowed(unsigned int width, unsigned int height) noexcept final;

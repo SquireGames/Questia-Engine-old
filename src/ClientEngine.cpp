@@ -19,7 +19,7 @@ namespace qe
 		/*
 		while(!window->shouldClose())
 		{
-			window->update();
+			window->display();
 		}
 		 */
 		/*

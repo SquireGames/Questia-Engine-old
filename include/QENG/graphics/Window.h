@@ -32,17 +32,20 @@ namespace qe
 		bool isClosed() noexcept;
 		void resetShouldClose() noexcept;
 
-		void update() noexcept;
+		void display() noexcept;
 		void toFullscreen() noexcept;
 		void toWindowed(unsigned int width, unsigned int height) noexcept;
+
 		void resize(unsigned int width, unsigned int height) noexcept;
 		void setTitle(const std::string& title) noexcept;
 		unsigned int getWidth() const noexcept;
 		unsigned int getHeight() const noexcept;
 		WindowMode getMode() const noexcept;
 		WindowBase* getWindowPtr() const noexcept;
+
 	private:
 		std::unique_ptr<WindowBase> windowBase;
+
 	};
 
 
@@ -50,7 +53,7 @@ namespace qe
 	{
 	public:
 		virtual ~WindowBase() noexcept = default;
-		virtual void update() noexcept = 0;
+		virtual void display() noexcept = 0;
 		virtual void toFullScreen() noexcept = 0;
 
 		virtual void toWindowed(unsigned int width, unsigned int height) noexcept = 0;
@@ -91,9 +94,9 @@ namespace qe
 		}
 	}
 
-	inline void Window::update() noexcept
+	inline void Window::display() noexcept
 	{
-		windowBase->update();
+		windowBase->display();
 	}
 
 	inline void Window::toFullscreen() noexcept

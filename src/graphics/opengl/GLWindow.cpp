@@ -50,9 +50,8 @@ namespace qe
 		glfwDestroyWindow(pWindow);
 	}
 
-	void qe::GLWindow::update() noexcept
+	void qe::GLWindow::display() noexcept
 	{
-		glfwPollEvents();
 		glfwSwapBuffers(pWindow);
 	}
 
