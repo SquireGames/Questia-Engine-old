@@ -15,6 +15,9 @@ namespace qe
 		explicit GraphicsAPI(std::unique_ptr<GraphicsAPIBase> graphicsAPIBase) noexcept;
 		~GraphicsAPI() noexcept = default;
 
+		// requires that all classes that depend on this class be deconstructed
+		void changeAPI(std::unique_ptr<GraphicsAPIBase> newAPI) noexcept;
+
 		Monitor getPrimaryMonitor() const noexcept;
 		std::vector<Monitor> getMonitors() const noexcept;
 
@@ -45,6 +48,12 @@ namespace qe
 	inline std::vector<Monitor> GraphicsAPI::getMonitors() const noexcept
 	{
 		return graphicsAPIBase->getMonitors();
+	}
+
+	inline void GraphicsAPI::changeAPI(std::unique_ptr<GraphicsAPIBase> newAPI) noexcept
+	{
+		graphicsAPIBase.reset();
+		graphicsAPIBase = std::move(newAPI);
 	}
 }
 

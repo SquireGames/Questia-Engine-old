@@ -1,22 +1,24 @@
 #include "QENG/graphics/opengl/GLMonitor.h"
+#include "QENG/graphics/opengl/GLWindow.h"
 #include <mutex>
 #include <vector>
-#include "QENG/graphics/opengl/GLWindow.h"
 
 namespace qe
 {
 	static std::mutex monitorLock;
 	static int monitorRefCount = 0;
 	static std::function<void(const Monitor&, Monitor::State)> monitorConnectionCallback = {};
+	static GraphicsAPI* pAPI = nullptr;
 
-	GLMonitor::GLMonitor(GLFWmonitor* pMonitor) noexcept
-		: MonitorBase(), pMonitor(pMonitor), monitorName(std::string(glfwGetMonitorName(pMonitor)))
+	GLMonitor::GLMonitor(GraphicsAPI& api, GLFWmonitor* pMonitor) noexcept
+		: MonitorBase(api), pMonitor(pMonitor), monitorName(std::string(glfwGetMonitorName(pMonitor)))
 	{
 		std::lock_guard<std::mutex> lock(monitorLock);
 		// if this is the first initialized GLMonitor object
 		if(monitorRefCount == 0)
 		{
 			glfwSetMonitorCallback(GLMonitor::monitorCallback);
+			pAPI= &api;
 		}
 		monitorRefCount++;
 	}
@@ -25,6 +27,10 @@ namespace qe
 	{
 		std::lock_guard<std::mutex> lock(monitorLock);
 		monitorRefCount--;
+		if (monitorRefCount == 0)
+		{
+			pAPI = nullptr;
+		}
 	}
 
 	std::string GLMonitor::getName() const noexcept
@@ -42,7 +48,7 @@ namespace qe
 			}
 		}
 		// ctor must not be locked because the constructor locks with the same mutex
-		Monitor monitor = Monitor(std::unique_ptr<MonitorBase>(new GLMonitor(pMonitor)));
+		Monitor monitor = Monitor(std::unique_ptr<MonitorBase>(new GLMonitor(*pAPI, pMonitor)));
 
 		std::lock_guard<std::mutex> lock(monitorLock);
 		if (event == GLFW_CONNECTED)
@@ -132,7 +138,7 @@ namespace qe
 
 	std::unique_ptr<MonitorBase> GLMonitor::clone() const noexcept
 	{
-		return std::unique_ptr<MonitorBase>(reinterpret_cast<MonitorBase*>(new GLMonitor(pMonitor)));
+		return std::unique_ptr<MonitorBase>(dynamic_cast<MonitorBase*>(new GLMonitor(*pAPI, pMonitor)));
 	}
 
 	bool GLMonitor::setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept

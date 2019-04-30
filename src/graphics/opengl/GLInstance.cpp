@@ -33,7 +33,7 @@ namespace qe
 
 		for (unsigned int i = 0; i < static_cast<unsigned int>(count); i++)
 		{
-			monitors.emplace_back(Monitor(std::unique_ptr<MonitorBase>(new GLMonitor(pMonitors[i]))));
+			monitors.emplace_back(Monitor(std::unique_ptr<MonitorBase>(new GLMonitor((GraphicsAPI&)*this, pMonitors[i]))));
 		}
 
 		return monitors;
@@ -42,7 +42,7 @@ namespace qe
 	Monitor GLInstance::getPrimaryMonitor() const noexcept
 	{
 		GLFWmonitor* pMonitor = glfwGetPrimaryMonitor();
-		return Monitor(std::unique_ptr<GLMonitor>(new GLMonitor(pMonitor)));
+		return Monitor(std::unique_ptr<GLMonitor>(new GLMonitor((GraphicsAPI&)*this, pMonitor)));
 	}
 }
 

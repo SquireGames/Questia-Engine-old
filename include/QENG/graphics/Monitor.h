@@ -23,8 +23,7 @@ namespace qe
 		enum class State {connected, disconnected};
 		struct GammaRamp { std::vector<unsigned short> red, green, blue;};
 
-		// Monitor is copyable and movable
-		// TODO assert() that moved Monitors are not being used in Debug mode
+		// Monitor is copyable and movable, but can only be created by GraphicsAPI
 		explicit Monitor(std::unique_ptr<MonitorBase> monitorBase) noexcept;
 		Monitor(Monitor&& monitor) = default;
 		Monitor(const Monitor&) noexcept;
@@ -60,6 +59,7 @@ namespace qe
 	};
 
 
+	class GraphicsAPI;
 
 	class MonitorBase
 	{
@@ -86,8 +86,14 @@ namespace qe
 		virtual std::function<WindowBase*(const std::string&, const WindowOptions&, const Monitor&, const Window*)> getWindowConstructor() const noexcept = 0;
 		virtual std::unique_ptr<MonitorBase> clone() const noexcept = 0;
 	protected:
-		explicit MonitorBase() noexcept = default;
+		explicit MonitorBase(GraphicsAPI& api) noexcept;
+		GraphicsAPI& api;
 	};
+
+	inline MonitorBase::MonitorBase(GraphicsAPI& api) noexcept : api(api)
+	{
+
+	}
 
 	inline Monitor::Monitor(std::unique_ptr<MonitorBase> monitorBase) noexcept : monitorBase(std::move(monitorBase))
 	{

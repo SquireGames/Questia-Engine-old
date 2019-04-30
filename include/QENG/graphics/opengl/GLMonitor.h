@@ -40,7 +40,7 @@ namespace qe
 		friend class GLInstance;
 
 		// must be initialized from glfw thread
-		explicit GLMonitor(GLFWmonitor* pMonitor) noexcept;
+		explicit GLMonitor(GraphicsAPI& api, GLFWmonitor* pMonitor) noexcept;
 
 		static void monitorCallback(GLFWmonitor* pMonitor, int event);
 
