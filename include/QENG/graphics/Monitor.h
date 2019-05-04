@@ -13,8 +13,8 @@
 namespace qe
 {
 	class MonitorBase;
-	class WindowBase;
 	class Window;
+	class GraphicsAPIBase;
 
 	// this class is partially thread safe, but TODO document the functions that need to be run on the main graphics thread
 	class Monitor
@@ -36,30 +36,27 @@ namespace qe
 
 		std::string getName() const noexcept;
 		qe::Vector2i getPosition() const noexcept;
-		// in mm
-		qe::Vector2ui getPhysicalSize() const noexcept;
+		qe::Vector2ui getPhysicalSize() const noexcept; // in mm
 
 		qe::VideoMode getVideoMode() const noexcept;
 		std::vector<qe::VideoMode> getVideoModes() const noexcept;
 
-		qe::Monitor::GammaRamp getGammaRamp() const noexcept;
-		// most platforms only support gamma ramps with 256 elements, this will fail silently if it fails for that reason
+		// most platforms only support gamma ramps with 256 elements, this will fail silently
 		bool setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept;
 		bool setGamma(float gamma) noexcept;
+		qe::Monitor::GammaRamp getGammaRamp() const noexcept;
 
 		void setMonitorCallback(std::function<void(const Monitor&, State)> callback) noexcept;
 
-		MonitorBase* getMonitorPtr() const noexcept;
-
 	private:
-		friend Window;
-		std::function<WindowBase *(const std::string&, const WindowOptions&, const Monitor&, const Window*)> getWindowConstructor() const noexcept;
-
 		std::unique_ptr<MonitorBase> monitorBase;
+
+		friend GraphicsAPIBase;
+		friend Window;
 	};
 
 
-	class GraphicsAPI;
+	class GraphicsAPIBase;
 
 	class MonitorBase
 	{
@@ -83,14 +80,15 @@ namespace qe
 		virtual bool setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept = 0;
 		virtual bool setGamma(float gamma) noexcept = 0;
 
-		virtual std::function<WindowBase*(const std::string&, const WindowOptions&, const Monitor&, const Window*)> getWindowConstructor() const noexcept = 0;
 		virtual std::unique_ptr<MonitorBase> clone() const noexcept = 0;
+
+		GraphicsAPIBase* const pAPI;
+
 	protected:
-		explicit MonitorBase(GraphicsAPI& api) noexcept;
-		GraphicsAPI& api;
+		explicit MonitorBase(GraphicsAPIBase* pAPI) noexcept;
 	};
 
-	inline MonitorBase::MonitorBase(GraphicsAPI& api) noexcept : api(api)
+	inline MonitorBase::MonitorBase(GraphicsAPIBase* pAPI) noexcept : pAPI(pAPI)
 	{
 
 	}
@@ -158,11 +156,6 @@ namespace qe
 		return monitorBase->setGamma(gamma);
 	}
 
-	inline std::function<WindowBase *(const std::string&, const WindowOptions&, const Monitor&, const Window*)> Monitor::getWindowConstructor() const noexcept
-	{
-		return monitorBase->getWindowConstructor();
-	}
-
 	inline Monitor& Monitor::operator=(const Monitor& m) noexcept
 	{
 		this->monitorBase = std::unique_ptr<MonitorBase>(m.monitorBase->clone());
@@ -173,11 +166,6 @@ namespace qe
 	{
 		this->monitorBase = std::move(m.monitorBase);
 		return *this;
-	}
-
-	inline MonitorBase* Monitor::getMonitorPtr() const noexcept
-	{
-		return monitorBase.get();
 	}
 
 	inline void* MonitorBase::getMonitorHandle() const noexcept

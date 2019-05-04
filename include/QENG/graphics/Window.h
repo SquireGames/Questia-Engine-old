@@ -7,6 +7,7 @@
 
 #include "QENG/graphics/Monitor.h"
 #include "QENG/graphics/WindowOptions.h"
+#include "QENG/graphics/GraphicsAPI.h"
 
 namespace qe
 {
@@ -15,8 +16,7 @@ namespace qe
 	class Window
 	{
 	public:
-		explicit Window(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor,
-				std::optional<const Window*> sharedContext = {}) noexcept;
+		explicit Window(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, std::optional<Window*> sharedContext = {}) noexcept;
 		constexpr Window() noexcept = default;
 		Window(const Window&) = delete;
 		Window(Window&&) noexcept = default;
@@ -24,8 +24,7 @@ namespace qe
 		Window& operator=(Window&&) noexcept = default;
 		~Window() noexcept = default;
 
-		void create(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor,
-					std::optional<const Window*> sharedContext = {}) noexcept;
+		void create(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, std::optional<Window*> sharedContext = {}) noexcept;
 		void close() noexcept;
 
 		bool shouldClose() const noexcept;
@@ -41,11 +40,11 @@ namespace qe
 		unsigned int getWidth() const noexcept;
 		unsigned int getHeight() const noexcept;
 		WindowMode getMode() const noexcept;
-		WindowBase* getWindowPtr() const noexcept;
 
 	private:
 		std::unique_ptr<WindowBase> windowBase;
 
+		friend GraphicsAPIBase;
 	};
 
 
@@ -66,23 +65,29 @@ namespace qe
 
 		virtual bool shouldClose() const noexcept = 0;
 		virtual void resetShouldClose() noexcept = 0;
+
 	protected:
-		explicit WindowBase() noexcept = default;
+		explicit WindowBase(GraphicsAPIBase* pAPI) noexcept;
+		GraphicsAPIBase* const pAPI;
 	};
+
+	inline WindowBase::WindowBase(GraphicsAPIBase* pAPI) noexcept : pAPI(pAPI)
+	{
+	}
 
 
 	inline qe::Window::Window(const std::string& title, const WindowOptions& options,
-							  const qe::Monitor& monitor, std::optional<const Window*> sharedContext) noexcept :
-		windowBase(monitor.getWindowConstructor()(title, options, monitor, sharedContext ? sharedContext.value() : nullptr))
+							  const qe::Monitor& monitor, std::optional<Window*> sharedContext) noexcept :
+		windowBase(monitor.monitorBase->pAPI->newWindowBase(title, options, monitor, sharedContext ? sharedContext.value() : nullptr))
 	{
 	}
 
 	inline void Window::create(const std::string &title, const WindowOptions &options, const qe::Monitor &monitor,
-							   std::optional<const Window*> sharedContext) noexcept
+							   std::optional<Window*> sharedContext) noexcept
 	{
 		if(isClosed())
 		{
-			windowBase = std::unique_ptr<WindowBase>(monitor.getWindowConstructor()(title, options, monitor, sharedContext ? sharedContext.value() : nullptr));
+			windowBase = std::unique_ptr<WindowBase>(monitor.monitorBase->pAPI->newWindowBase(title, options, monitor, sharedContext ? sharedContext.value() : nullptr));
 		}
 	}
 
@@ -132,11 +137,6 @@ namespace qe
 	inline WindowMode Window::getMode() const noexcept
 	{
 		return windowBase->getMode();
-	}
-
-	inline WindowBase* Window::getWindowPtr() const noexcept
-	{
-		return windowBase.get();
 	}
 
 	inline bool Window::shouldClose() const noexcept

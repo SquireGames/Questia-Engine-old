@@ -8,17 +8,17 @@ namespace qe
 	static std::mutex monitorLock;
 	static int monitorRefCount = 0;
 	static std::function<void(const Monitor&, Monitor::State)> monitorConnectionCallback = {};
-	static GraphicsAPI* pAPI = nullptr;
+	static GraphicsAPIBase* pAPIShared = nullptr;
 
-	GLMonitor::GLMonitor(GraphicsAPI& api, GLFWmonitor* pMonitor) noexcept
-		: MonitorBase(api), pMonitor(pMonitor), monitorName(std::string(glfwGetMonitorName(pMonitor)))
+	GLMonitor::GLMonitor(GraphicsAPIBase* pAPI, GLFWmonitor* pMonitor) noexcept
+		: MonitorBase(pAPI), pMonitor(pMonitor), monitorName(std::string(glfwGetMonitorName(pMonitor)))
 	{
 		std::lock_guard<std::mutex> lock(monitorLock);
 		// if this is the first initialized GLMonitor object
 		if(monitorRefCount == 0)
 		{
 			glfwSetMonitorCallback(GLMonitor::monitorCallback);
-			pAPI= &api;
+			pAPIShared= this->pAPI;
 		}
 		monitorRefCount++;
 	}
@@ -29,7 +29,7 @@ namespace qe
 		monitorRefCount--;
 		if (monitorRefCount == 0)
 		{
-			pAPI = nullptr;
+			pAPIShared = nullptr;
 		}
 	}
 
@@ -48,7 +48,7 @@ namespace qe
 			}
 		}
 		// ctor must not be locked because the constructor locks with the same mutex
-		Monitor monitor = Monitor(std::unique_ptr<MonitorBase>(new GLMonitor(*pAPI, pMonitor)));
+		Monitor monitor = Monitor(std::unique_ptr<MonitorBase>(new GLMonitor(pAPIShared, pMonitor)));
 
 		std::lock_guard<std::mutex> lock(monitorLock);
 		if (event == GLFW_CONNECTED)
@@ -138,7 +138,7 @@ namespace qe
 
 	std::unique_ptr<MonitorBase> GLMonitor::clone() const noexcept
 	{
-		return std::unique_ptr<MonitorBase>(dynamic_cast<MonitorBase*>(new GLMonitor(*pAPI, pMonitor)));
+		return std::unique_ptr<MonitorBase>(dynamic_cast<MonitorBase*>(new GLMonitor(pAPI, pMonitor)));
 	}
 
 	bool GLMonitor::setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept
@@ -165,11 +165,5 @@ namespace qe
 		}
 		glfwSetGamma(pMonitor, gamma);
 		return true;
-	}
-
-	std::function<WindowBase*(const std::string&, const WindowOptions&, const Monitor&, const Window*)> GLMonitor::getWindowConstructor() const noexcept
-	{
-		return [](const std::string& name, const WindowOptions& options, const Monitor& monitor, const Window* pSharedContext)
-			{return new GLWindow(name, options, monitor, pSharedContext);};
 	}
 }

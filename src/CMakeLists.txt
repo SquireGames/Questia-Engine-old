@@ -20,6 +20,7 @@ set(QUESTIAENGINE_HEADERS
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
     "ClientEngine.cpp"
+    "graphics/GraphicsAPI.cpp"
     )
 
 ## define implementations of graphics options dependant classes

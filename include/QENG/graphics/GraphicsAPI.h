@@ -26,14 +26,22 @@ namespace qe
 	};
 
 
+	class Window;
+	class WindowBase;
+
 	class GraphicsAPIBase
 	{
 	public:
 		explicit GraphicsAPIBase() noexcept = default;
 		virtual ~GraphicsAPIBase() noexcept = default;
 
-		virtual Monitor getPrimaryMonitor() const noexcept = 0;
-		virtual std::vector<Monitor> getMonitors() const noexcept = 0;
+		virtual Monitor getPrimaryMonitor() noexcept = 0;
+		virtual std::vector<Monitor> getMonitors() noexcept = 0;
+
+		virtual [[nodiscard]] WindowBase* newWindowBase(const std::string&, const WindowOptions&, const Monitor&, Window*) noexcept = 0;
+
+		WindowBase* getBase(const Window* pWindow) noexcept;
+		MonitorBase* getBase(const Monitor* pMonitor) noexcept;
 	};
 
 	inline GraphicsAPI::GraphicsAPI(std::unique_ptr<GraphicsAPIBase> graphicsAPIBase) noexcept : graphicsAPIBase(std::move(graphicsAPIBase))

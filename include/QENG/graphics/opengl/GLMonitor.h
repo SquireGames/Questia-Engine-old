@@ -17,7 +17,7 @@ namespace qe
 		~GLMonitor() noexcept final;
 
 		bool operator==(MonitorBase* other) const noexcept final;
-		std::function<WindowBase*(const std::string&, const WindowOptions&, const Monitor&, const Window*)> getWindowConstructor() const noexcept final;
+
 		std::string getName() const noexcept final;
 		Vector2i getPosition() const noexcept final;
 		Vector2ui getPhysicalSize() const noexcept final;
@@ -25,7 +25,6 @@ namespace qe
 		void setMonitorCallback(std::function<void(const Monitor&, Monitor::State)> callback) const noexcept final;
 
 		VideoMode getVideoMode() const noexcept final;
-		// TODO consider caching
 		std::vector<VideoMode> getVideoModes() const noexcept final;
 
 		Monitor::GammaRamp getGammaRamp() const noexcept final;
@@ -40,7 +39,7 @@ namespace qe
 		friend class GLInstance;
 
 		// must be initialized from glfw thread
-		explicit GLMonitor(GraphicsAPI& api, GLFWmonitor* pMonitor) noexcept;
+		explicit GLMonitor(GraphicsAPIBase* pAPI, GLFWmonitor* pMonitor) noexcept;
 
 		static void monitorCallback(GLFWmonitor* pMonitor, int event);
 

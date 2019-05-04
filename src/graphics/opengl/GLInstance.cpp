@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <QENG/graphics/opengl/GLWindow.h>
 #include "QENG/graphics/opengl/GLMonitor.h"
 
 namespace qe
@@ -23,7 +24,7 @@ namespace qe
 		glfwTerminate();
 	}
 
-	std::vector<Monitor> GLInstance::getMonitors() const noexcept
+	std::vector<Monitor> GLInstance::getMonitors() noexcept
 	{
 		int count;
 		GLFWmonitor** pMonitors = glfwGetMonitors(&count);
@@ -33,16 +34,22 @@ namespace qe
 
 		for (unsigned int i = 0; i < static_cast<unsigned int>(count); i++)
 		{
-			monitors.emplace_back(Monitor(std::unique_ptr<MonitorBase>(new GLMonitor((GraphicsAPI&)*this, pMonitors[i]))));
+			monitors.emplace_back(Monitor(std::unique_ptr<MonitorBase>(new GLMonitor(this, pMonitors[i]))));
 		}
 
 		return monitors;
 	}
 
-	Monitor GLInstance::getPrimaryMonitor() const noexcept
+	Monitor GLInstance::getPrimaryMonitor() noexcept
 	{
 		GLFWmonitor* pMonitor = glfwGetPrimaryMonitor();
-		return Monitor(std::unique_ptr<GLMonitor>(new GLMonitor((GraphicsAPI&)*this, pMonitor)));
+		return Monitor(std::unique_ptr<GLMonitor>(new GLMonitor(this, pMonitor)));
 	}
+
+	WindowBase* GLInstance::newWindowBase(const std::string& name, const WindowOptions& options, const Monitor& monitor, Window* pSharedContext) noexcept
+	{
+		return new GLWindow(this, name, options, monitor, pSharedContext);
+	}
+
 }
 

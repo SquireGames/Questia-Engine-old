@@ -7,8 +7,9 @@
 
 namespace qe
 {
-	GLWindow::GLWindow(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, const Window* pSharedContext) noexcept :
-			pMonitor (static_cast<GLFWmonitor*>(monitor.getMonitorPtr()->getMonitorHandle()))
+	GLWindow::GLWindow(GraphicsAPIBase* pAPI, const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, Window* pSharedContext) noexcept :
+			WindowBase(pAPI)
+			, pMonitor (static_cast<GLFWmonitor*>(pAPI->getBase(&monitor)->getMonitorHandle()))
 			, pWindow(nullptr)
 			, width(options.videoMode.width)
 			, height(options.videoMode.height)
@@ -19,7 +20,7 @@ namespace qe
 		glfwWindowHint(GLFW_GREEN_BITS, options.videoMode.greenBits ? options.videoMode.greenBits : GLFW_DONT_CARE);
 		glfwWindowHint(GLFW_BLUE_BITS, options.videoMode.blueBits ? options.videoMode.blueBits : GLFW_DONT_CARE);
 
-		GLFWwindow* pSharedContextWindow = pSharedContext ? dynamic_cast<GLWindow*>(pSharedContext->getWindowPtr())->pWindow : nullptr;
+		GLFWwindow* pSharedContextWindow = pSharedContext ? dynamic_cast<GLWindow*>(pAPI->getBase(pSharedContext))->pWindow : nullptr;
 		pWindow = glfwCreateWindow(width, height, title.c_str()
 				, options.initMode == WindowMode::fullscreen ? pMonitor : nullptr, pSharedContextWindow);
 

@@ -39,7 +39,7 @@ namespace qe
 		WindowMode mode;
 
 		// must be initialized from glfw thread
-		explicit GLWindow(const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, const Window* pSharedContext) noexcept;
+		explicit GLWindow(GraphicsAPIBase* pAPI, const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, Window* pSharedContext) noexcept;
 	};
 }
 

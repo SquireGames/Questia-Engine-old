@@ -11,8 +11,10 @@ namespace qe
 		explicit GLInstance() noexcept;
 		~GLInstance() noexcept final;
 
-		Monitor getPrimaryMonitor() const noexcept final;
-		std::vector<Monitor> getMonitors() const noexcept final;
+		Monitor getPrimaryMonitor() noexcept final;
+		std::vector<Monitor> getMonitors() noexcept final;
+
+		WindowBase* newWindowBase(const std::string& name, const WindowOptions& options, const Monitor& monitor, Window* pSharedContext) noexcept final;
 	};
 }
 
