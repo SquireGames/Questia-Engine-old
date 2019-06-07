@@ -9,12 +9,12 @@ set(QUESTIAENGINE_HEADERS
         "../include/QENG/graphics/Window.h"
         "../include/QENG/graphics/GraphicsAPI.h"
         "../include/QENG/graphics/impl/GraphicsAPIBase.ipp"
-        "../include/QENG/graphics/impl/opengl/GraphicsAPI.h"
+        "../include/QENG/graphics/impl/opengl/GraphicsAPIImpl.h"
         "../include/QENG/graphics/Monitor.h"
-        "../include/QENG/graphics/impl/opengl/Monitor.h"
+        "../include/QENG/graphics/impl/opengl/MonitorImpl.h"
         "../include/QENG/graphics/impl/MonitorBase.ipp"
         "../include/QENG/math/FixedVector.h"
-        "../include/QENG/graphics/impl/opengl/Window.h"
+        "../include/QENG/graphics/impl/opengl/WindowImpl.h"
         "../include/QENG/graphics/impl/WindowBase.ipp"
         "../include/QENG/graphics/VideoMode.h"
         "../include/QENG/graphics/WindowOptions.h"
@@ -36,14 +36,14 @@ string(REPLACE "," ";" QENG_GRAPHICS_LIST ${QENG_GRAPHICS_LIST})
 
 if("none" IN_LIST QENG_GRAPHICS_LIST)
     list(APPEND QUESTIAENGINE_SOURCES)
-           # "graphics/mock/Window.cpp")
+           # "graphics/mock/WindowImpl.cpp")
 endif()
 
 if("opengl" IN_LIST QENG_GRAPHICS_LIST)
     list(APPEND QUESTIAENGINE_SOURCES
-            "graphics/impl/opengl/Window.cpp"
-            "graphics/impl/opengl/GraphicsAPI.cpp"
-            "graphics/impl/opengl/Monitor.cpp"
+            "graphics/impl/opengl/WindowImpl.cpp"
+            "graphics/impl/opengl/GraphicsAPIImpl.cpp"
+            "graphics/impl/opengl/MonitorImpl.cpp"
         )
 endif()
 

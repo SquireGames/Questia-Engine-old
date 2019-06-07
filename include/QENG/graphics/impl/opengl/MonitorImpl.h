@@ -11,10 +11,10 @@
 
 namespace qe::gl
 {
-	class Monitor : public MonitorBase
+	class MonitorImpl : public MonitorBase
 	{
 	public:
-		~Monitor() noexcept final;
+		~MonitorImpl() noexcept final;
 
 		bool operator==(MonitorBase* other) const noexcept final;
 
@@ -36,10 +36,10 @@ namespace qe::gl
 		std::unique_ptr<MonitorBase> clone() const noexcept final;
 
 	private:
-		friend class GraphicsAPI;
+		friend class GraphicsAPIImpl;
 
 		// must be initialized from glfw thread
-		explicit Monitor(GraphicsAPIBase* pAPI, GLFWmonitor* pMonitor) noexcept;
+		explicit MonitorImpl(GraphicsAPIBase* pAPI, GLFWmonitor* pMonitor) noexcept;
 
 		static void monitorCallback(GLFWmonitor* pMonitor, int event);
 

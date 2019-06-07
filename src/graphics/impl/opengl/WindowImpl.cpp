@@ -3,11 +3,11 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "QENG/graphics/impl/opengl/Window.h"
+#include "QENG/graphics/impl/opengl/WindowImpl.h"
 
 namespace qe::gl
 {
-	Window::Window(GraphicsAPIBase* pAPI, const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, qe::Window* pSharedContext) noexcept :
+	WindowImpl::WindowImpl(GraphicsAPIBase* pAPI, const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, qe::Window* pSharedContext) noexcept :
 			WindowBase(pAPI)
 			, pMonitor (static_cast<GLFWmonitor*>(pAPI->getBase(&monitor)->getMonitorHandle()))
 			, pWindow(nullptr)
@@ -20,7 +20,7 @@ namespace qe::gl
 		glfwWindowHint(GLFW_GREEN_BITS, options.videoMode.greenBits ? options.videoMode.greenBits : GLFW_DONT_CARE);
 		glfwWindowHint(GLFW_BLUE_BITS, options.videoMode.blueBits ? options.videoMode.blueBits : GLFW_DONT_CARE);
 
-		GLFWwindow* pSharedContextWindow = pSharedContext ? dynamic_cast<Window*>(pAPI->getBase(pSharedContext))->pWindow : nullptr;
+		GLFWwindow* pSharedContextWindow = pSharedContext ? dynamic_cast<WindowImpl*>(pAPI->getBase(pSharedContext))->pWindow : nullptr;
 		pWindow = glfwCreateWindow(width, height, title.c_str()
 				, options.initMode == WindowMode::fullscreen ? pMonitor : nullptr, pSharedContextWindow);
 
@@ -36,7 +36,7 @@ namespace qe::gl
 		glfwSetWindowUserPointer(pWindow, this);
 		glfwSetWindowSizeCallback(pWindow, [](GLFWwindow* window, int width, int height)
 		{
-			auto* pThis = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+			auto* pThis = reinterpret_cast<WindowImpl*>(glfwGetWindowUserPointer(window));
 			pThis->width = static_cast<unsigned int>(width);
 			pThis->height = static_cast<unsigned int>(height);
 		});
@@ -45,17 +45,17 @@ namespace qe::gl
 		initGladLoader();
 	}
 
-	Window::~Window() noexcept
+	WindowImpl::~WindowImpl() noexcept
 	{
 		glfwDestroyWindow(pWindow);
 	}
 
-	void Window::display() noexcept
+	void WindowImpl::display() noexcept
 	{
 		glfwSwapBuffers(pWindow);
 	}
 
-	void Window::toFullScreen() noexcept
+	void WindowImpl::toFullScreen() noexcept
 	{
 		if(mode != WindowMode::fullscreen)
 		{
@@ -67,7 +67,7 @@ namespace qe::gl
 		}
 	}
 
-	void Window::toWindowed(unsigned int width, unsigned int height) noexcept
+	void WindowImpl::toWindowed(unsigned int width, unsigned int height) noexcept
 	{
 		if(mode != WindowMode::windowed)
 		{
@@ -78,7 +78,7 @@ namespace qe::gl
 		}
 	}
 
-	void Window::resize(unsigned int width, unsigned int height) noexcept
+	void WindowImpl::resize(unsigned int width, unsigned int height) noexcept
 	{
 		if(mode == WindowMode::windowed)
 		{
@@ -86,33 +86,33 @@ namespace qe::gl
 		}
 	}
 
-	void Window::setTitle(const std::string& title) noexcept
+	void WindowImpl::setTitle(const std::string& title) noexcept
 	{
 		glfwSetWindowTitle(this->pWindow, title.c_str());
 	}
 
-	unsigned int Window::getWidth() const noexcept
+	unsigned int WindowImpl::getWidth() const noexcept
 	{
 		return width;
 	}
 
-	unsigned int Window::getHeight() const noexcept
+	unsigned int WindowImpl::getHeight() const noexcept
 	{
 		return height;
 	}
 
-	WindowMode Window::getMode() const noexcept
+	WindowMode WindowImpl::getMode() const noexcept
 	{
 		return mode;
 	}
 
-	bool Window::shouldClose() const noexcept
+	bool WindowImpl::shouldClose() const noexcept
 	{
 		return static_cast<bool>(glfwWindowShouldClose(pWindow));
 	}
 
 
-	void Window::initGladLoader() const noexcept
+	void WindowImpl::initGladLoader() const noexcept
 	{
 		if(!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
 		{
@@ -122,7 +122,7 @@ namespace qe::gl
 		}
 	}
 
-	void Window::resetShouldClose() noexcept
+	void WindowImpl::resetShouldClose() noexcept
 	{
 		glfwSetWindowShouldClose(pWindow, GLFW_FALSE);
 	}

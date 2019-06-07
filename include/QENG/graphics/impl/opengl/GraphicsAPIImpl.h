@@ -5,11 +5,11 @@
 
 namespace qe::gl
 {
-	class GraphicsAPI : public GraphicsAPIBase
+	class GraphicsAPIImpl : public GraphicsAPIBase
 	{
 	public:
-		explicit GraphicsAPI() noexcept;
-		~GraphicsAPI() noexcept final;
+		explicit GraphicsAPIImpl() noexcept;
+		~GraphicsAPIImpl() noexcept final;
 
 		qe::Monitor getPrimaryMonitor() noexcept final;
 		std::vector<qe::Monitor> getMonitors() noexcept final;

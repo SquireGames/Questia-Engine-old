@@ -1,17 +1,17 @@
 #include <iostream>
-#include <QENG/graphics/impl/opengl/GraphicsAPI.h>
+#include <QENG/graphics/impl/opengl/GraphicsAPIImpl.h>
 #include "QENG/ClientEngine.h"
 
 namespace qe
 {
 	ClientEngine::ClientEngine(qe::EngineSettings initSettings) noexcept :
-			renderer({new gl::GraphicsAPI()}),
+			renderer({new gl::GraphicsAPIImpl()}),
 			//window(),
 			frameRate(initSettings.frameRate),
 			tickRate(initSettings.tickRate),
 			tickCount(0)
 	{
-	//	window = std::unique_ptr<Window>(new Window(u8"Questia Engine game title", initSettings.screenWidth, initSettings.screenHeight));
+	//	window = std::unique_ptr<WindowImpl>(new WindowImpl(u8"Questia Engine game title", initSettings.screenWidth, initSettings.screenHeight));
 	}
 
 	void ClientEngine::run() noexcept

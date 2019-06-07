@@ -5,10 +5,10 @@
 
 namespace qe::gl
 {
-	class Window : public WindowBase
+	class WindowImpl : public WindowBase
 	{
 	public:
-		~Window() noexcept final;
+		~WindowImpl() noexcept final;
 
 		void display() noexcept final;
 
@@ -27,8 +27,8 @@ namespace qe::gl
 		void resetShouldClose() noexcept final;
 
 	private:
-		friend class GraphicsAPI;
-		friend class Monitor;
+		friend class GraphicsAPIImpl;
+		friend class MonitorImpl;
 
 		void initGladLoader() const noexcept;
 
@@ -39,7 +39,7 @@ namespace qe::gl
 		WindowMode mode;
 
 		// must be initialized from glfw thread
-		explicit Window(GraphicsAPIBase* pAPI, const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, qe::Window* pSharedContext) noexcept;
+		explicit WindowImpl(GraphicsAPIBase* pAPI, const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, qe::Window* pSharedContext) noexcept;
 	};
 }
 

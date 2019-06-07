@@ -1,5 +1,5 @@
-#include "QENG/graphics/impl/opengl/Monitor.h"
-#include "QENG/graphics/impl/opengl/Window.h"
+#include "QENG/graphics/impl/opengl/MonitorImpl.h"
+#include "QENG/graphics/impl/opengl/WindowImpl.h"
 #include <mutex>
 #include <vector>
 
@@ -10,20 +10,20 @@ namespace qe::gl
 	static std::function<void(const qe::Monitor&, qe::Monitor::State)> monitorConnectionCallback = {};
 	static GraphicsAPIBase* pAPIShared = nullptr;
 
-	Monitor::Monitor(GraphicsAPIBase* pAPI, GLFWmonitor* pMonitor) noexcept
+	MonitorImpl::MonitorImpl(GraphicsAPIBase* pAPI, GLFWmonitor* pMonitor) noexcept
 		: MonitorBase(pAPI), pMonitor(pMonitor), monitorName(std::string(glfwGetMonitorName(pMonitor)))
 	{
 		std::lock_guard<std::mutex> lock(monitorLock);
-		// if this is the first initialized Monitor object
+		// if this is the first initialized MonitorImpl object
 		if(monitorRefCount == 0)
 		{
-			glfwSetMonitorCallback(Monitor::monitorCallback);
+			glfwSetMonitorCallback(MonitorImpl::monitorCallback);
 			pAPIShared= this->pAPI;
 		}
 		monitorRefCount++;
 	}
 
-    Monitor::~Monitor() noexcept
+    MonitorImpl::~MonitorImpl() noexcept
 	{
 		std::lock_guard<std::mutex> lock(monitorLock);
 		monitorRefCount--;
@@ -33,12 +33,12 @@ namespace qe::gl
 		}
 	}
 
-	std::string Monitor::getName() const noexcept
+	std::string MonitorImpl::getName() const noexcept
 	{
 		return monitorName;
 	}
 
-	void Monitor::monitorCallback(GLFWmonitor* pMonitor, int event)
+	void MonitorImpl::monitorCallback(GLFWmonitor* pMonitor, int event)
 	{
 		// only call the callback if the callback was set
 		{
@@ -48,7 +48,7 @@ namespace qe::gl
 			}
 		}
 		// ctor must not be locked because the constructor locks with the same mutex
-		qe::Monitor monitor = qe::Monitor(std::unique_ptr<MonitorBase>(new qe::gl::Monitor(pAPIShared, pMonitor)));
+		qe::Monitor monitor = qe::Monitor(std::unique_ptr<MonitorBase>(new qe::gl::MonitorImpl(pAPIShared, pMonitor)));
 
 		std::lock_guard<std::mutex> lock(monitorLock);
 		if (event == GLFW_CONNECTED)
@@ -61,44 +61,44 @@ namespace qe::gl
 		}
 	}
 
-	void Monitor::setMonitorCallback(std::function<void(const qe::Monitor&, qe::Monitor::State)> callback) const noexcept
+	void MonitorImpl::setMonitorCallback(std::function<void(const qe::Monitor&, qe::Monitor::State)> callback) const noexcept
 	{
 		std::lock_guard<std::mutex> lock(monitorLock);
 		qe::gl::monitorConnectionCallback = callback;
 	}
 
-	bool Monitor::operator==(MonitorBase* other) const noexcept
+	bool MonitorImpl::operator==(MonitorBase* other) const noexcept
 	{
 		return pMonitor == other->getMonitorHandle();
 	}
 
-	void* Monitor::getMonitorHandle() const noexcept
+	void* MonitorImpl::getMonitorHandle() const noexcept
 	{
 		return pMonitor;
 	}
 
-	Vector2i Monitor::getPosition() const noexcept
+	Vector2i MonitorImpl::getPosition() const noexcept
 	{
 		int xpos, ypos;
 		glfwGetMonitorPos(pMonitor, &xpos, &ypos);
 		return Vector2i{xpos, ypos};
 	}
 
-	Vector2ui Monitor::getPhysicalSize() const noexcept
+	Vector2ui MonitorImpl::getPhysicalSize() const noexcept
 	{
 		int xmm, ymm;
 		glfwGetMonitorPhysicalSize(pMonitor, &xmm, &ymm);
 		return qe::Vector2ui(static_cast<unsigned int>(xmm), static_cast<unsigned int>(ymm));
 	}
 
-	VideoMode Monitor::getVideoMode() const noexcept
+	VideoMode MonitorImpl::getVideoMode() const noexcept
 	{
 		const GLFWvidmode* videoMode = glfwGetVideoMode(pMonitor);
 		return {static_cast<unsigned int>(videoMode->width), static_cast<unsigned int>(videoMode->height), static_cast<unsigned int>(videoMode->refreshRate)
 		        , static_cast<unsigned int>(videoMode->redBits), static_cast<unsigned int>(videoMode->greenBits), static_cast<unsigned int>(videoMode->blueBits)};
 	}
 
-	std::vector<VideoMode> Monitor::getVideoModes() const noexcept
+	std::vector<VideoMode> MonitorImpl::getVideoModes() const noexcept
 	{
 		int modeCount;
 		const GLFWvidmode* videoModes = glfwGetVideoModes(pMonitor, &modeCount);
@@ -113,7 +113,7 @@ namespace qe::gl
 		return modes;
 	}
 
-	qe::Monitor::GammaRamp Monitor::getGammaRamp() const noexcept
+	qe::Monitor::GammaRamp MonitorImpl::getGammaRamp() const noexcept
 	{
 		const GLFWgammaramp* pRamp = glfwGetGammaRamp(pMonitor);
 		unsigned int size = pRamp->size;
@@ -136,12 +136,12 @@ namespace qe::gl
 		return ramp;
 	}
 
-	std::unique_ptr<MonitorBase> Monitor::clone() const noexcept
+	std::unique_ptr<MonitorBase> MonitorImpl::clone() const noexcept
 	{
-		return std::unique_ptr<MonitorBase>(dynamic_cast<MonitorBase*>(new Monitor(pAPI, pMonitor)));
+		return std::unique_ptr<MonitorBase>(dynamic_cast<MonitorBase*>(new MonitorImpl(pAPI, pMonitor)));
 	}
 
-	bool Monitor::setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept
+	bool MonitorImpl::setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept
 	{
 		const unsigned int redSize = static_cast<int>(ramp.red.size());
 		const unsigned int greenSize = static_cast<int>(ramp.red.size());
@@ -157,7 +157,7 @@ namespace qe::gl
 		return true;
 	}
 
-	bool Monitor::setGamma(float gamma) noexcept
+	bool MonitorImpl::setGamma(float gamma) noexcept
 	{
 		if(gamma <= 0)
 		{

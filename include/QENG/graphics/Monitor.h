@@ -23,7 +23,7 @@ namespace qe
 		enum class State { connected, disconnected };
 		struct GammaRamp { std::vector<unsigned short> red, green, blue; };
 
-		// Monitor is copyable and movable, but can only be created by GraphicsAPI
+		// MonitorImpl is copyable and movable, but can only be created by GraphicsAPIImpl
 		explicit Monitor(std::unique_ptr<MonitorBase> monitorBase) noexcept;
 		Monitor(Monitor&& monitor) = default;
 		Monitor(const Monitor&) noexcept;
