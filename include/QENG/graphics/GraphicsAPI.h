@@ -15,11 +15,13 @@ namespace qe
 		explicit GraphicsAPI(std::unique_ptr<GraphicsAPIBase> graphicsAPIBase) noexcept;
 		~GraphicsAPI() noexcept = default;
 
-		// requires that all classes that depend on this class be deconstructed
-		void changeAPI(std::unique_ptr<GraphicsAPIBase> newAPI) noexcept;
-
 		Monitor getPrimaryMonitor() const noexcept;
 		std::vector<Monitor> getMonitors() const noexcept;
+
+		void pollEvents() noexcept;
+
+		// requires that all classes that depend on this class be deconstructed
+		void changeAPI(std::unique_ptr<GraphicsAPIBase> newAPI) noexcept;
 
 	private:
 		std::unique_ptr<GraphicsAPIBase> graphicsAPIBase;
@@ -37,6 +39,8 @@ namespace qe
 
 		virtual Monitor getPrimaryMonitor() noexcept = 0;
 		virtual std::vector<Monitor> getMonitors() noexcept = 0;
+
+		virtual void pollEvents() noexcept = 0;
 
 		virtual [[nodiscard]] WindowBase* newWindowBase(const std::string&, const WindowOptions&, const Monitor&, Window*) noexcept = 0;
 
@@ -62,6 +66,11 @@ namespace qe
 	{
 		graphicsAPIBase.reset();
 		graphicsAPIBase = std::move(newAPI);
+	}
+
+	inline void GraphicsAPI::pollEvents() noexcept
+	{
+		graphicsAPIBase->pollEvents();
 	}
 }
 

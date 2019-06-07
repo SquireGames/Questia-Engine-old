@@ -9,12 +9,12 @@
 #include <unordered_map>
 #include "QENG/graphics/Window.h"
 
-namespace qe
+namespace qe::gl
 {
-	class GLMonitor : public MonitorBase
+	class Monitor : public MonitorBase
 	{
 	public:
-		~GLMonitor() noexcept final;
+		~Monitor() noexcept final;
 
 		bool operator==(MonitorBase* other) const noexcept final;
 
@@ -36,10 +36,10 @@ namespace qe
 		std::unique_ptr<MonitorBase> clone() const noexcept final;
 
 	private:
-		friend class GLInstance;
+		friend class GraphicsAPI;
 
 		// must be initialized from glfw thread
-		explicit GLMonitor(GraphicsAPIBase* pAPI, GLFWmonitor* pMonitor) noexcept;
+		explicit Monitor(GraphicsAPIBase* pAPI, GLFWmonitor* pMonitor) noexcept;
 
 		static void monitorCallback(GLFWmonitor* pMonitor, int event);
 

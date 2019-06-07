@@ -35,8 +35,10 @@ namespace qe
 		void toFullscreen() noexcept;
 		void toWindowed(unsigned int width, unsigned int height) noexcept;
 
-		void resize(unsigned int width, unsigned int height) noexcept;
 		void setTitle(const std::string& title) noexcept;
+		void resize(unsigned int width, unsigned int height) noexcept;
+		void resize(Vector2ui size) noexcept;
+		Vector2ui getSize() const noexcept;
 		unsigned int getWidth() const noexcept;
 		unsigned int getHeight() const noexcept;
 		WindowMode getMode() const noexcept;
@@ -74,7 +76,6 @@ namespace qe
 	inline WindowBase::WindowBase(GraphicsAPIBase* pAPI) noexcept : pAPI(pAPI)
 	{
 	}
-
 
 	inline qe::Window::Window(const std::string& title, const WindowOptions& options,
 							  const qe::Monitor& monitor, std::optional<Window*> sharedContext) noexcept :
@@ -119,6 +120,11 @@ namespace qe
 		windowBase->resize(width, height);
 	}
 
+	inline void Window::resize(Vector2ui size) noexcept
+	{
+		resize(size.x(), size.y());
+	}
+
 	inline void Window::setTitle(const std::string& title) noexcept
 	{
 		windowBase->setTitle(title);
@@ -152,6 +158,11 @@ namespace qe
 	inline bool Window::isClosed() noexcept
 	{
 		return !static_cast<bool>(windowBase);
+	}
+
+	inline Vector2ui Window::getSize() const noexcept
+	{
+		return qe::Vector2ui(getWidth(), getHeight());
 	}
 }
 

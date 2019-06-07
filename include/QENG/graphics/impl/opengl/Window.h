@@ -3,7 +3,7 @@
 
 #include "QENG/graphics/Window.h"
 
-namespace qe
+namespace qe::gl
 {
 	class GLWindow : public WindowBase
 	{
@@ -27,7 +27,7 @@ namespace qe
 		void resetShouldClose() noexcept final;
 
 	private:
-		friend class GLInstance;
+		friend class GraphicsAPI;
 		friend class GLMonitor;
 
 		void initGladLoader() const noexcept;

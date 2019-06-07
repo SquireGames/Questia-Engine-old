@@ -1,13 +1,13 @@
-#include "QENG/graphics/opengl/GLInstance.h"
+#include "QENG/graphics/impl/opengl/GraphicsAPI.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <QENG/graphics/opengl/GLWindow.h>
-#include "QENG/graphics/opengl/GLMonitor.h"
+#include <QENG/graphics/impl/opengl/GLWindow.h>
+#include "QENG/graphics/impl/opengl/GLMonitor.h"
 
-namespace qe
+namespace qe::gl
 {
-	GLInstance::GLInstance() noexcept : GraphicsAPIBase()
+	GraphicsAPI::GraphicsAPI() noexcept : GraphicsAPIBase()
 	{
 		if(!glfwInit())
 		{
@@ -19,12 +19,12 @@ namespace qe
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	}
 
-	GLInstance::~GLInstance()
+	GraphicsAPI::~GraphicsAPI()
 	{
 		glfwTerminate();
 	}
 
-	std::vector<Monitor> GLInstance::getMonitors() noexcept
+	std::vector<Monitor> GraphicsAPI::getMonitors() noexcept
 	{
 		int count;
 		GLFWmonitor** pMonitors = glfwGetMonitors(&count);
@@ -40,16 +40,20 @@ namespace qe
 		return monitors;
 	}
 
-	Monitor GLInstance::getPrimaryMonitor() noexcept
+	Monitor GraphicsAPI::getPrimaryMonitor() noexcept
 	{
 		GLFWmonitor* pMonitor = glfwGetPrimaryMonitor();
 		return Monitor(std::unique_ptr<GLMonitor>(new GLMonitor(this, pMonitor)));
 	}
 
-	WindowBase* GLInstance::newWindowBase(const std::string& name, const WindowOptions& options, const Monitor& monitor, Window* pSharedContext) noexcept
+	WindowBase* GraphicsAPI::newWindowBase(const std::string& name, const WindowOptions& options, const Monitor& monitor, Window* pSharedContext) noexcept
 	{
 		return new GLWindow(this, name, options, monitor, pSharedContext);
 	}
 
+	void GraphicsAPI::pollEvents() noexcept
+	{
+		glfwPollEvents();
+	}
 }
 

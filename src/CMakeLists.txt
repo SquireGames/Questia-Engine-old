@@ -8,19 +8,23 @@ set(QUESTIAENGINE_HEADERS
         "../include/QENG/ClientEngine.h"
         "../include/QENG/graphics/Window.h"
         "../include/QENG/graphics/GraphicsAPI.h"
-        "../include/QENG/graphics/opengl/GLInstance.h"
+        "../include/QENG/graphics/impl/opengl/GraphicsAPI.h"
         "../include/QENG/graphics/Monitor.h"
-        "../include/QENG/graphics/opengl/GLMonitor.h"
+        "../include/QENG/graphics/impl/opengl/Monitor.h"
         "../include/QENG/math/FixedVector.h"
-        "../include/QENG/graphics/opengl/GLWindow.h"
+        "../include/QENG/graphics/impl/opengl/Window.h"
         "../include/QENG/graphics/VideoMode.h"
         "../include/QENG/graphics/WindowOptions.h"
+        "../include/QENG/graphics/Sprite.h"
+        "../include/QENG/graphics/Texture.h"
         )
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
     "ClientEngine.cpp"
     "graphics/GraphicsAPI.cpp"
+    "graphics/Sprite.cpp"
+    "graphics/Texture.cpp"
     )
 
 ## define implementations of graphics options dependant classes
@@ -34,9 +38,9 @@ endif()
 
 if("opengl" IN_LIST QENG_GRAPHICS_LIST)
     list(APPEND QUESTIAENGINE_SOURCES
-            "graphics/opengl/GLWindow.cpp"
-            "graphics/opengl/GLInstance.cpp"
-            "graphics/opengl/GLMonitor.cpp"
+            "graphics/impl/opengl/Window.cpp"
+            "graphics/impl/opengl/GraphicsAPI.cpp"
+            "graphics/impl/opengl/Monitor.cpp"
         )
 endif()
 

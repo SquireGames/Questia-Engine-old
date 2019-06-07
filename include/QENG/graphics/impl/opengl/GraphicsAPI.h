@@ -3,7 +3,7 @@
 
 #include "QENG/graphics/GraphicsAPI.h"
 
-namespace qe
+namespace qe::gl
 {
 	class GLInstance : public GraphicsAPIBase
 	{
@@ -14,8 +14,11 @@ namespace qe
 		Monitor getPrimaryMonitor() noexcept final;
 		std::vector<Monitor> getMonitors() noexcept final;
 
+		void pollEvents() noexcept final;
+
 		WindowBase* newWindowBase(const std::string& name, const WindowOptions& options, const Monitor& monitor, Window* pSharedContext) noexcept final;
 	};
 }
 
 #endif //QUESTIAENGINE_GLRENDERER_H
+

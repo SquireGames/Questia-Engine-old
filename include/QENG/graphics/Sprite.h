@@ -1,0 +1,13 @@
+
+
+#ifndef QUESTIAENGINE_SPRITE_H
+#define QUESTIAENGINE_SPRITE_H
+
+
+class Sprite
+{
+
+};
+
+
+#endif //QUESTIAENGINE_SPRITE_H
