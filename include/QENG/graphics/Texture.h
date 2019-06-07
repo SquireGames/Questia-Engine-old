@@ -1,11 +1,12 @@
 #ifndef QUESTIAENGINE_TEXTURE_H
 #define QUESTIAENGINE_TEXTURE_H
 
-
-class Texture
+namespace qe
 {
+	class Texture
+	{
 
-};
-
+	};
+}
 
 #endif //QUESTIAENGINE_TEXTURE_H

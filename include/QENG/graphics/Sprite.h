@@ -1,13 +1,12 @@
-
-
 #ifndef QUESTIAENGINE_SPRITE_H
 #define QUESTIAENGINE_SPRITE_H
 
-
-class Sprite
+namespace qe
 {
+	class Sprite
+	{
 
-};
-
+	};
+}
 
 #endif //QUESTIAENGINE_SPRITE_H
