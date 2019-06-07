@@ -7,7 +7,7 @@
 
 namespace qe::gl
 {
-	Window::Window(GraphicsAPIBase* pAPI, const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, Window* pSharedContext) noexcept :
+	Window::Window(GraphicsAPIBase* pAPI, const std::string& title, const WindowOptions& options, const qe::Monitor& monitor, qe::Window* pSharedContext) noexcept :
 			WindowBase(pAPI)
 			, pMonitor (static_cast<GLFWmonitor*>(pAPI->getBase(&monitor)->getMonitorHandle()))
 			, pWindow(nullptr)
@@ -50,7 +50,7 @@ namespace qe::gl
 		glfwDestroyWindow(pWindow);
 	}
 
-	void qe::GLWindow::display() noexcept
+	void Window::display() noexcept
 	{
 		glfwSwapBuffers(pWindow);
 	}

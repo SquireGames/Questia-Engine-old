@@ -22,12 +22,12 @@ namespace qe::gl
 		Vector2i getPosition() const noexcept final;
 		Vector2ui getPhysicalSize() const noexcept final;
 
-		void setMonitorCallback(std::function<void(const Monitor&, Monitor::State)> callback) const noexcept final;
+		void setMonitorCallback(std::function<void(const qe::Monitor&, qe::Monitor::State)> callback) const noexcept final;
 
 		VideoMode getVideoMode() const noexcept final;
 		std::vector<VideoMode> getVideoModes() const noexcept final;
 
-		Monitor::GammaRamp getGammaRamp() const noexcept final;
+		qe::Monitor::GammaRamp getGammaRamp() const noexcept final;
 		bool setGammaRamp(const qe::Monitor::GammaRamp& ramp) noexcept final;
 		bool setGamma(float gamma) noexcept final;
 

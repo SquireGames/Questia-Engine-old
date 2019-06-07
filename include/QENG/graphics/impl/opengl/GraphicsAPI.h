@@ -5,18 +5,18 @@
 
 namespace qe::gl
 {
-	class GLInstance : public GraphicsAPIBase
+	class GraphicsAPI : public GraphicsAPIBase
 	{
 	public:
-		explicit GLInstance() noexcept;
-		~GLInstance() noexcept final;
+		explicit GraphicsAPI() noexcept;
+		~GraphicsAPI() noexcept final;
 
-		Monitor getPrimaryMonitor() noexcept final;
-		std::vector<Monitor> getMonitors() noexcept final;
+		qe::Monitor getPrimaryMonitor() noexcept final;
+		std::vector<qe::Monitor> getMonitors() noexcept final;
 
 		void pollEvents() noexcept final;
 
-		WindowBase* newWindowBase(const std::string& name, const WindowOptions& options, const Monitor& monitor, Window* pSharedContext) noexcept final;
+		WindowBase* newWindowBase(const std::string& name, const WindowOptions& options, const qe::Monitor& monitor, qe::Window* pSharedContext) noexcept final;
 	};
 }
 

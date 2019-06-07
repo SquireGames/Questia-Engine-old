@@ -7,7 +7,7 @@ namespace qe::gl
 {
 	static std::mutex monitorLock;
 	static int monitorRefCount = 0;
-	static std::function<void(const Monitor&, Monitor::State)> monitorConnectionCallback = {};
+	static std::function<void(const qe::Monitor&, qe::Monitor::State)> monitorConnectionCallback = {};
 	static GraphicsAPIBase* pAPIShared = nullptr;
 
 	Monitor::Monitor(GraphicsAPIBase* pAPI, GLFWmonitor* pMonitor) noexcept
@@ -48,23 +48,23 @@ namespace qe::gl
 			}
 		}
 		// ctor must not be locked because the constructor locks with the same mutex
-		Monitor monitor = Monitor(std::unique_ptr<MonitorBase>(new Monitor(pAPIShared, pMonitor)));
+		qe::Monitor monitor = qe::Monitor(std::unique_ptr<MonitorBase>(new qe::gl::Monitor(pAPIShared, pMonitor)));
 
 		std::lock_guard<std::mutex> lock(monitorLock);
 		if (event == GLFW_CONNECTED)
 		{
-			monitorConnectionCallback(monitor, Monitor::State::connected);
+			monitorConnectionCallback(monitor, qe::Monitor::State::connected);
 		}
 		else if (event == GLFW_DISCONNECTED)
 		{
-			monitorConnectionCallback(monitor, Monitor::State::disconnected);
+			monitorConnectionCallback(monitor, qe::Monitor::State::disconnected);
 		}
 	}
 
-	void Monitor::setMonitorCallback(std::function<void(const Monitor&, Monitor::State)> callback) const noexcept
+	void Monitor::setMonitorCallback(std::function<void(const qe::Monitor&, qe::Monitor::State)> callback) const noexcept
 	{
 		std::lock_guard<std::mutex> lock(monitorLock);
-		qe::monitorConnectionCallback = callback;
+		qe::gl::monitorConnectionCallback = callback;
 	}
 
 	bool Monitor::operator==(MonitorBase* other) const noexcept
@@ -113,11 +113,11 @@ namespace qe::gl
 		return modes;
 	}
 
-	Monitor::GammaRamp Monitor::getGammaRamp() const noexcept
+	qe::Monitor::GammaRamp Monitor::getGammaRamp() const noexcept
 	{
 		const GLFWgammaramp* pRamp = glfwGetGammaRamp(pMonitor);
 		unsigned int size = pRamp->size;
-		Monitor::GammaRamp ramp;
+		qe::Monitor::GammaRamp ramp;
 		ramp.red.reserve(size);
 		ramp.green.reserve(size);
 		ramp.blue.reserve(size);
