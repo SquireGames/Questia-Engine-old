@@ -20,6 +20,7 @@ set(QUESTIAENGINE_HEADERS
         "../include/QENG/graphics/WindowOptions.h"
         "../include/QENG/graphics/Sprite.h"
         "../include/QENG/graphics/Texture.h"
+        "../include/QENG/graphics/impl/TextureBase.ipp"
         )
 
 ## define source files to compile
