@@ -1,8 +1,6 @@
 #ifndef QUESTIAENGINE_WINDOWOPTIONS_H
 #define QUESTIAENGINE_WINDOWOPTIONS_H
 
-#include <variant>
-
 #include "QENG/graphics/VideoMode.h"
 
 namespace qe

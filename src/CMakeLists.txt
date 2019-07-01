@@ -8,19 +8,21 @@ set(QUESTIAENGINE_HEADERS
         "../include/QENG/ClientEngine.h"
         "../include/QENG/graphics/Window.h"
         "../include/QENG/graphics/GraphicsAPI.h"
-        "../include/QENG/graphics/impl/GraphicsAPIBase.ipp"
+        "../include/QENG/graphics/impl/GraphicsAPIBase.h"
         "../include/QENG/graphics/impl/opengl/GraphicsAPIImpl.h"
         "../include/QENG/graphics/Monitor.h"
         "../include/QENG/graphics/impl/opengl/MonitorImpl.h"
-        "../include/QENG/graphics/impl/MonitorBase.ipp"
+        "../include/QENG/graphics/impl/MonitorBase.h"
         "../include/QENG/math/FixedVector.h"
         "../include/QENG/graphics/impl/opengl/WindowImpl.h"
-        "../include/QENG/graphics/impl/WindowBase.ipp"
+        "../include/QENG/graphics/impl/WindowBase.h"
         "../include/QENG/graphics/VideoMode.h"
         "../include/QENG/graphics/WindowOptions.h"
         "../include/QENG/graphics/Sprite.h"
         "../include/QENG/graphics/Texture.h"
-        "../include/QENG/graphics/impl/TextureBase.ipp"
+        "../include/QENG/graphics/impl/TextureBase.h"
+        "../include/QENG/graphics/TextureManager.h"
+        "../include/QENG/graphics/impl/TextureManagerBase.h"
         )
 
 ## define source files to compile
@@ -29,6 +31,7 @@ set(QUESTIAENGINE_SOURCES
     "graphics/GraphicsAPI.cpp"
     "graphics/Sprite.cpp"
     "graphics/Texture.cpp"
+    "graphics/TextureManager.cpp"
     )
 
 ## define implementations of graphics options dependant classes

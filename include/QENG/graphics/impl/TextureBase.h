@@ -1,3 +1,5 @@
+#ifndef QUESTIAENGINE_TEXTUREBASE_H
+#define QUESTIAENGINE_TEXTUREBASE_H
 
 namespace qe
 {
@@ -6,6 +8,7 @@ namespace qe
 	public:
 
 	private:
+
 	};
 
 	qe::Texture::Texture(std::string fileName)
@@ -19,3 +22,6 @@ namespace qe
 	}
 
 }
+
+
+#endif //QUESTIAENGINE_TEXTUREBASE_H

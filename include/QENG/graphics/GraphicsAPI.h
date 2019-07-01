@@ -28,6 +28,36 @@ namespace qe
 	};
 }
 
-#include "QENG/Graphics/impl/GraphicsAPIBase.ipp"
+
+#include "QENG/graphics/impl/GraphicsAPIBase.h"
+
+namespace qe
+{
+	inline GraphicsAPI::GraphicsAPI(std::unique_ptr<GraphicsAPIBase> graphicsAPIBase) noexcept : graphicsAPIBase(std::move(graphicsAPIBase))
+	{
+	}
+
+	inline Monitor GraphicsAPI::getPrimaryMonitor() const noexcept
+	{
+		return graphicsAPIBase->getPrimaryMonitor();
+	}
+
+	inline std::vector<Monitor> GraphicsAPI::getMonitors() const noexcept
+	{
+		return graphicsAPIBase->getMonitors();
+	}
+
+	inline void GraphicsAPI::changeAPI(std::unique_ptr<GraphicsAPIBase> newAPI) noexcept
+	{
+		graphicsAPIBase.reset();
+		graphicsAPIBase = std::move(newAPI);
+	}
+
+	inline void GraphicsAPI::pollEvents() noexcept
+	{
+		graphicsAPIBase->pollEvents();
+	}
+}
+
 
 #endif //QUESTIAENGINE_GRAPHICSAPI_H

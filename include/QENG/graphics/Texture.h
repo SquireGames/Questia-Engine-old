@@ -19,6 +19,8 @@ namespace qe
 	};
 }
 
-#include "QENG/graphics/impl/TextureBase.ipp"
+#include "QENG/graphics/impl/TextureBase.h"
+
+
 
 #endif //QUESTIAENGINE_TEXTURE_H
