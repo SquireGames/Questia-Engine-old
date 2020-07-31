@@ -1,6 +1,4 @@
 
-# define an option to generate documentation, on by default
-option(BUILD_DOC "Build Documentation" OFF)
 
 # generate documentation
 if(BUILD_DOC)

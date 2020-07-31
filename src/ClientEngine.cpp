@@ -1,62 +1,49 @@
+#include <iostream>
+#include <QENG/graphics/impl/opengl/GraphicsAPIImpl.h>
 #include "QENG/ClientEngine.h"
 
-#include <iostream>
-
-ClientEngine::ClientEngine():
-	window(nullptr)
-	, renderer(nullptr)
+namespace qe
 {
-}
-
-int ClientEngine::run()
-{
-	const int windowSize_x = 400, windowSize_y = 300;
-
-	if (SDL_Init(SDL_INIT_VIDEO) == -1)
+	ClientEngine::ClientEngine(qe::EngineSettings initSettings) noexcept :
+			renderer({new gl::GraphicsAPIImpl()}),
+			//window(),
+			frameRate(initSettings.frameRate),
+			tickRate(initSettings.tickRate),
+			tickCount(0)
 	{
-		std::cout << "FATAL: Failed to initialize SDL" << std::endl;
-		std::cout << "\t" << SDL_GetError();
-		return 0;
+	//	window = std::unique_ptr<WindowImpl>(new WindowImpl(u8"Questia Engine game title", initSettings.screenWidth, initSettings.screenHeight));
 	}
 
-	window = SDL_CreateWindow("QENG Sample", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowSize_x, windowSize_y, SDL_WINDOW_SHOWN);
-	if (window == nullptr)
+	void ClientEngine::run() noexcept
 	{
-		std::cout << "FATAL: Failed to initialize SDL window" << std::endl;
-		std::cout << "\t" << SDL_GetError();
-		return 0;
-	}
-
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	if (renderer == nullptr)
-	{
-		std::cout << "FATAL: Failed to initialize SDL renderer" << std::endl;
-		std::cout << "\t" << SDL_GetError();
-		return 0;
-	}
-
-	SDL_RenderSetLogicalSize(renderer, windowSize_x, windowSize_y);
-	SDL_SetRenderDrawColor(renderer, 12, 23, 34, 45);
-
-	bool runSample = true;
-	while (runSample)
-	{
-		SDL_Event event;
-		while (SDL_PollEvent(&event))
+		/*
+		while(!window->shouldClose())
 		{
-			if (event.type == SDL_QUIT)
-			{
-				runSample = false;
-			}
+			window->display();
 		}
-		SDL_Delay(7);
+		 */
+		/*
 
-		SDL_RenderClear(renderer);
-		SDL_RenderPresent(renderer);
+		 */
 	}
 
-	SDL_DestroyWindow(window);
-	SDL_Quit();
+	void ClientEngine::setTickRate(unsigned int tickRate) noexcept
+	{
+		this->tickRate = tickRate;
+	}
 
-	return 0;
+	void ClientEngine::setFrameRate(unsigned int frameRate) noexcept
+	{
+		this->frameRate = frameRate;
+	}
+
+	unsigned int ClientEngine::getTickRate() const noexcept
+	{
+		return tickRate;
+	}
+
+	unsigned int ClientEngine::getFrameRate() const noexcept
+	{
+		return frameRate;
+	}
 }

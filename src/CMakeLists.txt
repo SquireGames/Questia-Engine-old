@@ -4,14 +4,53 @@
 
 ## define header files
 set(QUESTIAENGINE_HEADERS
-	"${CMAKE_CURRENT_BINARY_DIR}/../include/QENG/config.h"
-    "../include/QENG/ClientEngine.h"
-)
+        "${CMAKE_CURRENT_BINARY_DIR}/../include/QENG/config.h"
+        "../include/QENG/ClientEngine.h"
+        "../include/QENG/graphics/Window.h"
+        "../include/QENG/graphics/GraphicsAPI.h"
+        "../include/QENG/graphics/impl/GraphicsAPIBase.h"
+        "../include/QENG/graphics/impl/opengl/GraphicsAPIImpl.h"
+        "../include/QENG/graphics/Monitor.h"
+        "../include/QENG/graphics/impl/opengl/MonitorImpl.h"
+        "../include/QENG/graphics/impl/MonitorBase.h"
+        "../include/QENG/math/FixedVector.h"
+        "../include/QENG/graphics/impl/opengl/WindowImpl.h"
+        "../include/QENG/graphics/impl/WindowBase.h"
+        "../include/QENG/graphics/VideoMode.h"
+        "../include/QENG/graphics/WindowOptions.h"
+        "../include/QENG/graphics/Sprite.h"
+        "../include/QENG/graphics/Texture.h"
+        "../include/QENG/graphics/impl/TextureBase.h"
+        "../include/QENG/graphics/TextureManager.h"
+        "../include/QENG/graphics/impl/TextureManagerBase.h"
+        )
 
 ## define source files to compile
 set(QUESTIAENGINE_SOURCES
     "ClientEngine.cpp"
-)
+    "graphics/GraphicsAPI.cpp"
+    "graphics/Sprite.cpp"
+    "graphics/Texture.cpp"
+    "graphics/TextureManager.cpp"
+    )
+
+## define implementations of graphics options dependant classes
+string(REPLACE "\"" "" QENG_GRAPHICS_LIST ${QENG_GRAPHICS})
+string(REPLACE "," ";" QENG_GRAPHICS_LIST ${QENG_GRAPHICS_LIST})
+
+if("none" IN_LIST QENG_GRAPHICS_LIST)
+    list(APPEND QUESTIAENGINE_SOURCES)
+           # "graphics/mock/WindowImpl.cpp")
+endif()
+
+if("opengl" IN_LIST QENG_GRAPHICS_LIST)
+    list(APPEND QUESTIAENGINE_SOURCES
+            "graphics/impl/opengl/WindowImpl.cpp"
+            "graphics/impl/opengl/GraphicsAPIImpl.cpp"
+            "graphics/impl/opengl/MonitorImpl.cpp"
+        )
+endif()
+
 
 #----------------------------------------
 #		   Library naming scheme		 
@@ -64,11 +103,7 @@ endif()
 set_target_properties(${LIB_NAME} PROPERTIES FOLDER "QENG")
  
 # link dependencies
-if(BUILD_SHARED_LIBS)
-    target_link_libraries(${LIB_NAME} SDL2)
-else()
-    target_link_libraries(${LIB_NAME} SDL2-static)
-endif()
+qeng_target_link_libraries_libqeng(${LIB_NAME})
  
 # install rule
 install(
@@ -77,5 +112,3 @@ install(
     LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin
     ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel
 )
-
- 
