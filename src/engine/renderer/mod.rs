@@ -1,5 +1,13 @@
+#[cfg(feature ="dx11")]
+extern crate gfx_backend_dx11 as backend;
+#[cfg(feature ="dx12")]
+extern crate gfx_backend_dx12 as backend;
+#[cfg(feature ="opengl")]
+extern crate gfx_backend_gl as backend;
+#[cfg(feature ="vulkan")]
 extern crate gfx_backend_vulkan as backend;
 
+mod framegraph;
 mod graphics;
 
 use gfx::PipelineState;
